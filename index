@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gastrite – Sistema di Sydney + OLGA</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      color: #1a202c;
+      line-height: 1.6;
+    }
+    header {
+      background: white;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 1.5rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+    h1 { font-size: 1.75rem; font-weight: 700; color: #2d3748; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.9rem; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; }
+    
+    .info-panel {
+      background: #edf2f7;
+      border-left: 4px solid #4299e1;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .info-panel strong { color: #2b6cb0; }
+    
+    .settings {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .settings label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      margin: 0.5rem 0;
+    }
+    .settings input[type="radio"] { accent-color: #4299e1; cursor: pointer; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    
+    .card {
+      background: white;
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .card h2 { font-size: 1.1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    
+    .field { margin-bottom: 1rem; }
+    .field label { 
+      display: block; 
+      font-size: 0.85rem; 
+      font-weight: 600; 
+      color: #4a5568; 
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .field select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid #cbd5e0;
+      border-radius: 0.375rem;
+      font-size: 0.95rem;
+      background: white;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .field select:focus { outline: none; border-color: #4299e1; }
+    .field select.error { border-color: #f56565; background: #fff5f5; }
+    
+    .controls {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+    button.primary { background: #4299e1; color: white; }
+    button.primary:hover { background: #3182ce; }
+    button.secondary { background: #e2e8f0; color: #2d3748; }
+    button.secondary:hover { background: #cbd5e0; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    
+    .alert {
+      padding: 1rem;
+      border-radius: 0.375rem;
+      margin: 1rem 0;
+      display: none;
+    }
+    .alert.error { background: #fff5f5; border-left: 4px solid #f56565; color: #c53030; }
+    .alert.success { background: #f0fff4; border-left: 4px solid #48bb78; color: #22543d; }
+    .alert.show { display: block; }
+    
+    .results {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin: 1rem 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .badges {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1rem 0;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .badge.low { background: #c6f6d5; color: #22543d; }
+    .badge.high { background: #fed7d7; color: #c53030; }
+    .badge.info { background: #bee3f8; color: #2c5282; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      background: #f7fafc;
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+    td { font-size: 0.95rem; }
+    
+    .report-box {
+      background: #f7fafc;
+      border: 2px dashed #cbd5e0;
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      margin: 1rem 0;
+      white-space: pre-wrap;
+      font-family: ui-monospace, monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+    
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid #e2e8f0;
+      font-size: 0.85rem;
+      color: #718096;
+    }
+    .footer a { color: #4299e1; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    
+    @media print {
+      header, .controls, .settings, .alert { display: none !important; }
+      body { background: white; }
+      .card, .results { box-shadow: none; border: 1px solid #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>🔬 Gastrite – Sistema di Sydney + OLGA</h1>
+      <div class="subtitle">Tool per refertazione istologica</div>
+    </div>
+  </header>
+  
+  <main class="container">
+    <div class="info-panel">
+      <strong>Scala Sydney:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = severa
+    </div>
+    
+    <div class="settings">
+      <strong style="display: block; margin-bottom: 0.5rem;">Metodo di calcolo OLGA:</strong>
+      <label>
+        <input type="radio" name="olga_method" value="atrophy" checked>
+        Solo atrofia ghiandolare (approccio conservativo)
+      </label>
+      <label>
+        <input type="radio" name="olga_method" value="max">
+        Massimo tra atrofia e metaplasia per sede (più sensibile)
+      </label>
+      <label>
+        <input type="radio" name="olga_method" value="combined">
+        Atrofia + Metaplasia combinati (se atrofia ≥1 OR metaplasia ≥1)
+      </label>
+    </div>
+    
+    <div id="errorAlert" class="alert error"></div>
+    <div id="successAlert" class="alert success"></div>
+    
+    <div class="grid">
+      <div class="card">
+        <h2>Antro</h2>
+        <div class="field">
+          <label>Infiltrato cronico</label>
+          <select id="an_chronic">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderato</option>
+            <option value="3">3 - Severo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Attività (neutrofili)</label>
+          <select id="an_activity">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Atrofia ghiandolare</label>
+          <select id="an_atrophy">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Metaplasia intestinale</label>
+          <select id="an_metaplasia">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Helicobacter pylori</label>
+          <select id="an_hp">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderato</option>
+            <option value="3">3 - Severo</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Corpo</h2>
+        <div class="field">
+          <label>Infiltrato cronico</label>
+          <select id="co_chronic">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderato</option>
+            <option value="3">3 - Severo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Attività (neutrofili)</label>
+          <select id="co_activity">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Atrofia ghiandolare</label>
+          <select id="co_atrophy">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Metaplasia intestinale</label>
+          <select id="co_metaplasia">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Helicobacter pylori</label>
+          <select id="co_hp">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderato</option>
+            <option value="3">3 - Severo</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Incisura angolare</h2>
+        <div class="field">
+          <label>Infiltrato cronico</label>
+          <select id="in_chronic">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderato</option>
+            <option value="3">3 - Severo</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Attività (neutrofili)</label>
+          <select id="in_activity">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Atrofia ghiandolare</label>
+          <select id="in_atrophy">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Metaplasia intestinale</label>
+          <select id="in_metaplasia">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderata</option>
+            <option value="3">3 - Severa</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Helicobacter pylori</label>
+          <select id="in_hp">
+            <option value="">—</option>
+            <option value="0">0 - Assente</option>
+            <option value="1">1 - Lieve</option>
+            <option value="2">2 - Moderato</option>
+            <option value="3">3 - Severo</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="controls">
+      <button class="primary" onclick="calculate()">📊 Calcola referto</button>
+      <button class="secondary" onclick="copyReport()">📋 Copia referto</button>
+      <button class="secondary" onclick="window.print()">🖨️ Stampa/PDF</button>
+      <button class="secondary" onclick="resetForm()">🔄 Reset</button>
+    </div>
+    
+    <div id="resultsSection" class="results" style="display: none;">
+      <h2 style="margin-bottom: 1rem;">Risultati</h2>
+      
+      <div id="badgesContainer" class="badges"></div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Sede</th>
+            <th>Infiltr. cronico</th>
+            <th>Attività</th>
+            <th>Atrofia</th>
+            <th>Metaplasia</th>
+            <th>H. pylori</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      
+      <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Referto istologico</h3>
+      <div id="reportText" class="report-box"></div>
+      
+      <div class="footer">
+        <p><strong>⚠️ Nota clinica:</strong> Lo stadio OLGA stratifica il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS/ESGE.</p>
+        
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <strong>Riferimenti bibliografici:</strong><br>
+          <small>
+            • Dixon MF et al. Updated Sydney System. <em>Am J Surg Pathol</em> 1996;20(10):1161-81. <a href="https://pubmed.ncbi.nlm.nih.gov/8827022/" target="_blank">PMID:8827022</a><br>
+            • Rugge M et al. OLGA gastritis staging. <em>Dig Liver Dis</em> 2010;42(3):177-82. <a href="https://pubmed.ncbi.nlm.nih.gov/19793674/" target="_blank">PMID:19793674</a><br>
+            • Pimentel-Nunes P et al. MAPS II guidelines. <em>Endoscopy</em> 2019;51(4):365-388. <a href="https://pubmed.ncbi.nlm.nih.gov/30841008/" target="_blank">PMID:30841008</a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    function getValue(id) {
+      const el = document.getElementById(id);
+      return el && el.value !== '' ? parseInt(el.value, 10) : null;
+    }
+    
+    function showAlert(type, message) {
+      const alert = document.getElementById(type === 'error' ? 'errorAlert' : 'successAlert');
+      alert.textContent = message;
+      alert.classList.add('show');
+      setTimeout(() => alert.classList.remove('show'), 4000);
+    }
+    
+    function clearErrors() {
+      document.querySelectorAll('select.error').forEach(el => el.classList.remove('error'));
+      document.getElementById('errorAlert').classList.remove('show');
+    }
+    
+    function validate() {
+      clearErrors();
+      const fields = [
+        'an_chronic', 'an_activity', 'an_atrophy', 'an_metaplasia', 'an_hp',
+        'co_chronic', 'co_activity', 'co_atrophy', 'co_metaplasia', 'co_hp',
+        'in_chronic', 'in_activity', 'in_atrophy', 'in_metaplasia', 'in_hp'
+      ];
+      
+      const missing = fields.filter(id => getValue(id) === null);
+      
+      if (missing.length > 0) {
+        missing.forEach(id => document.getElementById(id).classList.add('error'));
+        showAlert('error', `⚠️ Compila tutti i campi (${missing.length} mancanti)`);
+        return false;
+      }
+      return true;
+    }
+    
+    function getOLGAScore(atrophy, metaplasia, method) {
+      if (method === 'atrophy') return atrophy;
+      if (method === 'max') return Math.max(atrophy, metaplasia);
+      if (method === 'combined') {
+        return (atrophy >= 1 || metaplasia >= 1) ? Math.max(atrophy, metaplasia) : 0;
+      }
+      return atrophy;
+    }
+    
+    function calculateOLGAStage(antrum, corpus) {
+      const min = Math.min(antrum, corpus);
+      const max = Math.max(antrum, corpus);
+      
+      if (antrum === 0 && corpus === 0) return '0';
+      if (max === 1) return 'I';
+      if (max === 2 && min <= 1) return 'II';
+      if (max === 3 && min <= 1) return 'III';
+      if (min >= 2) return 'IV';
+      return '?';
+    }
+    
+    function getTopography(anScore, coScore) {
+      const diff = anScore - coScore;
+      if (anScore < 1 && coScore < 1) return 'minima attività infiammatoria';
+      if (Math.abs(diff) < 1) return 'pangastrite';
+      return diff > 0 ? 'prevalentemente antrale' : 'prevalentemente corpale';
+    }
+    
+    function gradeText(val) {
+      const words = ['assente', 'lieve', 'moderata', 'severa'];
+      return words[val] || '?';
+    }
+    
+    function calculate() {
+      if (!validate()) return;
+      
+      const method = document.querySelector('input[name="olga_method"]:checked').value;
+      
+      const data = {
+        antrum: {
+          chronic: getValue('an_chronic'),
+          activity: getValue('an_activity'),
+          atrophy: getValue('an_atrophy'),
+          metaplasia: getValue('an_metaplasia'),
+          hp: getValue('an_hp')
+        },
+        corpus: {
+          chronic: getValue('co_chronic'),
+          activity: getValue('co_activity'),
+          atrophy: getValue('co_atrophy'),
+          metaplasia: getValue('co_metaplasia'),
+          hp: getValue('co_hp')
+        },
+        incisura: {
+          chronic: getValue('in_chronic'),
+          activity: getValue('in_activity'),
+          atrophy: getValue('in_atrophy'),
+          metaplasia: getValue('in_metaplasia'),
+          hp: getValue('in_hp')
+        }
+      };
+      
+      // OLGA scores per sede
+      const olgaAntrum = getOLGAScore(data.antrum.atrophy, data.antrum.metaplasia, method);
+      const olgaCorpus = getOLGAScore(data.corpus.atrophy, data.corpus.metaplasia, method);
+      const olgaStage = calculateOLGAStage(olgaAntrum, olgaCorpus);
+      
+      const anMean = (data.antrum.chronic + data.antrum.activity + data.antrum.atrophy + data.antrum.metaplasia + data.antrum.hp) / 5;
+      const coMean = (data.corpus.chronic + data.corpus.activity + data.corpus.atrophy + data.corpus.metaplasia + data.corpus.hp) / 5;
+      const topography = getTopography(anMean, coMean);
+      
+      const isHighRisk = olgaStage === 'III' || olgaStage === 'IV';
+      const riskText = isHighRisk ? 'Alto rischio' : (olgaStage === '?' ? 'Indeterminato' : 'Basso rischio');
+      
+      // Badges
+      const badgeClass = isHighRisk ? 'high' : 'low';
+      document.getElementById('badgesContainer').innerHTML = `
+        <span class="badge ${badgeClass}">
+          <span class="dot" style="background: ${isHighRisk ? '#f56565' : '#48bb78'}"></span>
+          OLGA ${olgaStage} – ${riskText}
+        </span>
+        <span class="badge info">
+          <span class="dot" style="background: #4299e1"></span>
+          ${topography}
+        </span>
+      `;
+      
+      // Tabella
+      const sites = [
+        ['Antro', data.antrum],
+        ['Corpo', data.corpus],
+        ['Incisura', data.incisura]
+      ];
+      
+      document.getElementById('tableBody').innerHTML = sites.map(([name, d]) => `
+        <tr>
+          <td><strong>${name}</strong></td>
+          <td>${d.chronic}</td>
+          <td>${d.activity}</td>
+          <td>${d.atrophy}</td>
+          <td>${d.metaplasia}</td>
+          <td>${d.hp}</td>
+        </tr>
+      `).join('');
+      
+      // Referto
+      const hpMax = Math.max(data.antrum.hp, data.corpus.hp, data.incisura.hp);
+      const hpStatus = hpMax > 0 ? 
+        `Presenza di Helicobacter pylori (grado ${hpMax})` : 
+        'Assenza di Helicobacter pylori';
+      
+      const methodDesc = {
+        'atrophy': 'solo atrofia',
+        'max': 'max(atrofia, metaplasia)',
+        'combined': 'atrofia+metaplasia combinati'
+      };
+      
+      const report = `REFERTO ISTOLOGICO - GASTRITE CRONICA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+UPDATED SYDNEY SYSTEM (Dixon et al., 1996)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ANTRO:
+  • Infiltrato cronico: ${data.antrum.chronic} (${gradeText(data.antrum.chronic)})
+  • Attività neutrofila: ${data.antrum.activity} (${gradeText(data.antrum.activity)})
+  • Atrofia ghiandolare: ${data.antrum.atrophy} (${gradeText(data.antrum.atrophy)})
+  • Metaplasia intestinale: ${data.antrum.metaplasia} (${gradeText(data.antrum.metaplasia)})
+  • Helicobacter pylori: ${data.antrum.hp} (${gradeText(data.antrum.hp)})
+
+CORPO:
+  • Infiltrato cronico: ${data.corpus.chronic} (${gradeText(data.corpus.chronic)})
+  • Attività neutrofila: ${data.corpus.activity} (${gradeText(data.corpus.activity)})
+  • Atrofia ghiandolare: ${data.corpus.atrophy} (${gradeText(data.corpus.atrophy)})
+  • Metaplasia intestinale: ${data.corpus.metaplasia} (${gradeText(data.corpus.metaplasia)})
+  • Helicobacter pylori: ${data.corpus.hp} (${gradeText(data.corpus.hp)})
+
+INCISURA ANGOLARE:
+  • Infiltrato cronico: ${data.incisura.chronic} (${gradeText(data.incisura.chronic)})
+  • Attività neutrofila: ${data.incisura.activity} (${gradeText(data.incisura.activity)})
+  • Atrofia ghiandolare: ${data.incisura.atrophy} (${gradeText(data.incisura.atrophy)})
+  • Metaplasia intestinale: ${data.incisura.metaplasia} (${gradeText(data.incisura.metaplasia)})
+  • Helicobacter pylori: ${data.incisura.hp} (${gradeText(data.incisura.hp)})
+
+DISTRIBUZIONE TOPOGRAFICA: Gastrite ${topography}
+H. PYLORI: ${hpStatus}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OLGA STAGING SYSTEM (Rugge et al., 2010)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Metodo di calcolo: ${methodDesc[method]}
+Score OLGA antro: ${olgaAntrum}
+Score OLGA corpo: ${olgaCorpus}
+
+STADIO OLGA: ${olgaStage}
+RISCHIO NEOPLASTICO: ${riskText}
+
+${isHighRisk ? '⚠️ GESTIONE CLINICA:\nStadio OLGA III-IV richiede sorveglianza endoscopica.\nFollow-up secondo linee guida MAPS/ESGE 2019:\n- OLGA III: EGDS ogni 3 anni\n- OLGA IV: EGDS ogni 1-2 anni' : 'ℹ️ GESTIONE CLINICA:\nStadio OLGA 0-II: basso rischio, follow-up secondo sintomatologia.\nEradicazione H. pylori se presente.'}`;
+      
+      document.getElementById('reportText').textContent = report;
+      document.getElementById('resultsSection').style.display = 'block';
+      document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    function copyReport() {
+      const text = document.getElementById('reportText').textContent;
+      if (!text || text === '') {
+        showAlert('error', '⚠️ Calcola prima il referto');
+        return;
+      }
+      
+      navigator.clipboard.writeText(text)
+        .then(() => showAlert('success', '✅ Referto copiato negli appunti'))
+        .catch(() => {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          showAlert('success', '✅ Referto copiato');
+        });
+    }
+    
+    function resetForm() {
+      document.querySelectorAll('select').forEach(el => el.value = '');
+      document.getElementById('resultsSection').style.display = 'none';
+      clearErrors();
+      document.querySelector('input[name="olga_method"][value="atrophy"]').checked = true;
+    }
+  </script>
+</body>
+</html>
