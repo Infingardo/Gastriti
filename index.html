@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Gastrite – Sistema di Sydney + OLGA</title>
+  <title>Gastrite – Sistema di Sydney + OLGA/OLGIM</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -113,6 +113,7 @@
     }
     .alert.error { background: #fff5f5; border-left: 4px solid #f56565; color: #c53030; }
     .alert.success { background: #f0fff4; border-left: 4px solid #48bb78; color: #22543d; }
+    .alert.warning { background: #fffaf0; border-left: 4px solid #ed8936; color: #7c2d12; }
     .alert.show { display: block; }
     
     .results {
@@ -141,6 +142,7 @@
     .badge.low { background: #c6f6d5; color: #22543d; }
     .badge.high { background: #fed7d7; color: #c53030; }
     .badge.info { background: #bee3f8; color: #2c5282; }
+    .badge.warning { background: #feebc8; color: #7c2d12; }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
     
     table {
@@ -181,8 +183,18 @@
       font-size: 0.85rem;
       color: #718096;
     }
-    .footer a { color: #4299e1; text-decoration: none; }
+    .footer a { color: #4299e1; text-decoration: none; font-weight: 500; }
     .footer a:hover { text-decoration: underline; }
+    
+    .biblio-section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+    .biblio-item {
+      margin: 0.5rem 0;
+      padding-left: 1rem;
+    }
     
     @media print {
       header, .controls, .settings, .alert { display: none !important; }
@@ -194,7 +206,7 @@
 <body>
   <header>
     <div class="container">
-      <h1>🔬 Gastrite – Sistema di Sydney + OLGA</h1>
+      <h1>🔬 Gastrite – Sistema di Sydney + OLGA/OLGIM</h1>
       <div class="subtitle">Tool per refertazione istologica</div>
     </div>
   </header>
@@ -222,6 +234,7 @@
     
     <div id="errorAlert" class="alert error"></div>
     <div id="successAlert" class="alert success"></div>
+    <div id="warningAlert" class="alert warning"></div>
     
     <div class="grid">
       <div class="card">
@@ -417,15 +430,40 @@
       <div id="reportText" class="report-box"></div>
       
       <div class="footer">
-        <p><strong>⚠️ Nota clinica:</strong> Lo stadio OLGA stratifica il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS/ESGE.</p>
+        <p><strong>⚠️ Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS/ESGE.</p>
         
-        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <strong>Riferimenti bibliografici:</strong><br>
-          <small>
-            • Dixon MF et al. Updated Sydney System. <em>Am J Surg Pathol</em> 1996;20(10):1161-81. <a href="https://pubmed.ncbi.nlm.nih.gov/8827022/" target="_blank">PMID:8827022</a><br>
-            • Rugge M et al. OLGA gastritis staging. <em>Dig Liver Dis</em> 2010;42(3):177-82. <a href="https://pubmed.ncbi.nlm.nih.gov/19793674/" target="_blank">PMID:19793674</a><br>
-            • Pimentel-Nunes P et al. MAPS II guidelines. <em>Endoscopy</em> 2019;51(4):365-388. <a href="https://pubmed.ncbi.nlm.nih.gov/30841008/" target="_blank">PMID:30841008</a>
-          </small>
+        <div class="biblio-section">
+          <strong>Riferimenti bibliografici:</strong>
+          <div class="biblio-item">
+            • Dixon MF et al. Classification and grading of gastritis. The updated Sydney System. 
+            <em>Am J Surg Pathol</em> 1996;20(10):1161-81. 
+            <a href="https://pubmed.ncbi.nlm.nih.gov/8827022/" target="_blank" rel="noopener">PMID:8827022</a>
+          </div>
+          <div class="biblio-item">
+            • Rugge M et al. Gastritis staging in clinical practice: the OLGA staging system. 
+            <em>Gut</em> 2007;56(5):631-6. 
+            <a href="https://pubmed.ncbi.nlm.nih.gov/17142647/" target="_blank" rel="noopener">PMID:17142647</a>
+          </div>
+          <div class="biblio-item">
+            • Rugge M et al. OLGA gastritis staging for the assessment of gastric cancer risk: a twelve-year clinico-pathological follow-up study. 
+            <em>Dig Liver Dis</em> 2010;42(3):177-82. 
+            <a href="https://pubmed.ncbi.nlm.nih.gov/19793674/" target="_blank" rel="noopener">PMID:19793674</a>
+          </div>
+          <div class="biblio-item">
+            • Capelle LG et al. The staging of gastritis with the OLGA system by using intestinal metaplasia as an accurate alternative for atrophic gastritis. 
+            <em>Gastrointest Endosc</em> 2010;71(7):1150-8. 
+            <a href="https://pubmed.ncbi.nlm.nih.gov/20381801/" target="_blank" rel="noopener">PMID:20381801</a>
+          </div>
+          <div class="biblio-item">
+            • Capelle LG et al. Staging gastritis with the OLGIM: a less complex alternative to OLGA gastritis staging. 
+            <em>Am J Surg Pathol</em> 2010;34(11):1653-64. 
+            <a href="https://pubmed.ncbi.nlm.nih.gov/20975341/" target="_blank" rel="noopener">PMID:20975341</a>
+          </div>
+          <div class="biblio-item">
+            • Pimentel-Nunes P et al. Management of epithelial precancerous conditions and lesions in the stomach (MAPS II): European Society of Gastrointestinal Endoscopy, European Helicobacter and Microbiota Study Group, European Society of Pathology, and Sociedade Portuguesa de Endoscopia Digestiva Guideline Update 2019. 
+            <em>Endoscopy</em> 2019;51(4):365-388. 
+            <a href="https://pubmed.ncbi.nlm.nih.gov/30841008/" target="_blank" rel="noopener">PMID:30841008</a>
+          </div>
         </div>
       </div>
     </div>
@@ -438,15 +476,17 @@
     }
     
     function showAlert(type, message) {
-      const alert = document.getElementById(type === 'error' ? 'errorAlert' : 'successAlert');
+      const alertId = type === 'error' ? 'errorAlert' : type === 'warning' ? 'warningAlert' : 'successAlert';
+      const alert = document.getElementById(alertId);
       alert.textContent = message;
       alert.classList.add('show');
-      setTimeout(() => alert.classList.remove('show'), 4000);
+      setTimeout(() => alert.classList.remove('show'), 5000);
     }
     
     function clearErrors() {
       document.querySelectorAll('select.error').forEach(el => el.classList.remove('error'));
       document.getElementById('errorAlert').classList.remove('show');
+      document.getElementById('warningAlert').classList.remove('show');
     }
     
     function validate() {
@@ -476,11 +516,11 @@
       return atrophy;
     }
     
-    function calculateOLGAStage(antrum, corpus) {
-      const min = Math.min(antrum, corpus);
-      const max = Math.max(antrum, corpus);
+    function calculateStage(scoreSiteA, scoreSiteB) {
+      const min = Math.min(scoreSiteA, scoreSiteB);
+      const max = Math.max(scoreSiteA, scoreSiteB);
       
-      if (antrum === 0 && corpus === 0) return '0';
+      if (scoreSiteA === 0 && scoreSiteB === 0) return '0';
       if (max === 1) return 'I';
       if (max === 2 && min <= 1) return 'II';
       if (max === 3 && min <= 1) return 'III';
@@ -498,6 +538,12 @@
     function gradeText(val) {
       const words = ['assente', 'lieve', 'moderata', 'severa'];
       return words[val] || '?';
+    }
+    
+    function getRiskLevel(stage) {
+      if (stage === 'III' || stage === 'IV') return 'alto';
+      if (stage === '0' || stage === 'I' || stage === 'II') return 'basso';
+      return 'indeterminato';
     }
     
     function calculate() {
@@ -532,27 +578,56 @@
       // OLGA scores per sede
       const olgaAntrum = getOLGAScore(data.antrum.atrophy, data.antrum.metaplasia, method);
       const olgaCorpus = getOLGAScore(data.corpus.atrophy, data.corpus.metaplasia, method);
-      const olgaStage = calculateOLGAStage(olgaAntrum, olgaCorpus);
+      const olgaStage = calculateStage(olgaAntrum, olgaCorpus);
+      
+      // OLGIM scores (solo metaplasia intestinale)
+      const olgimAntrum = data.antrum.metaplasia;
+      const olgimCorpus = data.corpus.metaplasia;
+      const olgimStage = calculateStage(olgimAntrum, olgimCorpus);
       
       const anMean = (data.antrum.chronic + data.antrum.activity + data.antrum.atrophy + data.antrum.metaplasia + data.antrum.hp) / 5;
       const coMean = (data.corpus.chronic + data.corpus.activity + data.corpus.atrophy + data.corpus.metaplasia + data.corpus.hp) / 5;
       const topography = getTopography(anMean, coMean);
       
-      const isHighRisk = olgaStage === 'III' || olgaStage === 'IV';
-      const riskText = isHighRisk ? 'Alto rischio' : (olgaStage === '?' ? 'Indeterminato' : 'Basso rischio');
+      const olgaRisk = getRiskLevel(olgaStage);
+      const olgimRisk = getRiskLevel(olgimStage);
+      const isHighRisk = olgaRisk === 'alto' || olgimRisk === 'alto';
+      
+      // Calcola discordanza tra OLGA e OLGIM
+      const stageValues = { '0': 0, 'I': 1, 'II': 2, 'III': 3, 'IV': 4, '?': -1 };
+      const stageDiff = Math.abs(stageValues[olgaStage] - stageValues[olgimStage]);
+      const hasDiscordance = stageDiff >= 2;
       
       // Badges
-      const badgeClass = isHighRisk ? 'high' : 'low';
-      document.getElementById('badgesContainer').innerHTML = `
-        <span class="badge ${badgeClass}">
-          <span class="dot" style="background: ${isHighRisk ? '#f56565' : '#48bb78'}"></span>
-          OLGA ${olgaStage} – ${riskText}
+      const olgaBadgeClass = olgaRisk === 'alto' ? 'high' : 'low';
+      const olgimBadgeClass = olgimRisk === 'alto' ? 'high' : 'low';
+      
+      let badgesHTML = `
+        <span class="badge ${olgaBadgeClass}">
+          <span class="dot" style="background: ${olgaRisk === 'alto' ? '#f56565' : '#48bb78'}"></span>
+          OLGA ${olgaStage}
+        </span>
+        <span class="badge ${olgimBadgeClass}">
+          <span class="dot" style="background: ${olgimRisk === 'alto' ? '#f56565' : '#48bb78'}"></span>
+          OLGIM ${olgimStage}
         </span>
         <span class="badge info">
           <span class="dot" style="background: #4299e1"></span>
           ${topography}
         </span>
       `;
+      
+      if (hasDiscordance) {
+        badgesHTML += `
+          <span class="badge warning">
+            <span class="dot" style="background: #ed8936"></span>
+            Discordanza significativa OLGA/OLGIM
+          </span>
+        `;
+        showAlert('warning', '⚠️ OLGA e OLGIM divergono ≥2 stadi: considerare lo stadio più alto per la sorveglianza');
+      }
+      
+      document.getElementById('badgesContainer').innerHTML = badgesHTML;
       
       // Tabella
       const sites = [
@@ -583,6 +658,22 @@
         'max': 'max(atrofia, metaplasia)',
         'combined': 'atrofia+metaplasia combinati'
       };
+      
+      const riskAssessment = isHighRisk ? 
+        'Alto rischio (stadio III-IV in almeno un sistema)' : 
+        'Basso rischio (stadi 0-II in entrambi i sistemi)';
+      
+      const followUpText = isHighRisk ?
+        `⚠️ GESTIONE CLINICA:
+Stadio III-IV richiede sorveglianza endoscopica.
+Follow-up secondo linee guida MAPS/ESGE 2019:
+- Stadio III: EGDS ogni 3 anni
+- Stadio IV: EGDS ogni 1-2 anni
+${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM ≥2 stadi. In caso di dubbio, considerare lo stadio più alto per la sorveglianza.' : ''}` :
+        `ℹ️ GESTIONE CLINICA:
+Stadi 0-II: basso rischio, follow-up secondo sintomatologia.
+Eradicazione H. pylori se presente.
+${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM rilevata. Valutare clinicamente.' : ''}`;
       
       const report = `REFERTO ISTOLOGICO - GASTRITE CRONICA
 
@@ -615,7 +706,7 @@ DISTRIBUZIONE TOPOGRAFICA: Gastrite ${topography}
 H. PYLORI: ${hpStatus}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OLGA STAGING SYSTEM (Rugge et al., 2010)
+OLGA STAGING SYSTEM (Rugge et al., 2007/2010)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Metodo di calcolo: ${methodDesc[method]}
@@ -623,9 +714,26 @@ Score OLGA antro: ${olgaAntrum}
 Score OLGA corpo: ${olgaCorpus}
 
 STADIO OLGA: ${olgaStage}
-RISCHIO NEOPLASTICO: ${riskText}
+RISCHIO (OLGA): ${olgaRisk.charAt(0).toUpperCase() + olgaRisk.slice(1)} rischio
 
-${isHighRisk ? '⚠️ GESTIONE CLINICA:\nStadio OLGA III-IV richiede sorveglianza endoscopica.\nFollow-up secondo linee guida MAPS/ESGE 2019:\n- OLGA III: EGDS ogni 3 anni\n- OLGA IV: EGDS ogni 1-2 anni' : 'ℹ️ GESTIONE CLINICA:\nStadio OLGA 0-II: basso rischio, follow-up secondo sintomatologia.\nEradicazione H. pylori se presente.'}`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+OLGIM STAGING SYSTEM (Capelle et al., 2010)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Basato solo su metaplasia intestinale
+Score OLGIM antro: ${olgimAntrum}
+Score OLGIM corpo: ${olgimCorpus}
+
+STADIO OLGIM: ${olgimStage}
+RISCHIO (OLGIM): ${olgimRisk.charAt(0).toUpperCase() + olgimRisk.slice(1)} rischio
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+VALUTAZIONE COMPLESSIVA DEL RISCHIO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${riskAssessment}
+
+${followUpText}`;
       
       document.getElementById('reportText').textContent = report;
       document.getElementById('resultsSection').style.display = 'block';
@@ -656,6 +764,7 @@ ${isHighRisk ? '⚠️ GESTIONE CLINICA:\nStadio OLGA III-IV richiede sorveglian
       document.querySelectorAll('select').forEach(el => el.value = '');
       document.getElementById('resultsSection').style.display = 'none';
       clearErrors();
+      document.getElementById('warningAlert').classList.remove('show');
       document.querySelector('input[name="olga_method"][value="atrophy"]').checked = true;
     }
   </script>
