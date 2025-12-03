@@ -60,6 +60,8 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .card h2 { font-size: 1.1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+    .card.global { background: #f0f9ff; border: 2px solid #90cdf4; }
+    .card.global h2 { color: #2b6cb0; border-bottom-color: #90cdf4; }
     
     .field { margin-bottom: 1rem; }
     .field label { 
@@ -83,6 +85,8 @@
     }
     .field select:focus { outline: none; border-color: #4299e1; }
     .field select.error { border-color: #f56565; background: #fff5f5; }
+    .field select.optional { border-style: dashed; }
+    .field small { display: block; color: #718096; font-size: 0.8rem; margin-top: 0.25rem; }
     
     .controls {
       display: flex;
@@ -143,6 +147,7 @@
     .badge.high { background: #fed7d7; color: #c53030; }
     .badge.info { background: #bee3f8; color: #2c5282; }
     .badge.warning { background: #feebc8; color: #7c2d12; }
+    .badge.dysplasia { background: #e9d8fd; color: #553c9a; }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
     
     table {
@@ -196,6 +201,15 @@
       padding-left: 1rem;
     }
     
+    .matrix-note {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      font-size: 0.85rem;
+    }
+    
     @media print {
       header, .controls, .settings, .alert { display: none !important; }
       body { background: white; }
@@ -207,20 +221,21 @@
   <header>
     <div class="container">
       <h1>🔬 Gastrite – Sistema di Sydney + OLGA/OLGIM</h1>
-      <div class="subtitle">Tool per refertazione istologica</div>
+      <div class="subtitle">Tool per refertazione istologica v2.1</div>
     </div>
   </header>
   
   <main class="container">
     <div class="info-panel">
-      <strong>Scala Sydney:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = severa
+      <strong>Scala Sydney:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = severa<br>
+      <strong>Nota:</strong> L'incisura angolare viene aggregata all'antro per il calcolo OLGA/OLGIM (max tra i due valori)
     </div>
     
     <div class="settings">
       <strong style="display: block; margin-bottom: 0.5rem;">Metodo di calcolo OLGA:</strong>
       <label>
         <input type="radio" name="olga_method" value="atrophy" checked>
-        Solo atrofia ghiandolare (approccio conservativo)
+        Solo atrofia ghiandolare (approccio conservativo, OLGA originale)
       </label>
       <label>
         <input type="radio" name="olga_method" value="max">
@@ -235,6 +250,33 @@
     <div id="errorAlert" class="alert error"></div>
     <div id="successAlert" class="alert success"></div>
     <div id="warningAlert" class="alert warning"></div>
+    
+    <!-- Card globale per displasia e tipo MI -->
+    <div class="card global">
+      <h2>Valutazione globale</h2>
+      <div class="grid" style="margin: 0;">
+        <div class="field">
+          <label>Displasia</label>
+          <select id="dysplasia">
+            <option value="">—</option>
+            <option value="0">Assente</option>
+            <option value="1">Basso grado (LGD)</option>
+            <option value="2">Alto grado (HGD)</option>
+          </select>
+          <small>Campo obbligatorio per stratificazione rischio MAPS II</small>
+        </div>
+        <div class="field">
+          <label>Tipo metaplasia intestinale (se presente)</label>
+          <select id="mi_type" class="optional">
+            <option value="">Non applicabile / Non valutato</option>
+            <option value="complete">Completa (tipo I)</option>
+            <option value="incomplete">Incompleta (tipo II/III)</option>
+            <option value="mixed">Mista</option>
+          </select>
+          <small>Opzionale – MI incompleta associata a rischio maggiore</small>
+        </div>
+      </div>
+    </div>
     
     <div class="grid">
       <div class="card">
@@ -430,7 +472,7 @@
       <div id="reportText" class="report-box"></div>
       
       <div class="footer">
-        <p><strong>⚠️ Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS/ESGE.</p>
+        <p><strong>⚠️ Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS/ESGE. La presenza di displasia modifica significativamente il management.</p>
         
         <div class="biblio-section">
           <strong>Riferimenti bibliografici:</strong>
@@ -470,9 +512,23 @@
   </main>
   
   <script>
+    // Matrice OLGA originale (Rugge et al. 2007)
+    // Righe: corpo (0-3), Colonne: antro (0-3)
+    const OLGA_MATRIX = [
+      ['0',  'I',   'II',  'II' ],  // corpo 0
+      ['I',  'I',   'II',  'III'],  // corpo 1
+      ['II', 'II',  'III', 'IV' ],  // corpo 2
+      ['II', 'III', 'IV',  'IV' ]   // corpo 3
+    ];
+    
     function getValue(id) {
       const el = document.getElementById(id);
       return el && el.value !== '' ? parseInt(el.value, 10) : null;
+    }
+    
+    function getStringValue(id) {
+      const el = document.getElementById(id);
+      return el ? el.value : '';
     }
     
     function showAlert(type, message) {
@@ -480,7 +536,7 @@
       const alert = document.getElementById(alertId);
       alert.textContent = message;
       alert.classList.add('show');
-      setTimeout(() => alert.classList.remove('show'), 5000);
+      setTimeout(() => alert.classList.remove('show'), 6000);
     }
     
     function clearErrors() {
@@ -494,14 +550,15 @@
       const fields = [
         'an_chronic', 'an_activity', 'an_atrophy', 'an_metaplasia', 'an_hp',
         'co_chronic', 'co_activity', 'co_atrophy', 'co_metaplasia', 'co_hp',
-        'in_chronic', 'in_activity', 'in_atrophy', 'in_metaplasia', 'in_hp'
+        'in_chronic', 'in_activity', 'in_atrophy', 'in_metaplasia', 'in_hp',
+        'dysplasia'
       ];
       
       const missing = fields.filter(id => getValue(id) === null);
       
       if (missing.length > 0) {
         missing.forEach(id => document.getElementById(id).classList.add('error'));
-        showAlert('error', `⚠️ Compila tutti i campi (${missing.length} mancanti)`);
+        showAlert('error', `⚠️ Compila tutti i campi obbligatori (${missing.length} mancanti)`);
         return false;
       }
       return true;
@@ -516,22 +573,19 @@
       return atrophy;
     }
     
-    function calculateStage(scoreSiteA, scoreSiteB) {
-      const min = Math.min(scoreSiteA, scoreSiteB);
-      const max = Math.max(scoreSiteA, scoreSiteB);
-      
-      if (scoreSiteA === 0 && scoreSiteB === 0) return '0';
-      if (max === 1) return 'I';
-      if (max === 2 && min <= 1) return 'II';
-      if (max === 3 && min <= 1) return 'III';
-      if (min >= 2) return 'IV';
-      return '?';
+    // Calcolo stadio usando la matrice OLGA corretta
+    function calculateStage(antrumScore, corpusScore) {
+      // Clamp dei valori a 0-3
+      const a = Math.min(3, Math.max(0, antrumScore));
+      const c = Math.min(3, Math.max(0, corpusScore));
+      return OLGA_MATRIX[c][a];
     }
     
-    function getTopography(anScore, coScore) {
-      const diff = anScore - coScore;
-      if (anScore < 1 && coScore < 1) return 'minima attività infiammatoria';
-      if (Math.abs(diff) < 1) return 'pangastrite';
+    function getTopography(anChronic, coChronic) {
+      // Topografia basata solo su infiltrato cronico (più appropriato clinicamente)
+      if (anChronic <= 1 && coChronic <= 1) return 'minima attività infiammatoria';
+      const diff = anChronic - coChronic;
+      if (Math.abs(diff) <= 1) return 'pangastrite';
       return diff > 0 ? 'prevalentemente antrale' : 'prevalentemente corpale';
     }
     
@@ -546,10 +600,26 @@
       return 'indeterminato';
     }
     
+    function getDysplasiaText(val) {
+      if (val === 0) return 'Assente';
+      if (val === 1) return 'Basso grado (LGD)';
+      if (val === 2) return 'Alto grado (HGD)';
+      return '?';
+    }
+    
+    function getMITypeText(val) {
+      if (val === 'complete') return 'Completa (tipo I)';
+      if (val === 'incomplete') return 'Incompleta (tipo II/III)';
+      if (val === 'mixed') return 'Mista (completa + incompleta)';
+      return 'Non valutato';
+    }
+    
     function calculate() {
       if (!validate()) return;
       
       const method = document.querySelector('input[name="olga_method"]:checked').value;
+      const dysplasia = getValue('dysplasia');
+      const miType = getStringValue('mi_type');
       
       const data = {
         antrum: {
@@ -575,28 +645,35 @@
         }
       };
       
-      // OLGA scores per sede
-      const olgaAntrum = getOLGAScore(data.antrum.atrophy, data.antrum.metaplasia, method);
+      // Aggregazione incisura all'antro: prendi il max tra antro e incisura
+      const antrumAtrophyAggregated = Math.max(data.antrum.atrophy, data.incisura.atrophy);
+      const antrumMetaplasiaAggregated = Math.max(data.antrum.metaplasia, data.incisura.metaplasia);
+      
+      // OLGA scores per sede (con incisura aggregata all'antro)
+      const olgaAntrum = getOLGAScore(antrumAtrophyAggregated, antrumMetaplasiaAggregated, method);
       const olgaCorpus = getOLGAScore(data.corpus.atrophy, data.corpus.metaplasia, method);
       const olgaStage = calculateStage(olgaAntrum, olgaCorpus);
       
-      // OLGIM scores (solo metaplasia intestinale)
-      const olgimAntrum = data.antrum.metaplasia;
+      // OLGIM scores (solo metaplasia intestinale, con incisura aggregata)
+      const olgimAntrum = antrumMetaplasiaAggregated;
       const olgimCorpus = data.corpus.metaplasia;
       const olgimStage = calculateStage(olgimAntrum, olgimCorpus);
       
-      const anMean = (data.antrum.chronic + data.antrum.activity + data.antrum.atrophy + data.antrum.metaplasia + data.antrum.hp) / 5;
-      const coMean = (data.corpus.chronic + data.corpus.activity + data.corpus.atrophy + data.corpus.metaplasia + data.corpus.hp) / 5;
-      const topography = getTopography(anMean, coMean);
+      // Topografia basata su infiltrato cronico
+      const maxAntrumChronic = Math.max(data.antrum.chronic, data.incisura.chronic);
+      const topography = getTopography(maxAntrumChronic, data.corpus.chronic);
       
       const olgaRisk = getRiskLevel(olgaStage);
       const olgimRisk = getRiskLevel(olgimStage);
       const isHighRisk = olgaRisk === 'alto' || olgimRisk === 'alto';
       
       // Calcola discordanza tra OLGA e OLGIM
-      const stageValues = { '0': 0, 'I': 1, 'II': 2, 'III': 3, 'IV': 4, '?': -1 };
+      const stageValues = { '0': 0, 'I': 1, 'II': 2, 'III': 3, 'IV': 4 };
       const stageDiff = Math.abs(stageValues[olgaStage] - stageValues[olgimStage]);
       const hasDiscordance = stageDiff >= 2;
+      
+      // Verifica se c'è metaplasia in qualche sede
+      const hasMetaplasia = antrumMetaplasiaAggregated > 0 || data.corpus.metaplasia > 0;
       
       // Badges
       const olgaBadgeClass = olgaRisk === 'alto' ? 'high' : 'low';
@@ -617,11 +694,21 @@
         </span>
       `;
       
+      if (dysplasia > 0) {
+        const dysplasiaBadgeClass = dysplasia === 2 ? 'high' : 'dysplasia';
+        badgesHTML += `
+          <span class="badge ${dysplasiaBadgeClass}">
+            <span class="dot" style="background: ${dysplasia === 2 ? '#f56565' : '#805ad5'}"></span>
+            Displasia ${dysplasia === 1 ? 'LGD' : 'HGD'}
+          </span>
+        `;
+      }
+      
       if (hasDiscordance) {
         badgesHTML += `
           <span class="badge warning">
             <span class="dot" style="background: #ed8936"></span>
-            Discordanza significativa OLGA/OLGIM
+            Discordanza OLGA/OLGIM
           </span>
         `;
         showAlert('warning', '⚠️ OLGA e OLGIM divergono ≥2 stadi: considerare lo stadio più alto per la sorveglianza');
@@ -654,26 +741,59 @@
         'Assenza di Helicobacter pylori';
       
       const methodDesc = {
-        'atrophy': 'solo atrofia',
+        'atrophy': 'solo atrofia (OLGA originale)',
         'max': 'max(atrofia, metaplasia)',
         'combined': 'atrofia+metaplasia combinati'
       };
       
-      const riskAssessment = isHighRisk ? 
-        'Alto rischio (stadio III-IV in almeno un sistema)' : 
-        'Basso rischio (stadi 0-II in entrambi i sistemi)';
+      // Logica follow-up MAPS II con displasia
+      let followUpText = '';
+      let riskAssessment = '';
       
-      const followUpText = isHighRisk ?
-        `⚠️ GESTIONE CLINICA:
-Stadio III-IV richiede sorveglianza endoscopica.
-Follow-up secondo linee guida MAPS/ESGE 2019:
-- Stadio III: EGDS ogni 3 anni
-- Stadio IV: EGDS ogni 1-2 anni
-${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM ≥2 stadi. In caso di dubbio, considerare lo stadio più alto per la sorveglianza.' : ''}` :
-        `ℹ️ GESTIONE CLINICA:
-Stadi 0-II: basso rischio, follow-up secondo sintomatologia.
-Eradicazione H. pylori se presente.
+      if (dysplasia === 2) {
+        // HGD
+        riskAssessment = 'ALTO RISCHIO - Displasia di alto grado';
+        followUpText = `⚠️ GESTIONE CLINICA (MAPS II 2019):
+DISPLASIA DI ALTO GRADO (HGD):
+→ Staging endoscopico accurato (HD-WLE + cromoscopia)
+→ Conferma istologica da secondo patologo esperto
+→ Resezione endoscopica di lesioni visibili
+→ Se HGD su mucosa piatta: EGDS ogni 6 mesi con mappaggio estensivo
+→ Discussione multidisciplinare`;
+      } else if (dysplasia === 1) {
+        // LGD
+        riskAssessment = 'RISCHIO AUMENTATO - Displasia di basso grado';
+        followUpText = `⚠️ GESTIONE CLINICA (MAPS II 2019):
+DISPLASIA DI BASSO GRADO (LGD):
+→ Resezione endoscopica di lesioni visibili
+→ Se LGD su mucosa piatta: EGDS ogni 12 mesi con HD-WLE + cromoscopia
+→ Eradicazione H. pylori se presente
+→ Considerare conferma da patologo esperto`;
+      } else if (isHighRisk) {
+        // Stadio III-IV senza displasia
+        riskAssessment = 'Alto rischio (stadio III-IV) senza displasia';
+        followUpText = `⚠️ GESTIONE CLINICA (MAPS II 2019):
+STADIO OLGA/OLGIM III-IV:
+→ EGDS ogni 3 anni con HD-WLE + cromoscopia
+→ Mappaggio bioptico estensivo
+→ Eradicazione H. pylori se presente
+${miType === 'incomplete' ? '→ MI incompleta: considerare follow-up più ravvicinato' : ''}
+${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM. Considerare lo stadio più alto.' : ''}`;
+      } else {
+        // Basso rischio
+        riskAssessment = 'Basso rischio (stadi 0-II, no displasia)';
+        followUpText = `ℹ️ GESTIONE CLINICA (MAPS II 2019):
+STADI OLGA/OLGIM 0-II senza displasia:
+→ Non indicata sorveglianza endoscopica routinaria
+→ Eradicazione H. pylori se presente
+→ Follow-up clinico secondo sintomatologia
+${miType === 'incomplete' && hasMetaplasia ? '\n⚠️ NOTA: MI incompleta presente. Valutare clinicamente opportunità di follow-up.' : ''}
 ${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM rilevata. Valutare clinicamente.' : ''}`;
+      }
+      
+      // Sezione tipo MI nel referto
+      const miTypeSection = hasMetaplasia && miType ? 
+        `\nTIPO METAPLASIA INTESTINALE: ${getMITypeText(miType)}` : '';
       
       const report = `REFERTO ISTOLOGICO - GASTRITE CRONICA
 
@@ -704,14 +824,17 @@ INCISURA ANGOLARE:
 
 DISTRIBUZIONE TOPOGRAFICA: Gastrite ${topography}
 H. PYLORI: ${hpStatus}
+DISPLASIA: ${getDysplasiaText(dysplasia)}${miTypeSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OLGA STAGING SYSTEM (Rugge et al., 2007/2010)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Metodo di calcolo: ${methodDesc[method]}
-Score OLGA antro: ${olgaAntrum}
-Score OLGA corpo: ${olgaCorpus}
+Nota: Incisura angolare aggregata all'antro (max dei valori)
+
+Score antro (aggregato): ${olgaAntrum}
+Score corpo: ${olgaCorpus}
 
 STADIO OLGA: ${olgaStage}
 RISCHIO (OLGA): ${olgaRisk.charAt(0).toUpperCase() + olgaRisk.slice(1)} rischio
@@ -721,8 +844,10 @@ OLGIM STAGING SYSTEM (Capelle et al., 2010)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Basato solo su metaplasia intestinale
-Score OLGIM antro: ${olgimAntrum}
-Score OLGIM corpo: ${olgimCorpus}
+Nota: Incisura angolare aggregata all'antro (max dei valori)
+
+Score antro (aggregato): ${olgimAntrum}
+Score corpo: ${olgimCorpus}
 
 STADIO OLGIM: ${olgimStage}
 RISCHIO (OLGIM): ${olgimRisk.charAt(0).toUpperCase() + olgimRisk.slice(1)} rischio
