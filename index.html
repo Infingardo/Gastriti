@@ -642,6 +642,18 @@
       </div>
     </div>
     
+    <!-- Note libere -->
+    <div class="card" style="border: 2px solid #718096; background: #f7fafc;">
+      <h2 style="color: #2d3748; border-bottom-color: #cbd5e0;">
+        📝 Note aggiuntive
+      </h2>
+      <div class="field" style="margin-top: 1rem;">
+        <label>Osservazioni libere (opzionale)</label>
+        <textarea id="free_notes" rows="4" style="width: 100%; padding: 0.75rem; border: 2px solid #cbd5e0; border-radius: 0.375rem; font-size: 0.95rem; font-family: inherit; resize: vertical;" placeholder="Eventuali osservazioni aggiuntive non coperte dai campi strutturati (es: aspetti morfologici particolari, note cliniche, dubbi diagnostici...)"></textarea>
+        <small>Queste note verranno aggiunte alla fine del referto se compilate.</small>
+      </div>
+    </div>
+    
     <div class="controls">
       <button class="primary" onclick="calculate()">📊 Calcola referto</button>
       <button class="secondary" onclick="copyReport()">📋 Copia referto</button>
@@ -904,6 +916,27 @@
         }
       }
       
+      // VALIDAZIONI INCROCIATE CLINICHE
+      // Attività neutrofila senza H. pylori
+      if (maxActivity > 0 && hpMax === 0) {
+        showAlert('warning', '⚠️ VALIDAZIONE: Attività neutrofila presente senza H. pylori rilevabile. Considerare: altri patogeni, forme speciali, artefatti.');
+      }
+      
+      // Metaplasia senza atrofia (pattern insolito)
+      const hasMetaplasiaWithoutAtrophy = (data.antrum.metaplasia > 0 && data.antrum.atrophy === 0) ||
+                                          (data.corpus.metaplasia > 0 && data.corpus.atrophy === 0) ||
+                                          (data.incisura.metaplasia > 0 && data.incisura.atrophy === 0);
+      if (hasMetaplasiaWithoutAtrophy) {
+        showAlert('warning', '⚠️ VALIDAZIONE: Metaplasia intestinale senza atrofia ghiandolare è insolita. Verificare campionamento.');
+      }
+      
+      // Atrofia/metaplasia marcata senza infiltrato cronico significativo
+      const hasAtrophyWithoutInflammation = (data.antrum.atrophy >= 2 && data.antrum.chronic < 2) ||
+                                            (data.corpus.atrophy >= 2 && data.corpus.chronic < 2);
+      if (hasAtrophyWithoutInflammation) {
+        showAlert('warning', '⚠️ VALIDAZIONE: Atrofia marcata con scarso infiltrato cronico. Pattern suggestivo di gastrite autoimmune avanzata o post-eradicazione.');
+      }
+      
       // Aggregazione incisura all'antro: prendi il max tra antro e incisura
       const antrumAtrophyAggregated = Math.max(data.antrum.atrophy, data.incisura.atrophy);
       const antrumMetaplasiaAggregated = Math.max(data.antrum.metaplasia, data.incisura.metaplasia);
@@ -1079,6 +1112,11 @@ ${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM rilevata. Valutare cli
       const miTypeSection = hasMetaplasia && miType ? 
         `\nTIPO METAPLASIA INTESTINALE: ${getMITypeText(miType)}` : '';
       
+      // Note libere
+      const freeNotes = document.getElementById('free_notes').value.trim();
+      const freeNotesSection = freeNotes ? 
+        `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNOTE AGGIUNTIVE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n${freeNotes}` : '';
+      
       // Check modalità referto breve
       const isBriefMode = document.getElementById('brief_report').checked;
       
@@ -1117,7 +1155,7 @@ FOLLOW-UP (MAPS II - ESGE/ESP 2019)
 
 ${briefFollowUp}
 ${hpMax > 0 ? '• Eradicazione H. pylori' : ''}
-${miType === 'incomplete' ? '• MI incompleta: follow-up più ravvicinato' : ''}
+${miType === 'incomplete' ? '• MI incompleta: follow-up più ravvicinato' : ''}${freeNotesSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Referto generato con tool Sydney-OLGA/OLGIM v3.0 (MAPS II - ESGE/ESP 2019)
@@ -1215,7 +1253,7 @@ VALUTAZIONE COMPLESSIVA DEL RISCHIO
 
 ${riskAssessment}
 
-${followUpText}
+${followUpText}${freeNotesSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 RIFERIMENTI BIBLIOGRAFICI
@@ -1270,6 +1308,7 @@ SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano`;
     function resetForm() {
       document.querySelectorAll('select').forEach(el => el.value = '');
       document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+      document.getElementById('free_notes').value = '';
       document.getElementById('resultsSection').style.display = 'none';
       clearErrors();
       document.getElementById('warningAlert').classList.remove('show');
@@ -1277,7 +1316,152 @@ SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano`;
       // Chiudi sezione forme speciali
       document.getElementById('specialFormsContent').style.display = 'none';
       document.getElementById('specialFormsToggle').textContent = '▼';
+      // Pulisci localStorage
+      localStorage.removeItem('gastritisFormData');
     }
+    
+    // ============================================
+    // LOCALSTORAGE - SALVATAGGIO AUTOMATICO
+    // ============================================
+    
+    function saveFormData() {
+      try {
+        const formData = {
+          // Metodo OLGA
+          method: document.querySelector('input[name="olga_method"]:checked')?.value || 'atrophy',
+          briefReport: document.getElementById('brief_report')?.checked || false,
+          
+          // Dati Sydney
+          antrum: {
+            chronic: getValue('an_chronic'),
+            activity: getValue('an_activity'),
+            atrophy: getValue('an_atrophy'),
+            metaplasia: getValue('an_metaplasia'),
+            hp: getValue('an_hp')
+          },
+          corpus: {
+            chronic: getValue('co_chronic'),
+            activity: getValue('co_activity'),
+            atrophy: getValue('co_atrophy'),
+            metaplasia: getValue('co_metaplasia'),
+            hp: getValue('co_hp')
+          },
+          incisura: {
+            chronic: getValue('in_chronic'),
+            activity: getValue('in_activity'),
+            atrophy: getValue('in_atrophy'),
+            metaplasia: getValue('in_metaplasia'),
+            hp: getValue('in_hp')
+          },
+          
+          // Altri campi
+          dysplasia: getValue('dysplasia'),
+          miType: getStringValue('mi_type'),
+          
+          // Forme speciali
+          foveolarHyperplasia: getValue('foveolar_hyperplasia'),
+          laminaEdema: document.getElementById('lamina_edema')?.checked || false,
+          smoothMuscleProlif: document.getElementById('smooth_muscle_prolif')?.checked || false,
+          corpusRestricted: document.getElementById('corpus_restricted')?.checked || false,
+          pseudopyloricMeta: document.getElementById('pseudopyloric_meta')?.checked || false,
+          eclHyperplasia: document.getElementById('ecl_hyperplasia')?.checked || false,
+          highIELs: document.getElementById('high_iels')?.checked || false,
+          
+          // Note libere
+          freeNotes: document.getElementById('free_notes')?.value || '',
+          
+          // Timestamp
+          savedAt: new Date().toISOString()
+        };
+        
+        localStorage.setItem('gastritisFormData', JSON.stringify(formData));
+      } catch (e) {
+        console.warn('Errore salvataggio localStorage:', e);
+      }
+    }
+    
+    function loadFormData() {
+      try {
+        const saved = localStorage.getItem('gastritisFormData');
+        if (!saved) return;
+        
+        const data = JSON.parse(saved);
+        
+        // Metodo OLGA
+        const methodRadio = document.querySelector(`input[name="olga_method"][value="${data.method}"]`);
+        if (methodRadio) methodRadio.checked = true;
+        
+        if (document.getElementById('brief_report')) {
+          document.getElementById('brief_report').checked = data.briefReport;
+        }
+        
+        // Dati Sydney
+        const setValue = (id, val) => {
+          const el = document.getElementById(id);
+          if (el && val !== null && val !== undefined) el.value = val;
+        };
+        
+        setValue('an_chronic', data.antrum.chronic);
+        setValue('an_activity', data.antrum.activity);
+        setValue('an_atrophy', data.antrum.atrophy);
+        setValue('an_metaplasia', data.antrum.metaplasia);
+        setValue('an_hp', data.antrum.hp);
+        
+        setValue('co_chronic', data.corpus.chronic);
+        setValue('co_activity', data.corpus.activity);
+        setValue('co_atrophy', data.corpus.atrophy);
+        setValue('co_metaplasia', data.corpus.metaplasia);
+        setValue('co_hp', data.corpus.hp);
+        
+        setValue('in_chronic', data.incisura.chronic);
+        setValue('in_activity', data.incisura.activity);
+        setValue('in_atrophy', data.incisura.atrophy);
+        setValue('in_metaplasia', data.incisura.metaplasia);
+        setValue('in_hp', data.incisura.hp);
+        
+        setValue('dysplasia', data.dysplasia);
+        setValue('mi_type', data.miType);
+        
+        // Forme speciali
+        setValue('foveolar_hyperplasia', data.foveolarHyperplasia);
+        if (document.getElementById('lamina_edema')) {
+          document.getElementById('lamina_edema').checked = data.laminaEdema;
+        }
+        if (document.getElementById('smooth_muscle_prolif')) {
+          document.getElementById('smooth_muscle_prolif').checked = data.smoothMuscleProlif;
+        }
+        if (document.getElementById('corpus_restricted')) {
+          document.getElementById('corpus_restricted').checked = data.corpusRestricted;
+        }
+        if (document.getElementById('pseudopyloric_meta')) {
+          document.getElementById('pseudopyloric_meta').checked = data.pseudopyloricMeta;
+        }
+        if (document.getElementById('ecl_hyperplasia')) {
+          document.getElementById('ecl_hyperplasia').checked = data.eclHyperplasia;
+        }
+        if (document.getElementById('high_iels')) {
+          document.getElementById('high_iels').checked = data.highIELs;
+        }
+        
+        // Note libere
+        if (document.getElementById('free_notes')) {
+          document.getElementById('free_notes').value = data.freeNotes || '';
+        }
+        
+      } catch (e) {
+        console.warn('Errore caricamento localStorage:', e);
+      }
+    }
+    
+    // Carica dati salvati al caricamento pagina
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFormData();
+      
+      // Salva automaticamente ad ogni cambio
+      document.querySelectorAll('select, input, textarea').forEach(el => {
+        el.addEventListener('change', saveFormData);
+      });
+    });
   </script>
 </body>
 </html>

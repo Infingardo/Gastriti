@@ -27,6 +27,7 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
 * **Modalità referto selezionabile:**
   - **Referto BREVE**: essenziale per LIS/endoscopisti (diagnosi + staging + follow-up)
   - **Referto ESTESO**: completo per casi complessi/secondo parere (tutto + bibliografia)
+* **Note libere**: campo testo per osservazioni aggiuntive non strutturate
 * **Badge riassuntivi**: stadio OLGA, stadio OLGIM, distribuzione topografica, forme speciali, alert
 * **Tabella sinottica**: valori Sydney per tutte le sedi
 * **Referto testuale strutturato**: pronto per copia-incolla con validazione clinica
@@ -34,9 +35,11 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
 * **Alert automatici**: 
   - Discordanze significative tra OLGA e OLGIM (≥2 stadi)
   - Pattern incompatibili nelle forme speciali
+  - **Validazioni incrociate cliniche** (attività senza HP, metaplasia senza atrofia, etc.)
   - Metaplasia intestinale incompleta
   - Note epistemologiche su limiti diagnostici
 * **Gestione clinica**: raccomandazioni follow-up secondo MAPS II (ESGE/ESP 2019)
+* **Salvataggio automatico**: localStorage per non perdere dati al refresh browser
 
 ## 🚀 Utilizzo
 
@@ -218,12 +221,22 @@ No, solo quando il pattern istologico lo suggerisce:
 - **Autoimmune**: se atrofia corpus >>> antro
 - **Lymphocytic**: se IEL chiaramente aumentati
 
+### I dati vengono salvati automaticamente?
+Sì! Il tool usa localStorage del browser per salvare automaticamente tutti i campi mentre li compili. I dati vengono recuperati automaticamente se ricarichi la pagina. 
+
+**Nota**: I dati sono salvati SOLO nel tuo browser locale (privacy-first) e vengono cancellati se:
+- Clicchi "Reset" (cancellazione manuale)
+- Cancelli i dati del browser
+- Usi modalità incognito (non persistono)
+
+Per casi importanti, usa sempre "Copia referto" per salvare il testo in modo permanente.
+
 ---
 
-**Versione**: 3.0 FINAL (con forme speciali + referto breve/esteso)  
+**Versione**: 3.0 FINAL (con forme speciali + referto breve/esteso + validazioni + note libere)  
 **Ultimo aggiornamento**: Gennaio 2026  
 **Live URL**: [https://infingardo.github.io/Gastriti/](https://infingardo.github.io/Gastriti/)  
-**Features**: 15+ funzionalità diagnostiche avanzate
+**Features**: 18+ funzionalità diagnostiche avanzate
 
 ## 🔄 Changelog
 
@@ -236,14 +249,20 @@ No, solo quando il pattern istologico lo suggerisce:
   - Gastropatia chimica/reattiva (bile, FANS, alcol)
   - Gastrite autoimmune (tipo A) con pattern corpus-predominante
   - Gastrite linfocitaria (IEL ≥20–25/100 cellule)
+- ✨ **NEW**: Note libere per osservazioni aggiuntive
+- ✨ **NEW**: Salvataggio automatico con localStorage (no perdita dati al refresh)
 - ✨ Alert automatici per pattern incompatibili
 - ✨ Badge distintivi per forme speciali
 - ✨ Bibliografia integrata nel referto testuale
 
 #### Miglioramenti Clinici
+- 🔬 **Validazioni incrociate cliniche**:
+  - Attività neutrofila senza H. pylori → considerare altri patogeni
+  - Metaplasia senza atrofia → verificare campionamento
+  - Atrofia marcata senza infiammazione → pattern autoimmune/post-eradicazione
 - 🔬 Note epistemologiche su limiti diagnostici
   - Topografia: può sottostimare pattern post-eradicazione/autoimmuni
-  - Soglie IEL ammorbidite: ≥20–25 (no feticismo numerico)
+  - Soglie IEL ammorbidite: ≥20–25 (cut-off orientativo, valutazione semiquantitativa)
   - Metaplasia pseudopilorica: nota esplicita NON entra in OLGIM
 - 📋 Citazioni MAPS II complete: "MAPS II (ESGE/ESP 2019)"
 - ⚠️ Disclaimer medico-legale prominente in interfaccia
@@ -261,6 +280,8 @@ No, solo quando il pattern istologico lo suggerisce:
 - Refactoring logica referto breve/esteso (clean code)
 - Alert system migliorato con validazione pattern
 - Gestione checkbox forme speciali con reset automatico
+- localStorage per persistenza dati form
+- Validazioni incrociate cliniche integrate
 
 ### v2.1 (Novembre 2025)
 - Aggiornamento interfaccia utente
