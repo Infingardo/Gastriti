@@ -210,6 +210,94 @@
       font-size: 0.85rem;
     }
     
+    @media (max-width: 768px) {
+      h1 { font-size: 1.4rem; }
+      .subtitle { font-size: 0.85rem; }
+      .container { padding: 0.5rem; }
+      
+      .grid { 
+        grid-template-columns: 1fr; 
+        gap: 0.75rem; 
+      }
+      
+      .card { 
+        padding: 1rem; 
+        margin-bottom: 0.75rem;
+      }
+      .card h2 { font-size: 1rem; }
+      
+      .field label { font-size: 0.8rem; }
+      .field select {
+        padding: 0.75rem 0.5rem;
+        font-size: 1rem;
+      }
+      
+      button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+      }
+      
+      .controls {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .badges {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .badge {
+        justify-content: center;
+        padding: 0.75rem 1rem;
+      }
+      
+      table {
+        font-size: 0.85rem;
+      }
+      th, td {
+        padding: 0.5rem 0.25rem;
+      }
+      
+      .report-box {
+        font-size: 0.8rem;
+        padding: 1rem;
+      }
+      
+      .info-panel {
+        font-size: 0.85rem;
+        padding: 0.75rem;
+      }
+      
+      /* Forme speciali su mobile */
+      #specialFormsContent > div {
+        padding: 0.75rem;
+      }
+      #specialFormsContent h3 {
+        font-size: 0.95rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      h1 { font-size: 1.2rem; }
+      .container { padding: 0.25rem; }
+      .card { padding: 0.75rem; }
+      
+      table {
+        font-size: 0.75rem;
+      }
+      th, td {
+        padding: 0.4rem 0.2rem;
+      }
+      th {
+        font-size: 0.7rem;
+      }
+      
+      .report-box {
+        font-size: 0.75rem;
+      }
+    }
+    
     @media print {
       header, .controls, .settings, .alert { display: none !important; }
       body { background: white; }
@@ -442,6 +530,102 @@
       </div>
     </div>
     
+    <!-- Sezione Forme Speciali -->
+    <div class="card" style="border: 2px solid #d69e2e; background: #fffbeb;">
+      <h2 style="color: #744210; border-bottom-color: #f6ad55; cursor: pointer; user-select: none;" onclick="toggleSpecialForms()">
+        ⚠️ Forme Speciali di Gastrite 
+        <span id="specialFormsToggle" style="float: right; font-size: 1.2rem;">▼</span>
+      </h2>
+      <div id="specialFormsContent" style="display: none; margin-top: 1rem;">
+        <div class="info-panel" style="background: #fef3c7; border-left-color: #d97706;">
+          <strong>Nota:</strong> Valutare solo se il pattern istologico suggerisce una forma speciale. 
+          Il sistema genererà alert se i criteri sono incompatibili con H. pylori-associata.
+        </div>
+        
+        <!-- Chemical/Reactive Gastritis -->
+        <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
+            🧪 Gastropatia Chimica / Reattiva
+          </h3>
+          <div style="display: grid; gap: 1rem;">
+            <div class="field">
+              <label>Iperplasia foveolare</label>
+              <select id="foveolar_hyperplasia">
+                <option value="">—</option>
+                <option value="0">0 - Assente</option>
+                <option value="1">1 - Lieve</option>
+                <option value="2">2 - Moderata</option>
+                <option value="3">3 - Marcata</option>
+              </select>
+            </div>
+            <div class="field">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
+                <input type="checkbox" id="lamina_edema" style="accent-color: #4299e1;">
+                <span>Edema della lamina propria</span>
+              </label>
+            </div>
+            <div class="field">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
+                <input type="checkbox" id="smooth_muscle_prolif" style="accent-color: #4299e1;">
+                <span>Proliferazione muscolo liscio nella lamina propria</span>
+              </label>
+            </div>
+            <div style="font-size: 0.85rem; color: #718096;">
+              <strong>Eziologie comuni:</strong> Reflusso biliare (post-gastrectomia), FANS, alcol
+            </div>
+          </div>
+        </div>
+        
+        <!-- Autoimmune Gastritis -->
+        <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
+            🎯 Gastrite Autoimmune (tipo A)
+          </h3>
+          <div style="display: grid; gap: 1rem;">
+            <div class="field">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
+                <input type="checkbox" id="corpus_restricted" style="accent-color: #4299e1;">
+                <span>Pattern corpus-predominante/ristretto (corpo >>> antro)</span>
+              </label>
+            </div>
+            <div class="field">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
+                <input type="checkbox" id="pseudopyloric_meta" style="accent-color: #4299e1;">
+                <span>Metaplasia pseudopilorica (vs. metaplasia intestinale)</span>
+              </label>
+            </div>
+            <div class="field">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
+                <input type="checkbox" id="ecl_hyperplasia" style="accent-color: #4299e1;">
+                <span>Iperplasia cellule ECL (argirofilia/cromogranina)</span>
+              </label>
+            </div>
+            <div style="font-size: 0.85rem; color: #718096;">
+              <strong>Associazioni:</strong> Anemia perniciosa, ipergastrinemia, anticorpi anti-cellule parietali
+            </div>
+          </div>
+        </div>
+        
+        <!-- Lymphocytic Gastritis -->
+        <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
+            🔬 Gastrite Linfocitaria
+          </h3>
+          <div style="display: grid; gap: 1rem;">
+            <div class="field">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
+                <input type="checkbox" id="high_iels" style="accent-color: #4299e1;">
+                <span>Linfociti intraepiteliali (IEL) >25 per 100 cellule epiteliali</span>
+              </label>
+            </div>
+            <div style="font-size: 0.85rem; color: #718096;">
+              <strong>Associazioni:</strong> Gastrite variolariforme (endoscopia), malattia celiaca (20-40% dei casi), Ménétrier's disease
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <div class="controls">
       <button class="primary" onclick="calculate()">📊 Calcola referto</button>
       <button class="secondary" onclick="copyReport()">📋 Copia referto</button>
@@ -545,6 +729,18 @@
       document.getElementById('warningAlert').classList.remove('show');
     }
     
+    function toggleSpecialForms() {
+      const content = document.getElementById('specialFormsContent');
+      const toggle = document.getElementById('specialFormsToggle');
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        toggle.textContent = '▲';
+      } else {
+        content.style.display = 'none';
+        toggle.textContent = '▼';
+      }
+    }
+    
     function validate() {
       clearErrors();
       const fields = [
@@ -645,6 +841,53 @@
         }
       };
       
+      // Raccolta dati forme speciali
+      const specialForms = {
+        chemical: {
+          foveolarHyperplasia: getValue('foveolar_hyperplasia'),
+          laminaEdema: document.getElementById('lamina_edema').checked,
+          smoothMuscleProlif: document.getElementById('smooth_muscle_prolif').checked
+        },
+        autoimmune: {
+          corpusRestricted: document.getElementById('corpus_restricted').checked,
+          pseudopyloricMeta: document.getElementById('pseudopyloric_meta').checked,
+          eclHyperplasia: document.getElementById('ecl_hyperplasia').checked
+        },
+        lymphocytic: {
+          highIELs: document.getElementById('high_iels').checked
+        }
+      };
+      
+      // Verifica forme speciali attive
+      const hasChemical = specialForms.chemical.foveolarHyperplasia !== null || 
+                         specialForms.chemical.laminaEdema || 
+                         specialForms.chemical.smoothMuscleProlif;
+      const hasAutoimmune = specialForms.autoimmune.corpusRestricted || 
+                           specialForms.autoimmune.pseudopyloricMeta || 
+                           specialForms.autoimmune.eclHyperplasia;
+      const hasLymphocytic = specialForms.lymphocytic.highIELs;
+      
+      // Alert per incompatibilità forme speciali
+      const maxActivity = Math.max(data.antrum.activity, data.corpus.activity, data.incisura.activity);
+      const hpMax = Math.max(data.antrum.hp, data.corpus.hp, data.incisura.hp);
+      
+      // Chemical: incompatibile con alta attività neutrofila
+      if (hasChemical && maxActivity > 1) {
+        showAlert('warning', '⚠️ ALERT: Gastropatia chimica è tipicamente paucicellulare. Attività neutrofila >1 è inconsueta (verificare H. pylori).');
+      }
+      
+      // Autoimmune: pattern incompatibile con corpus-restricted
+      if (hasAutoimmune) {
+        const corpusInflammation = data.corpus.chronic;
+        const antrumInflammation = Math.max(data.antrum.chronic, data.incisura.chronic);
+        if (!specialForms.autoimmune.corpusRestricted && (corpusInflammation <= antrumInflammation)) {
+          showAlert('warning', '⚠️ ALERT: Criteri autoimmuni presenti ma pattern non corpus-predominante. Verificare distribuzione.');
+        }
+        if (hpMax > 1) {
+          showAlert('warning', '⚠️ ALERT: H. pylori abbondante è raro in gastrite autoimmune conclamata.');
+        }
+      }
+      
       // Aggregazione incisura all'antro: prendi il max tra antro e incisura
       const antrumAtrophyAggregated = Math.max(data.antrum.atrophy, data.incisura.atrophy);
       const antrumMetaplasiaAggregated = Math.max(data.antrum.metaplasia, data.incisura.metaplasia);
@@ -714,6 +957,32 @@
         showAlert('warning', '⚠️ OLGA e OLGIM divergono ≥2 stadi: considerare lo stadio più alto per la sorveglianza');
       }
       
+      // Badge forme speciali
+      if (hasChemical) {
+        badgesHTML += `
+          <span class="badge warning">
+            <span class="dot" style="background: #f59e0b"></span>
+            Gastropatia chimica/reattiva
+          </span>
+        `;
+      }
+      if (hasAutoimmune) {
+        badgesHTML += `
+          <span class="badge info">
+            <span class="dot" style="background: #8b5cf6"></span>
+            Pattern autoimmune
+          </span>
+        `;
+      }
+      if (hasLymphocytic) {
+        badgesHTML += `
+          <span class="badge dysplasia">
+            <span class="dot" style="background: #6366f1"></span>
+            Gastrite linfocitaria
+          </span>
+        `;
+      }
+      
       document.getElementById('badgesContainer').innerHTML = badgesHTML;
       
       // Tabella
@@ -735,7 +1004,6 @@
       `).join('');
       
       // Referto
-      const hpMax = Math.max(data.antrum.hp, data.corpus.hp, data.incisura.hp);
       const hpStatus = hpMax > 0 ? 
         `Presenza di Helicobacter pylori (grado ${hpMax})` : 
         'Assenza di Helicobacter pylori';
@@ -825,6 +1093,30 @@ INCISURA ANGOLARE:
 DISTRIBUZIONE TOPOGRAFICA: Gastrite ${topography}
 H. PYLORI: ${hpStatus}
 DISPLASIA: ${getDysplasiaText(dysplasia)}${miTypeSection}
+${(hasChemical || hasAutoimmune || hasLymphocytic) ? `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FORME SPECIALI (Dixon et al., 1996 - Updated Sydney System)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${hasChemical ? `
+GASTROPATIA CHIMICA/REATTIVA:
+  • Iperplasia foveolare: ${specialForms.chemical.foveolarHyperplasia !== null ? gradeText(specialForms.chemical.foveolarHyperplasia) : 'Non valutata'}
+  • Edema lamina propria: ${specialForms.chemical.laminaEdema ? 'Presente' : 'Assente'}
+  • Proliferazione muscolo liscio: ${specialForms.chemical.smoothMuscleProlif ? 'Presente' : 'Assente'}
+  → Pattern suggestivo di gastropatia chimica/reattiva
+  → Eziologie comuni: reflusso biliare, FANS, alcol
+` : ''}${hasAutoimmune ? `
+GASTRITE AUTOIMMUNE (tipo A):
+  • Pattern corpus-predominante: ${specialForms.autoimmune.corpusRestricted ? 'Sì' : 'No'}
+  • Metaplasia pseudopilorica: ${specialForms.autoimmune.pseudopyloricMeta ? 'Presente' : 'Non identificata'}
+  • Iperplasia cellule ECL: ${specialForms.autoimmune.eclHyperplasia ? 'Presente' : 'Non identificata'}
+  → Pattern suggestivo di gastrite autoimmune
+  → Considerare: sierologia (APCA, anti-FI), gastrina, vitamina B12
+` : ''}${hasLymphocytic ? `
+GASTRITE LINFOCITARIA:
+  • Linfociti intraepiteliali: >25 IEL/100 cellule epiteliali
+  → Pattern suggestivo di gastrite linfocitaria
+  → Considerare: gastrite variolariforme (endoscopia), screening celiachia
+` : ''}` : ''}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 OLGA STAGING SYSTEM (Rugge et al., 2007/2010)
@@ -858,7 +1150,24 @@ VALUTAZIONE COMPLESSIVA DEL RISCHIO
 
 ${riskAssessment}
 
-${followUpText}`;
+${followUpText}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RIFERIMENTI BIBLIOGRAFICI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Dixon MF et al. Classification and grading of gastritis. The updated Sydney System.
+  Am J Surg Pathol 1996;20(10):1161-81. [PMID:8827022]
+
+• Rugge M et al. Gastritis staging in clinical practice: the OLGA staging system.
+  Gut 2007;56(5):631-6. [PMID:17142647]
+
+• Capelle LG et al. Staging gastritis with the OLGIM: a less complex alternative to OLGA.
+  Am J Surg Pathol 2010;34(11):1653-64. [PMID:20975341]
+
+• Pimentel-Nunes P et al. Management of epithelial precancerous conditions and lesions 
+  in the stomach (MAPS II): ESGE/EHMSG/ESP/SPED Guideline Update 2019.
+  Endoscopy 2019;51(4):365-388. [PMID:30841008]`;
       
       document.getElementById('reportText').textContent = report;
       document.getElementById('resultsSection').style.display = 'block';
@@ -887,10 +1196,14 @@ ${followUpText}`;
     
     function resetForm() {
       document.querySelectorAll('select').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
       document.getElementById('resultsSection').style.display = 'none';
       clearErrors();
       document.getElementById('warningAlert').classList.remove('show');
       document.querySelector('input[name="olga_method"][value="atrophy"]').checked = true;
+      // Chiudi sezione forme speciali
+      document.getElementById('specialFormsContent').style.display = 'none';
+      document.getElementById('specialFormsToggle').textContent = '▼';
     }
   </script>
 </body>
