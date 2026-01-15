@@ -24,24 +24,56 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
   + Associazioni: gastrite variolariforme, malattia celiaca (20-40%), Ménétrier's disease
 
 ### Output e Reporting
+* **Modalità referto selezionabile:**
+  - **Referto BREVE**: essenziale per LIS/endoscopisti (diagnosi + staging + follow-up)
+  - **Referto ESTESO**: completo per casi complessi/secondo parere (tutto + bibliografia)
 * **Badge riassuntivi**: stadio OLGA, stadio OLGIM, distribuzione topografica, forme speciali, alert
 * **Tabella sinottica**: valori Sydney per tutte le sedi
-* **Referto testuale strutturato**: completo di scoring, staging, forme speciali e raccomandazioni cliniche
-* **Bibliografia integrata**: citazioni PMID nel referto
+* **Referto testuale strutturato**: pronto per copia-incolla con validazione clinica
+* **Bibliografia integrata**: citazioni PMID nel referto esteso
 * **Alert automatici**: 
   - Discordanze significative tra OLGA e OLGIM (≥2 stadi)
   - Pattern incompatibili nelle forme speciali
   - Metaplasia intestinale incompleta
-* **Gestione clinica**: raccomandazioni follow-up secondo MAPS II/ESGE 2019
+  - Note epistemologiche su limiti diagnostici
+* **Gestione clinica**: raccomandazioni follow-up secondo MAPS II (ESGE/ESP 2019)
 
 ## 🚀 Utilizzo
 
 1. Apri [https://infingardo.github.io/Gastriti/](https://infingardo.github.io/Gastriti/) in un browser
-2. Seleziona il metodo di calcolo OLGA (default: solo atrofia)
-3. Compila tutti i campi per le tre sedi anatomiche (antro, corpo, incisura)
-4. *Opzionale*: Espandi "Forme Speciali" se il pattern istologico lo suggerisce
-5. Clicca "📊 Calcola referto"
-6. Copia il referto o stampa/esporta in PDF
+2. **Seleziona il metodo di calcolo OLGA** (default: solo atrofia)
+3. **Scegli modalità referto:**
+   - ☐ Referto breve → per LIS/routine/endoscopisti
+   - ☑ Default (esteso) → per casi complessi/MDT
+4. Compila tutti i campi per le tre sedi anatomiche (antro, corpo, incisura)
+5. *Opzionale*: Espandi "Forme Speciali" se il pattern istologico lo suggerisce
+6. Clicca "📊 Calcola referto"
+7. Copia il referto o stampa/esporta in PDF
+
+## 📄 Differenze Referto Breve vs Esteso
+
+### Referto BREVE (ideale per routine clinica)
+```
+✓ Diagnosi essenziale + topografia
+✓ H. pylori status
+✓ Stadi OLGA/OLGIM
+✓ Follow-up MAPS II sintetico
+✓ Alert essenziali
+✗ NO dettagli Sydney per sede
+✗ NO bibliografia
+✗ NO note epistemologiche estese
+```
+
+### Referto ESTESO (ideale per casi complessi)
+```
+✓ Sydney completo (3 sedi × 5 parametri)
+✓ OLGA/OLGIM con scoring dettagliato
+✓ Forme speciali complete
+✓ Follow-up MAPS II dettagliato
+✓ Bibliografia con PMID
+✓ Note epistemologiche e validazione
+✓ Tutti gli alert e raccomandazioni
+```
 
 ## 📊 Criteri Diagnostici Forme Speciali
 
@@ -68,8 +100,10 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
 
 ### Gastrite Linfocitaria
 ✅ **Criteri positivi:**
-- Linfociti intraepiteliali >25 per 100 cellule epiteliali
+- Linfociti intraepiteliali aumentati (≥20–25 per 100 cellule epiteliali)
 - Pattern diffuso (non focale)
+
+**Nota:** Range flessibile 20–25 per evitare feticismo numerico nella pratica clinica
 
 ## ⚠️ Note Cliniche
 
@@ -110,14 +144,33 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
 
 ## ⚖️ Disclaimer
 
-**Questo tool è destinato esclusivamente a professionisti sanitari qualificati.**
+**⚠️ AVVERTENZA MEDICO-LEGALE**
 
+Questo tool è destinato esclusivamente a professionisti sanitari qualificati come **strumento di supporto** alla refertazione istologica.
+
+* **NON sostituisce** il giudizio diagnostico e la responsabilità del patologo refertante
+* **Tutti i dati devono essere validati clinicamente** prima dell'uso
 * Il software è fornito "as is" senza garanzie di alcun tipo
 * La responsabilità diagnostica e terapeutica rimane del medico refertante
 * Il tool supporta ma non sostituisce il giudizio clinico
 * Verificare sempre la correttezza dei dati inseriti
 * L'output deve essere validato dal patologo prima dell'uso clinico
 * Gli alert automatici sono suggerimenti, non diagnosi definitive
+
+### Note di Validazione Clinica
+
+**Topografia basata su infiltrato cronico:**
+- Può sottostimare pattern post-eradicazione H. pylori
+- Può essere fuorviante in gastrite autoimmune avanzata
+- In caso di dubbio, considerare anche pattern di atrofia/metaplasia
+
+**Metaplasia pseudopilorica:**
+- NON contribuisce allo stadio OLGIM (solo metaplasia intestinale conta)
+- Tipica di gastrite autoimmune, non da confondere con MI
+
+**Range soglie:**
+- IEL 20–25: range flessibile per evitare rigidità diagnostica
+- Il conteggio reale è spesso "a occhio esperto", non matematico
 
 ## 📄 Licenza
 
@@ -129,24 +182,85 @@ Citare la fonte in caso di pubblicazioni o presentazioni.
 Sviluppato per uso interno presso SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano.  
 Contributi e feedback benvenuti via Issues su GitHub.
 
+## ❓ FAQ
+
+### Quando usare il referto BREVE?
+- Routine quotidiana (gastriti H. pylori+ banali)
+- Invio a endoscopisti/gastroenterologi
+- Inserimento veloce in LIS
+- Quando serve solo staging + follow-up
+
+### Quando usare il referto ESTESO?
+- Casi complessi o dubbi diagnostici
+- Forme speciali di gastrite
+- Secondo parere patologico
+- Discussioni multidisciplinari (MDT)
+- Pubblicazioni o presentazioni
+- Quando serve documentazione completa
+
+### La topografia è sempre affidabile?
+No. È basata sull'infiltrato cronico che può essere fuorviante in:
+- Post-eradicazione H. pylori (infiammazione residua)
+- Gastrite autoimmune avanzata (atrofia > infiammazione)
+- Gastropatia chimica (poca infiammazione)
+
+In caso di dubbio, considera anche pattern di atrofia/metaplasia.
+
+### OLGA vs OLGIM: quale usare?
+- **OLGA**: più sensibile, include atrofia
+- **OLGIM**: più specifico, solo metaplasia intestinale
+- **Entrambi**: utili per stratificazione rischio
+- Se discordanza ≥2 stadi → considera stadio più alto
+
+### Le forme speciali vanno sempre valutate?
+No, solo quando il pattern istologico lo suggerisce:
+- **Chemical**: se vedi iperplasia foveolare + edema + poca infiammazione
+- **Autoimmune**: se atrofia corpus >>> antro
+- **Lymphocytic**: se IEL chiaramente aumentati
+
 ---
 
-**Versione**: 3.0 (con forme speciali integrate)  
+**Versione**: 3.0 FINAL (con forme speciali + referto breve/esteso)  
 **Ultimo aggiornamento**: Gennaio 2026  
-**Live URL**: [https://infingardo.github.io/Gastriti/](https://infingardo.github.io/Gastriti/)
+**Live URL**: [https://infingardo.github.io/Gastriti/](https://infingardo.github.io/Gastriti/)  
+**Features**: 15+ funzionalità diagnostiche avanzate
 
 ## 🔄 Changelog
 
-### v3.0 (Gennaio 2026)
+### v3.0 (Gennaio 2026) - Major Release
+#### Nuove Funzionalità
+- ✨ **NEW**: Modalità referto breve/esteso selezionabile
+  - Referto breve: essenziale per LIS/endoscopisti/routine
+  - Referto esteso: completo per casi complessi/MDT/secondo parere
 - ✨ **NEW**: Sezione forme speciali di gastrite
-  - Gastropatia chimica/reattiva
-  - Gastrite autoimmune (tipo A)
-  - Gastrite linfocitaria
+  - Gastropatia chimica/reattiva (bile, FANS, alcol)
+  - Gastrite autoimmune (tipo A) con pattern corpus-predominante
+  - Gastrite linfocitaria (IEL ≥20–25/100 cellule)
 - ✨ Alert automatici per pattern incompatibili
 - ✨ Badge distintivi per forme speciali
 - ✨ Bibliografia integrata nel referto testuale
+
+#### Miglioramenti Clinici
+- 🔬 Note epistemologiche su limiti diagnostici
+  - Topografia: può sottostimare pattern post-eradicazione/autoimmuni
+  - Soglie IEL ammorbidite: ≥20–25 (no feticismo numerico)
+  - Metaplasia pseudopilorica: nota esplicita NON entra in OLGIM
+- 📋 Citazioni MAPS II complete: "MAPS II (ESGE/ESP 2019)"
+- ⚠️ Disclaimer medico-legale prominente in interfaccia
+- 📱 Ottimizzazione completa per mobile/tablet
+
+#### Bug Fix & Refactoring
 - 🐛 Fix: duplicazione variabile hpMax
-- 🌍 Traduzione eziologie (reflusso biliare, FANS)
+- 🐛 Fix: topografia "Gastrite pangastrite" → "pangastrite"
+- 🐛 Fix: "Gastrite prevalentemente X" mantiene "Gastrite"
+- 🌍 Traduzione eziologie: reflusso biliare, FANS (non bile reflux, NSAIDs)
+- 🎨 CSS responsive: media queries 768px e 480px
+- 🎨 Touch-friendly UI: bottoni full-width, select ingranditi
+
+#### Technical Improvements
+- Refactoring logica referto breve/esteso (clean code)
+- Alert system migliorato con validazione pattern
+- Gestione checkbox forme speciali con reset automatico
 
 ### v2.1 (Novembre 2025)
 - Aggiornamento interfaccia utente

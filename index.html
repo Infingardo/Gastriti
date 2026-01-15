@@ -309,7 +309,7 @@
   <header>
     <div class="container">
       <h1>🔬 Gastrite – Sistema di Sydney + OLGA/OLGIM</h1>
-      <div class="subtitle">Tool per refertazione istologica v2.1</div>
+      <div class="subtitle">Tool per refertazione istologica v3.0</div>
     </div>
   </header>
   
@@ -317,6 +317,12 @@
     <div class="info-panel">
       <strong>Scala Sydney:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = severa<br>
       <strong>Nota:</strong> L'incisura angolare viene aggregata all'antro per il calcolo OLGA/OLGIM (max tra i due valori)
+    </div>
+    
+    <div class="info-panel" style="border-left-color: #e53e3e; background: #fff5f5;">
+      <strong>⚠️ Avvertenza medico-legale:</strong> Tool di supporto alla refertazione istologica. 
+      Non sostituisce il giudizio diagnostico e la responsabilità del patologo refertante. 
+      Tutti i dati devono essere validati clinicamente prima dell'uso.
     </div>
     
     <div class="settings">
@@ -333,6 +339,16 @@
         <input type="radio" name="olga_method" value="combined">
         Atrofia + Metaplasia combinati (se atrofia ≥1 OR metaplasia ≥1)
       </label>
+      
+      <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+          <input type="checkbox" id="brief_report" style="accent-color: #4299e1;">
+          <span><strong>Referto breve</strong> (essenziale per LIS/endoscopisti)</span>
+        </label>
+        <small style="display: block; margin-top: 0.25rem; color: #718096;">
+          Solo diagnosi, stadi e follow-up. Disattiva per referto esteso completo.
+        </small>
+      </div>
     </div>
     
     <div id="errorAlert" class="alert error"></div>
@@ -615,7 +631,7 @@
             <div class="field">
               <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
                 <input type="checkbox" id="high_iels" style="accent-color: #4299e1;">
-                <span>Linfociti intraepiteliali (IEL) >25 per 100 cellule epiteliali</span>
+                <span>Linfociti intraepiteliali aumentati (≥20–25 per 100 cellule epiteliali)</span>
               </label>
             </div>
             <div style="font-size: 0.85rem; color: #718096;">
@@ -656,7 +672,7 @@
       <div id="reportText" class="report-box"></div>
       
       <div class="footer">
-        <p><strong>⚠️ Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS/ESGE. La presenza di displasia modifica significativamente il management.</p>
+        <p><strong>⚠️ Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS II (ESGE/ESP 2019). La presenza di displasia modifica significativamente il management.</p>
         
         <div class="biblio-section">
           <strong>Riferimenti bibliografici:</strong>
@@ -782,7 +798,7 @@
       if (anChronic <= 1 && coChronic <= 1) return 'minima attività infiammatoria';
       const diff = anChronic - coChronic;
       if (Math.abs(diff) <= 1) return 'pangastrite';
-      return diff > 0 ? 'prevalentemente antrale' : 'prevalentemente corpale';
+      return diff > 0 ? 'Gastrite prevalentemente antrale' : 'Gastrite prevalentemente corpale';
     }
     
     function gradeText(val) {
@@ -1021,7 +1037,7 @@
       if (dysplasia === 2) {
         // HGD
         riskAssessment = 'ALTO RISCHIO - Displasia di alto grado';
-        followUpText = `⚠️ GESTIONE CLINICA (MAPS II 2019):
+        followUpText = `⚠️ GESTIONE CLINICA MAPS II (ESGE/ESP 2019):
 DISPLASIA DI ALTO GRADO (HGD):
 → Staging endoscopico accurato (HD-WLE + cromoscopia)
 → Conferma istologica da secondo patologo esperto
@@ -1031,7 +1047,7 @@ DISPLASIA DI ALTO GRADO (HGD):
       } else if (dysplasia === 1) {
         // LGD
         riskAssessment = 'RISCHIO AUMENTATO - Displasia di basso grado';
-        followUpText = `⚠️ GESTIONE CLINICA (MAPS II 2019):
+        followUpText = `⚠️ GESTIONE CLINICA MAPS II (ESGE/ESP 2019):
 DISPLASIA DI BASSO GRADO (LGD):
 → Resezione endoscopica di lesioni visibili
 → Se LGD su mucosa piatta: EGDS ogni 12 mesi con HD-WLE + cromoscopia
@@ -1040,7 +1056,7 @@ DISPLASIA DI BASSO GRADO (LGD):
       } else if (isHighRisk) {
         // Stadio III-IV senza displasia
         riskAssessment = 'Alto rischio (stadio III-IV) senza displasia';
-        followUpText = `⚠️ GESTIONE CLINICA (MAPS II 2019):
+        followUpText = `⚠️ GESTIONE CLINICA MAPS II (ESGE/ESP 2019):
 STADIO OLGA/OLGIM III-IV:
 → EGDS ogni 3 anni con HD-WLE + cromoscopia
 → Mappaggio bioptico estensivo
@@ -1050,7 +1066,7 @@ ${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM. Considerare lo stadio
       } else {
         // Basso rischio
         riskAssessment = 'Basso rischio (stadi 0-II, no displasia)';
-        followUpText = `ℹ️ GESTIONE CLINICA (MAPS II 2019):
+        followUpText = `ℹ️ GESTIONE CLINICA MAPS II (ESGE/ESP 2019):
 STADI OLGA/OLGIM 0-II senza displasia:
 → Non indicata sorveglianza endoscopica routinaria
 → Eradicazione H. pylori se presente
@@ -1063,7 +1079,53 @@ ${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM rilevata. Valutare cli
       const miTypeSection = hasMetaplasia && miType ? 
         `\nTIPO METAPLASIA INTESTINALE: ${getMITypeText(miType)}` : '';
       
-      const report = `REFERTO ISTOLOGICO - GASTRITE CRONICA
+      // Check modalità referto breve
+      const isBriefMode = document.getElementById('brief_report').checked;
+      
+      let report;
+      
+      if (isBriefMode) {
+        // REFERTO BREVE per LIS/Endoscopisti
+        const briefFollowUp = dysplasia === 2 ? 'HGD: resezione endoscopica + staging accurato' :
+                              dysplasia === 1 ? 'LGD: EGDS ogni 12 mesi + resezione lesioni' :
+                              isHighRisk ? `Stadio III-IV: EGDS ogni ${olgaStage === 'IV' || olgimStage === 'IV' ? '1-2' : '3'} anni` :
+                              'Stadi 0-II: non indicata sorveglianza routinaria';
+        
+        const specialFormsText = (hasChemical || hasAutoimmune || hasLymphocytic) ? 
+          `\n${hasChemical ? '• Pattern reattivo/chimico' : ''}${hasAutoimmune ? '• Pattern autoimmune' : ''}${hasLymphocytic ? '• Gastrite linfocitaria' : ''}` : '';
+        
+        report = `REFERTO ISTOLOGICO - GASTRITE CRONICA
+
+DIAGNOSI: ${topography}
+(Pattern basato sull'infiltrato cronico)
+
+H. PYLORI: ${hpMax > 0 ? `Presente (grado ${hpMax}) – raccomandata eradicazione` : 'Assente'}
+
+DISPLASIA: ${getDysplasiaText(dysplasia)}${miTypeSection}${specialFormsText}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STAGING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+OLGA: stadio ${olgaStage} (${olgaRisk} rischio)
+OLGIM: stadio ${olgimStage} (${olgimRisk} rischio)
+${hasDiscordance ? '\n⚠️ NOTA CRITICA: Discordanza OLGA/OLGIM ≥2 stadi → considerare lo stadio più alto' : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FOLLOW-UP (MAPS II - ESGE/ESP 2019)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${briefFollowUp}
+${hpMax > 0 ? '• Eradicazione H. pylori' : ''}
+${miType === 'incomplete' ? '• MI incompleta: follow-up più ravvicinato' : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Referto generato con tool Sydney-OLGA/OLGIM v3.0 (MAPS II - ESGE/ESP 2019)
+SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano`;
+        
+      } else {
+        // REFERTO ESTESO (attuale)
+        report = `REFERTO ISTOLOGICO - GASTRITE CRONICA
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 UPDATED SYDNEY SYSTEM (Dixon et al., 1996)
@@ -1090,7 +1152,8 @@ INCISURA ANGOLARE:
   • Metaplasia intestinale: ${data.incisura.metaplasia} (${gradeText(data.incisura.metaplasia)})
   • Helicobacter pylori: ${data.incisura.hp} (${gradeText(data.incisura.hp)})
 
-DISTRIBUZIONE TOPOGRAFICA: Gastrite ${topography}
+DISTRIBUZIONE TOPOGRAFICA: ${topography}
+(Pattern basato sull'infiltrato cronico - può sottostimare forme post-eradicazione o autoimmuni avanzate)
 H. PYLORI: ${hpStatus}
 DISPLASIA: ${getDysplasiaText(dysplasia)}${miTypeSection}
 ${(hasChemical || hasAutoimmune || hasLymphocytic) ? `
@@ -1111,9 +1174,11 @@ GASTRITE AUTOIMMUNE (tipo A):
   • Iperplasia cellule ECL: ${specialForms.autoimmune.eclHyperplasia ? 'Presente' : 'Non identificata'}
   → Pattern suggestivo di gastrite autoimmune
   → Considerare: sierologia (APCA, anti-FI), gastrina, vitamina B12
+  ⚠️ NOTA: La metaplasia pseudopilorica NON contribuisce allo stadio OLGIM (solo MI conta)
 ` : ''}${hasLymphocytic ? `
 GASTRITE LINFOCITARIA:
-  • Linfociti intraepiteliali: >25 IEL/100 cellule epiteliali
+  • Linfociti intraepiteliali: aumentati (≥20–25 IEL/100 cellule epiteliali)
+    Cut-off orientativo - valutazione semiquantitativa
   → Pattern suggestivo di gastrite linfocitaria
   → Considerare: gastrite variolariforme (endoscopia), screening celiachia
 ` : ''}` : ''}
@@ -1167,11 +1232,19 @@ RIFERIMENTI BIBLIOGRAFICI
 
 • Pimentel-Nunes P et al. Management of epithelial precancerous conditions and lesions 
   in the stomach (MAPS II): ESGE/EHMSG/ESP/SPED Guideline Update 2019.
-  Endoscopy 2019;51(4):365-388. [PMID:30841008]`;
+  Endoscopy 2019;51(4):365-388. [PMID:30841008]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Referto generato con tool Sydney-OLGA/OLGIM v3.0 (MAPS II - ESGE/ESP 2019)
+SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano`;
+      }
       
       document.getElementById('reportText').textContent = report;
       document.getElementById('resultsSection').style.display = 'block';
       document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // TODO v3.1: Export dati caso per analisi retrospettive
+      // window.lastCase = { data, olgaStage, olgimStage, topography, specialForms, timestamp: new Date().toISOString() };
     }
     
     function copyReport() {
