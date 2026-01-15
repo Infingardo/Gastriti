@@ -869,20 +869,25 @@
         }
       };
       
-      // Raccolta dati forme speciali
+      // Raccolta dati forme speciali (con controlli sicuri)
+      const getChecked = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.checked : false;
+      };
+      
       const specialForms = {
         chemical: {
           foveolarHyperplasia: getValue('foveolar_hyperplasia'),
-          laminaEdema: document.getElementById('lamina_edema').checked,
-          smoothMuscleProlif: document.getElementById('smooth_muscle_prolif').checked
+          laminaEdema: getChecked('lamina_edema'),
+          smoothMuscleProlif: getChecked('smooth_muscle_prolif')
         },
         autoimmune: {
-          corpusRestricted: document.getElementById('corpus_restricted').checked,
-          pseudopyloricMeta: document.getElementById('pseudopyloric_meta').checked,
-          eclHyperplasia: document.getElementById('ecl_hyperplasia').checked
+          corpusRestricted: getChecked('corpus_restricted'),
+          pseudopyloricMeta: getChecked('pseudopyloric_meta'),
+          eclHyperplasia: getChecked('ecl_hyperplasia')
         },
         lymphocytic: {
-          highIELs: document.getElementById('high_iels').checked
+          highIELs: getChecked('high_iels')
         }
       };
       
@@ -1113,12 +1118,14 @@ ${hasDiscordance ? '\n⚠️ NOTA: Discordanza OLGA/OLGIM rilevata. Valutare cli
         `\nTIPO METAPLASIA INTESTINALE: ${getMITypeText(miType)}` : '';
       
       // Note libere
-      const freeNotes = document.getElementById('free_notes').value.trim();
+      const freeNotesEl = document.getElementById('free_notes');
+      const freeNotes = freeNotesEl ? freeNotesEl.value.trim() : '';
       const freeNotesSection = freeNotes ? 
         `\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNOTE AGGIUNTIVE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n${freeNotes}` : '';
       
       // Check modalità referto breve
-      const isBriefMode = document.getElementById('brief_report').checked;
+      const briefReportEl = document.getElementById('brief_report');
+      const isBriefMode = briefReportEl ? briefReportEl.checked : false;
       
       let report;
       
@@ -1308,14 +1315,17 @@ SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano`;
     function resetForm() {
       document.querySelectorAll('select').forEach(el => el.value = '');
       document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
-      document.getElementById('free_notes').value = '';
+      const freeNotesEl = document.getElementById('free_notes');
+      if (freeNotesEl) freeNotesEl.value = '';
       document.getElementById('resultsSection').style.display = 'none';
       clearErrors();
       document.getElementById('warningAlert').classList.remove('show');
       document.querySelector('input[name="olga_method"][value="atrophy"]').checked = true;
       // Chiudi sezione forme speciali
-      document.getElementById('specialFormsContent').style.display = 'none';
-      document.getElementById('specialFormsToggle').textContent = '▼';
+      const specialFormsContent = document.getElementById('specialFormsContent');
+      const specialFormsToggle = document.getElementById('specialFormsToggle');
+      if (specialFormsContent) specialFormsContent.style.display = 'none';
+      if (specialFormsToggle) specialFormsToggle.textContent = '▼';
       // Pulisci localStorage
       localStorage.removeItem('gastritisFormData');
     }
