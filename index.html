@@ -852,9 +852,9 @@
     
     function getTopography(anChronic, coChronic) {
       // Topografia basata solo su infiltrato cronico (più appropriato clinicamente)
-      if (anChronic <= 1 && coChronic <= 1) return 'minima attività infiammatoria';
+      if (anChronic <= 1 && coChronic <= 1) return 'gastrite cronica con infiltrato di grado minimo';
       const diff = anChronic - coChronic;
-      if (Math.abs(diff) <= 1) return 'pangastrite';
+      if (Math.abs(diff) <= 1) return 'Gastrite diffusa (pangastrite)';
       return diff > 0 ? 'Gastrite prevalentemente antrale' : 'Gastrite prevalentemente corpale';
     }
     
@@ -1165,8 +1165,14 @@ No sorveglianza routinaria | Eradicazione HP | Follow-up clinico${miType === 'in
       }
       
       // Sezione tipo MI nel referto (non mostrare se "absent" perché ridondante)
-      const miTypeSection = hasMetaplasia && miType && miType !== 'absent' ? 
-        `\nTIPO METAPLASIA INTESTINALE: ${getMITypeText(miType)}` : '';
+      // Sezione tipo MI nel referto
+      let miTypeSection = '';
+      if (miType === 'absent') {
+        // Esplicito "Assente" solo nel referto esteso per chiarezza
+        miTypeSection = '\nMETAPLASIA INTESTINALE: Assente';
+      } else if (hasMetaplasia && miType) {
+        miTypeSection = `\nTIPO METAPLASIA INTESTINALE: ${getMITypeText(miType)}`;
+      }
       
       // Note libere
       const freeNotesEl = document.getElementById('free_notes');
