@@ -24,6 +24,10 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
   + Associazioni: gastrite variolariforme, malattia celiaca (20-40%), Ménétrier's disease
 
 ### Output e Reporting
+* **Compilazione rapida (Quick Fill):**
+  - 🚫 **Metaplasia assente**: setta metaplasia = 0 in tutte le sedi
+  - ✅ **Tutto negativo**: caso completamente negativo (tutti campi = 0)
+  - 🦠 **H. pylori+ lieve**: gastrite lieve antro-predominante (caso più comune)
 * **Modalità referto selezionabile:**
   - **Referto BREVE**: essenziale per LIS/endoscopisti (diagnosi + staging + follow-up)
   - **Referto ESTESO**: completo per casi complessi/secondo parere (tutto + bibliografia)
@@ -69,13 +73,14 @@ Tool web per la refertazione istologica strutturata della gastrite cronica secon
 
 ### Referto ESTESO (ideale per casi complessi)
 ```
-✓ Sydney completo (3 sedi × 5 parametri)
-✓ OLGA/OLGIM con scoring dettagliato
-✓ Forme speciali complete
-✓ Follow-up MAPS II dettagliato
-✓ Bibliografia con PMID
-✓ Note epistemologiche e validazione
+✓ Sydney formato tabellare compatto (3 sedi × 5 parametri)
+✓ OLGA/OLGIM unificati in tabella comparativa
+✓ Forme speciali formato compatto
+✓ Follow-up MAPS II essenziale (no prolissità)
+✓ Bibliografia compatta (PMID citati)
+✓ Note epistemologiche concise
 ✓ Tutti gli alert e raccomandazioni
+✓ ~2-3 pagine (vs 7 precedenti)
 ```
 
 ## 📊 Criteri Diagnostici Forme Speciali
@@ -233,15 +238,18 @@ Per casi importanti, usa sempre "Copia referto" per salvare il testo in modo per
 
 ---
 
-**Versione**: 3.0 FINAL (con forme speciali + referto breve/esteso + validazioni + note libere)  
+**Versione**: 3.0 FINAL (forme speciali + referto breve/esteso + quick fill + validazioni)  
 **Ultimo aggiornamento**: Gennaio 2026  
 **Live URL**: [https://infingardo.github.io/Gastriti/](https://infingardo.github.io/Gastriti/)  
-**Features**: 18+ funzionalità diagnostiche avanzate
+**Features**: 20+ funzionalità diagnostiche avanzate
 
 ## 🔄 Changelog
 
 ### v3.0 (Gennaio 2026) - Major Release
 #### Nuove Funzionalità
+- ✨ **NEW**: Compilazione rapida (Quick Fill)
+  - Bottoni shortcut per casi comuni: metaplasia assente, tutto negativo, H. pylori+ lieve
+  - Risparmio tempo sui casi routine (90% dei casi)
 - ✨ **NEW**: Modalità referto breve/esteso selezionabile
   - Referto breve: essenziale per LIS/endoscopisti/routine
   - Referto esteso: completo per casi complessi/MDT/secondo parere
@@ -256,6 +264,12 @@ Per casi importanti, usa sempre "Copia referto" per salvare il testo in modo per
 - ✨ Bibliografia integrata nel referto testuale
 
 #### Miglioramenti Clinici
+- 🔬 **Referto esteso compattato**: da 7 a ~2-3 pagine
+  - Sydney: formato tabellare invece di bullet points
+  - OLGA/OLGIM: unificati in tabella comparativa
+  - Follow-up: formato conciso (pipe-separated)
+  - Bibliografia: formato compatto su 2 righe
+  - Separatori ridotti (50 caratteri invece di 70)
 - 🔬 **Validazioni incrociate cliniche**:
   - Attività neutrofila senza H. pylori → considerare altri patogeni
   - Metaplasia senza atrofia → verificare campionamento
