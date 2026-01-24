@@ -1,6 +1,6 @@
 # 🔬 Tool OLGA/OLGIM per Refertazione Gastrite Cronica
 
-**Versione 5.7.2 "iOS Fix"** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
+**Versione 5.7.3 "Grading Refinement"** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
 
 ---
 
@@ -10,6 +10,7 @@ Tool web interattivo per la refertazione istologica strutturata della gastrite c
 
 Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validazioni automatiche, alert clinici e gestione delle forme speciali di gastrite.
 
+**🆕 NOVITÀ v5.7.3: Grading "Elevata" invece di "Marcata/Severa" 📝**  
 **🆕 NOVITÀ v5.7.2: iOS Support completo - "Aggiungi a Home" funziona! 📱**  
 **🆕 NOVITÀ v5.7.1: Quick Medical-Legal Hardening (feedback ChatGPT)! 🎯**  
 **🆕 NOVITÀ v5.7: RESET OBBLIGATORIO - The Nuclear Option! 💣**  
@@ -217,6 +218,43 @@ Per segnalazioni bug, richieste features o domande:
 
 ## 📝 Changelog
 
+### v5.7.3 "Grading Refinement" (24 gennaio 2026) 📝
+**Terminologia Sydney System - Preferenza Utente**
+
+*"Non mi piace 'severa', preferisco 'elevata'" - User feedback*
+
+**Modifica:**
+- **Grading Sydney System grado 3:** "Marcata/Severa" → **"Elevata"**
+
+**Dettaglio modifiche:**
+
+1. ✅ **Dropdown grading** (infiltrato, attività, atrofia, metaplasia)
+   ```
+   PRIMA: 0-Assente, 1-Lieve, 2-Moderata, 3-Marcata
+   ORA:   0-Assente, 1-Lieve, 2-Moderata, 3-Elevata
+   ```
+
+2. ✅ **Funzione gradeText()** (genera testo referti)
+   ```javascript
+   PRIMA: ['assente', 'lieve', 'moderata', 'severa']
+   ORA:   ['assente', 'lieve', 'moderata', 'elevata']
+   ```
+
+3. ✅ **Alert validazione atrofia**
+   ```
+   PRIMA: "Atrofia marcata con scarso infiltrato..."
+   ORA:   "Atrofia elevata con scarso infiltrato..."
+   ```
+
+**Rationale linguistico:**
+- "Elevata" più simmetrico con "Lieve/Moderata"
+- Suono più neutro e professionale
+- Coerenza terminologica interna
+
+**Nota:** Termini clinici come "marcatamente aumentati" (eosinofili, IEL) mantenuti invariati - sono lessico clinico standard, non grading Sydney.
+
+**Impatto:** Puramente estetico/terminologico, nessun cambio funzionale.
+
 ### v5.7.2 "iOS Fix" (24 gennaio 2026) 📱
 **Fix Definitivo Installazione iOS**
 
@@ -406,7 +444,7 @@ Per segnalazioni bug, richieste features o domande:
 Il tool è sviluppato per uso clinico interno. La redistribuzione o uso commerciale richiede autorizzazione esplicita dell'autore.
 
 Citazione consigliata in pubblicazioni:
-> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.7.2 "iOS Fix". SC Anatomia Patologia, ASST Fatebenefratelli-Sacco, Milano. 2026.
+> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.7.3. SC Anatomia Patologia, ASST Fatebenefratelli-Sacco, Milano. 2026.
 
 ---
 
@@ -418,7 +456,7 @@ Citazione consigliata in pubblicazioni:
 ✅ Audit-ready (versioning, disclaimer, tracciabilità)  
 ✅ **Installabile come PWA su mobile**
 
-**Ultima revisione**: 24 gennaio 2026 - v5.7.2 "iOS Fix"  
+**Ultima revisione**: 24 gennaio 2026 - v5.7.3 "Grading Refinement"  
 **Prossimi sviluppi**: Integrazione con PDTA colorettale/gastrico, export HL7/FHIR
 
 ---

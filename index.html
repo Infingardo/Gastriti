@@ -422,7 +422,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.2</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.3</div>
     </div>
   </header>
   
@@ -760,7 +760,7 @@
                 <option value="0">0 - Assente</option>
                 <option value="1">1 - Lieve</option>
                 <option value="2">2 - Moderata</option>
-                <option value="3">3 - Marcata</option>
+                <option value="3">3 - Elevata</option>
               </select>
             </div>
             <div class="field">
@@ -1158,7 +1158,7 @@
     }
     
     function gradeText(val) {
-      const words = ['assente', 'lieve', 'moderata', 'severa'];
+      const words = ['assente', 'lieve', 'moderata', 'elevata'];
       return words[val] || '?';
     }
     
@@ -1317,7 +1317,7 @@
       const hasAtrophyWithoutInflammation = (data.antrum.atrophy >= 2 && data.antrum.chronic < 2) ||
                                             (data.corpus.atrophy >= 2 && data.corpus.chronic < 2);
       if (hasAtrophyWithoutInflammation) {
-        showAlert('warning', '⚠️ VALIDAZIONE: Atrofia marcata con scarso infiltrato cronico. Pattern suggestivo di gastrite autoimmune avanzata o post-eradicazione.');
+        showAlert('warning', '⚠️ VALIDAZIONE: Atrofia elevata con scarso infiltrato cronico. Pattern suggestivo di gastrite autoimmune avanzata o post-eradicazione.');
       }
       
       const antrumAtrophyAggregated = Math.max(data.antrum.atrophy, data.incisura.atrophy);
@@ -1483,7 +1483,7 @@
 'VALUTAZIONE RISCHIO: Basso rischio\n' +
 'FOLLOW-UP: Non indicata sorveglianza routinaria' + freeNotesSection + '\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7.2 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7.3 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         } else if (hasSpecialFormWithoutInflammation) {
           let reportTitle = '';
           let morphologySection = '';
@@ -1544,7 +1544,7 @@ diagnosisSection + '\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
 'OLGIM: stadio ' + olgimStage + freeNotesSection + '\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7.2 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7.3 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         } else {
           let specialFormsSection = '';
           if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
@@ -1608,7 +1608,7 @@ followUpText + freeNotesSection + '\n\n' +
 'Dixon MF+ 1996 (Sydney System) PMID:8827022 | Rugge M+ 2007 (OLGA) PMID:17142647\n' +
 'Capelle LG+ 2010 (OLGIM) PMID:20975341 | Dinis-Ribeiro M+ 2025 (MAPS III) DOI:10.1055/a-2529-5025\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7.2 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7.3 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         }
         
       } else {
