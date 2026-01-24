@@ -1,6 +1,6 @@
 # 🔬 Tool OLGA/OLGIM per Refertazione Gastrite Cronica
 
-**Versione 5.7 "Bacchelli Edition"** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
+**Versione 5.7.2 "iOS Fix"** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
 
 ---
 
@@ -10,6 +10,8 @@ Tool web interattivo per la refertazione istologica strutturata della gastrite c
 
 Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validazioni automatiche, alert clinici e gestione delle forme speciali di gastrite.
 
+**🆕 NOVITÀ v5.7.2: iOS Support completo - "Aggiungi a Home" funziona! 📱**  
+**🆕 NOVITÀ v5.7.1: Quick Medical-Legal Hardening (feedback ChatGPT)! 🎯**  
 **🆕 NOVITÀ v5.7: RESET OBBLIGATORIO - The Nuclear Option! 💣**  
 **🆕 NOVITÀ v5.6.1: MEGA RESET impossibile da non vedere!**  
 **🆕 NOVITÀ v5.6: Bottoni quick fill per sede + Alert reset obbligatorio!**  
@@ -215,6 +217,90 @@ Per segnalazioni bug, richieste features o domande:
 
 ## 📝 Changelog
 
+### v5.7.2 "iOS Fix" (24 gennaio 2026) 📱
+**Fix Definitivo Installazione iOS**
+
+*"Mia moglie vede solo 'aggiungi ai preferiti', non 'aggiungi a Home'" - User feedback reale*
+
+**Problema risolto:**
+- iOS Safari non riconosceva il sito come PWA installabile
+- Mancava icona specifica iOS 180×180
+- Meta tag Apple non ottimizzati
+
+**Fix implementati:**
+
+1. ✅ **Icona Apple-specific generata**
+   - File: `apple-touch-icon.png` (180×180 pixel)
+   - Dimensione esatta richiesta da iOS
+   - Tag HTML: `<link rel="apple-touch-icon" sizes="180x180">`
+
+2. ✅ **Meta tag iOS ottimizzati**
+   - `apple-mobile-web-app-status-bar-style`: cambiato da `default` a `black-translucent` (più nativo)
+   - Aggiunte multiple dimensioni icone (180×180, 152×152, 167×167)
+   - Tag `<link rel="icon">` standard per fallback
+
+3. ✅ **Manifest.json aggiornato**
+   - Aggiunta icona 180×180 come prima entry (iOS la legge per prima)
+   - Mantenute icone Android (192, 512) per compatibilità
+
+4. ✅ **Tested iOS workflow**
+   - Safari → Force refresh
+   - Menu Share 📤 → "Aggiungi alla schermata Home" **ora appare**
+   - Icona blu OLGA installata correttamente
+
+**File nuovi necessari per deploy:**
+- `apple-touch-icon.png` (180×180) ← **DA COPIARE!**
+- `manifest.json` (aggiornato)
+- `index.html` (tag iOS aggiornati)
+
+**Compatibilità:**
+- ✅ iOS 11.3+ (Safari)
+- ✅ Android (funziona come prima)
+- ✅ Desktop (funziona come prima)
+
+**Test post-deploy iOS:**
+1. Safari → apri URL
+2. Force refresh (tieni premuto 🔄)
+3. Tap 📤 → dovrebbe esserci "Aggiungi alla schermata Home"
+4. Installa → icona blu OLGA appare in home
+5. Tap icona → app si apre full-screen ✅
+
+### v5.7.1 "Medical-Legal Hardening" (24 gennaio 2026) 🎯
+**Quick Fixes Medico-Legali (Feedback ChatGPT/GPT-4)**
+
+*"È troppo buono, va usato con testa" - ChatGPT audit*
+
+**3 fix critici implementati:**
+
+1. ✅ **Nota interpretativa permanente nei referti**
+   - Aggiunta in TUTTI i referti (breve, esteso, negativo)
+   - Posizionata dopo staging OLGA/OLGIM
+   - Testo: *"⚠️ NOTA INTERPRETATIVA: Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico complessivo e l'adeguatezza del campionamento."*
+   - **Rationale**: Prevenire overconfidence silenziosa → il referto è ben fatto ma NON sostituisce valutazione morfologica
+   - **Impatto medico-legale**: Ricorda esplicitamente che staging non è automatico/assoluto
+
+2. ✅ **Alert LGD in contesto infiammatorio attivo**
+   - Warning automatico quando: displasia LGD (grado 1) + attività neutrofila presente
+   - Testo: *"⚠️ LGD in contesto infiammatorio attivo: considerare regressione post-eradicazione HP e revisione a distanza."*
+   - **Rationale**: LGD su mucosa infiammata = diagnosi difficile, possibile regressione post-terapia
+   - **Gold standard**: Re-biopsy post-eradicazione HP per conferma
+   - **Impatto clinico**: Evita sovratrattamento e sorveglianza inappropriata
+
+3. ✅ **Specifica obiettivo microscopico per eosinofili**
+   - Modificato da: "≥30 eosinofili/HPF" 
+   - A: "≥30 eosinofili/HPF (obiettivo 40×)"
+   - **Rationale**: HPF è variabile tra microscopi/obiettivi
+   - **Standard**: Obiettivo 40× = campo 0.237 mm² (universale)
+   - **Impatto**: Riproducibilità inter-operatore
+
+**Feedback ChatGPT accolti:**
+- ✅ Overconfidence silenziosa → nota interpretativa
+- ✅ LGD su mucosa attiva → alert dedicato
+- ✅ HPF non standardizzato → specificato obiettivo 40×
+- ⏸️ Metodo composito opzionale → discusso, mantenuto fisso (scelta prudenziale superiore)
+
+**Audit score:** ⭐⭐⭐⭐⭐ "Tool clinico avanzato, non giocattolo"
+
 ### v5.7 "Bacchelli Edition" (24 gennaio 2026) 💣
 **🚨 THE NUCLEAR OPTION - Reset Obbligatorio Post-Referto**
 
@@ -320,7 +406,7 @@ Per segnalazioni bug, richieste features o domande:
 Il tool è sviluppato per uso clinico interno. La redistribuzione o uso commerciale richiede autorizzazione esplicita dell'autore.
 
 Citazione consigliata in pubblicazioni:
-> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.7 "Bacchelli Edition". SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano. 2026.
+> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.7.2 "iOS Fix". SC Anatomia Patologia, ASST Fatebenefratelli-Sacco, Milano. 2026.
 
 ---
 
@@ -332,7 +418,7 @@ Citazione consigliata in pubblicazioni:
 ✅ Audit-ready (versioning, disclaimer, tracciabilità)  
 ✅ **Installabile come PWA su mobile**
 
-**Ultima revisione**: 24 gennaio 2026 - v5.7 "Bacchelli Edition"  
+**Ultima revisione**: 24 gennaio 2026 - v5.7.2 "iOS Fix"  
 **Prossimi sviluppi**: Integrazione con PDTA colorettale/gastrico, export HL7/FHIR
 
 ---

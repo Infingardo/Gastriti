@@ -8,10 +8,21 @@
   
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
+  
+  <!-- iOS Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="OLGA/OLGIM">
-  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <!-- iOS Icons -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icon-192.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
+  
+  <!-- Standard Icons -->
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
   <title>OLGA/OLGIM e H. pylori</title>
   <style>
@@ -411,7 +422,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.2</div>
     </div>
   </header>
   
@@ -833,7 +844,7 @@
                 <option value="2">20-29 eosinofili/HPF (moderatamente aumentati)</option>
                 <option value="3">≥30 eosinofili/HPF (marcatamente aumentati)</option>
               </select>
-              <small>Soglia diagnostica: ≥30 eosinofili/HPF (Rosai and Ackerman's, 11th ed.)</small>
+              <small>Soglia diagnostica: ≥30 eosinofili/HPF (obiettivo 40×) (Rosai and Ackerman's, 11th ed.)</small>
             </div>
             <div style="font-size: 0.85rem; color: #718096;">
               <strong>DD essenziali:</strong> Parassitosi (Anisakis), farmaci (PPI, FANS), IBD, vasculiti, neoplasie (linfoma, carcinoma)
@@ -1286,6 +1297,12 @@
         showAlert('warning', '⚠️ VALIDAZIONE: Attività neutrofila presente senza H. pylori rilevabile.');
       }
       
+      // Alert LGD in contesto infiammatorio attivo
+      const hasLGD = (anDysplasia === 1 || inDysplasia === 1 || coDysplasia === 1);
+      if (hasLGD && maxActivity > 0) {
+        showAlert('warning', '⚠️ LGD in contesto infiammatorio attivo: considerare regressione post-eradicazione HP e revisione a distanza.');
+      }
+      
       const hasMetaplasiaWithoutAtrophy = (data.antrum.metaplasia > 0 && data.antrum.atrophy === 0) ||
                                           (data.corpus.metaplasia > 0 && data.corpus.atrophy === 0) ||
                                           (data.incisura.metaplasia > 0 && data.incisura.atrophy === 0);
@@ -1460,10 +1477,13 @@
 '══════════════════════════════════════════════════\n' +
 'OLGA: stadio 0\n' +
 'OLGIM: stadio 0\n\n' +
+'⚠️ NOTA INTERPRETATIVA:\n' +
+'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
+'complessivo e l\'adeguatezza del campionamento.\n\n' +
 'VALUTAZIONE RISCHIO: Basso rischio\n' +
 'FOLLOW-UP: Non indicata sorveglianza routinaria' + freeNotesSection + '\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7.2 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         } else if (hasSpecialFormWithoutInflammation) {
           let reportTitle = '';
           let morphologySection = '';
@@ -1524,7 +1544,7 @@ diagnosisSection + '\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
 'OLGIM: stadio ' + olgimStage + freeNotesSection + '\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7.2 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         } else {
           let specialFormsSection = '';
           if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
@@ -1574,6 +1594,9 @@ CLINICAL_NOTES.compositeMethod + '\n\n' +
 'OLGA          ' + olgaAntrum + '           ' + olgaCorpus + '           ' + olgaStage + '      ' + olgaRisk + '\n' +
 'OLGIM         ' + olgimAntrum + '           ' + olgimCorpus + '           ' + olgimStage + '      ' + olgimRisk +
 (hasDiscordance ? '\n\n⚠️ DISCORDANZA ≥2 stadi OLGA/OLGIM → considerare stadio più alto' : '') + '\n\n' +
+'⚠️ NOTA INTERPRETATIVA:\n' +
+'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico complessivo\n' +
+'e l\'adeguatezza del campionamento.\n\n' +
 '══════════════════════════════════════════════════\n' +
 'FOLLOW-UP (MAPS III - ESGE/ESP 2025)\n' +
 '══════════════════════════════════════════════════\n' +
@@ -1585,7 +1608,7 @@ followUpText + freeNotesSection + '\n\n' +
 'Dixon MF+ 1996 (Sydney System) PMID:8827022 | Rugge M+ 2007 (OLGA) PMID:17142647\n' +
 'Capelle LG+ 2010 (OLGIM) PMID:20975341 | Dinis-Ribeiro M+ 2025 (MAPS III) DOI:10.1055/a-2529-5025\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7.2 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         }
         
       } else {
@@ -1638,7 +1661,10 @@ followUpText + freeNotesSection + '\n\n' +
 'DISPLASIA: Assente\n' +
 'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
-'OLGIM: stadio ' + olgimStage + freeNotesSection;
+'OLGIM: stadio ' + olgimStage + '\n\n' +
+'⚠️ NOTA INTERPRETATIVA:\n' +
+'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
+'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
         } else {
           let specialFormsText = '';
           if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
@@ -1657,7 +1683,10 @@ followUpText + freeNotesSection + '\n\n' +
 'METAPLASIA INTESTINALE: ' + getMITypeText() + specialFormsText + '\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
 'OLGIM: stadio ' + olgimStage +
-(hasDiscordance ? '\n\n⚠️ NOTA: Discordanza OLGA/OLGIM ≥2 stadi' : '') + hgdNote + freeNotesSection + '\n\n' +
+(hasDiscordance ? '\n\n⚠️ NOTA: Discordanza OLGA/OLGIM ≥2 stadi' : '') + hgdNote + '\n\n' +
+'⚠️ NOTA INTERPRETATIVA:\n' +
+'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
+'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
 CLINICAL_NOTES.stagingValidity;
         }
       }
