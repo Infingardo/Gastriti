@@ -1,6 +1,6 @@
 # 🔬 Tool OLGA/OLGIM per Refertazione Gastrite Cronica
 
-**Versione 5.5** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
+**Versione 5.7 "Bacchelli Edition"** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
 
 ---
 
@@ -10,6 +10,9 @@ Tool web interattivo per la refertazione istologica strutturata della gastrite c
 
 Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validazioni automatiche, alert clinici e gestione delle forme speciali di gastrite.
 
+**🆕 NOVITÀ v5.7: RESET OBBLIGATORIO - The Nuclear Option! 💣**  
+**🆕 NOVITÀ v5.6.1: MEGA RESET impossibile da non vedere!**  
+**🆕 NOVITÀ v5.6: Bottoni quick fill per sede + Alert reset obbligatorio!**  
 **🆕 NOVITÀ v5.5: Installabile come PWA (Progressive Web App) su Android/iOS!**
 
 ---
@@ -61,7 +64,9 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
   - Stadi 0-II: no sorveglianza routinaria
 
 ### Funzionalità Avanzate
-- **Quick fill**: precompilazione casi comuni (tutto negativo, H. pylori+)
+- **Quick fill globale**: precompilazione casi comuni (tutto negativo, H. pylori+)
+- **Quick fill per sede** 🆕: bottoni "⚡ Tutto 0" per antro/incisura/corpo singolarmente
+- **Alert reset permanente** 🆕: reminder "RESET prima di ogni diagnosi" sempre visibile
 - **Displasia per sede anatomica**: antro, incisura, corpo (output intelligente)
 - **Note libere**: campo testo per osservazioni aggiuntive
 - **LocalStorage**: autosalvataggio continuo dei dati inseriti
@@ -76,51 +81,6 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
 - **Prompt installazione** personalizzato
 - **Aggiornamenti automatici** al refresh
 - **Zero dipendenze esterne** - tutto self-contained
-
----
-
-## 📊 Changelog Versioni
-
-### v5.5 (24 gennaio 2026)
-**🆕 MAJOR UPDATE: PWA + Metaplasia per Sede**
-- ✅ **PWA Support**: installabile come app su Android/iOS
-  - Manifest.json completo
-  - Service worker per cache offline
-  - Prompt installazione con dismiss temporaneo
-  - Meta tag iOS ottimizzati
-- ✅ **Metaplasia intestinale per sede**: campo tipo MI specifico (antro, incisura, corpo)
-  - Show/hide condizionale per ogni sede
-  - Output intelligente pattern misto: "MI mista (antro: completa, corpo: incompleta)"
-  - Migliore aderenza al workflow diagnostico reale
-- ✅ **FIX CRITICO: Attività neutrofila nel referto breve**
-  - Titolo con attività: "GASTRITE CRONICA (attiva)" vs "(quiescente)"
-  - Riga dedicata attività nel referto esteso
-- ✅ **LocalStorage migration**: compatibilità dati vecchia versione
-
-### v5.1 FINAL (22 gennaio 2026)
-**Rifiniture finali (code quality & medico-legale):**
-- ✅ Centralizzazione stringhe cliniche
-- ✅ Sezione "Cosa NON fa il tool": disclaimer espandibile
-- ✅ Linguaggio uniforme forme speciali
-- ✅ Code cleanup eliminazione duplicazioni
-
-### v5.0 FINAL (22 gennaio 2026)
-**Fix medico-legali critici:**
-- ✅ Metodo composito blindato con disclaimer
-- ✅ HGD prevale su staging: nota automatica
-- ✅ Linguaggio forme speciali attenuato
-- ✅ Alert stacking: max 3 alert con priorità
-
-### v4.3 (21 gennaio 2026)
-- Reset spostato in alto con stile rosso visibile
-- Improved UX per cancellazione dati
-
-### v4.2 (21 gennaio 2026)
-- Referti specifici per forme speciali senza infiltrato cronico
-- Output personalizzati per gastropatia, autoimmune, linfocitaria, eosinofila
-
-### v3.9 (21 gennaio 2026)
-- **FIX CRITICO**: Correzione matrice OLGA (Rugge 2007)
 
 ---
 
@@ -155,19 +115,23 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
 - ✅ **Storage persistente** (localStorage)
 
 ### Workflow Tipico
-1. **Compilare campi Sydney** per antro, incisura, corpo
-2. **Se metaplasia >0**: specificare tipo MI (completa/incompleta) per ogni sede
-3. *Opzionale*: Usare **Quick Fill** per casi comuni
-4. *Opzionale*: Compilare **forme speciali** se pattern suggestivo
-5. *Opzionale*: Aggiungere **note libere**
-6. Cliccare **"Calcola referto"**
-7. Verificare **alert** e **badge** rischio
-8. **Copiare referto** o **stampare PDF**
+1. **⚠️ IMPORTANTE**: Click **Reset completo** prima di ogni nuova diagnosi (alert permanente lo ricorda)
+2. **Compilare campi Sydney** per antro, incisura, corpo
+   - 🆕 Usa bottone **"⚡ Tutto 0"** per settare velocemente una sede a 0
+3. **Se metaplasia >0**: specificare tipo MI (completa/incompleta) per ogni sede
+4. *Opzionale*: Usare **Quick Fill globale** per casi comuni (tutto negativo, H. pylori+)
+5. *Opzionale*: Compilare **forme speciali** se pattern suggestivo
+6. *Opzionale*: Aggiungere **note libere**
+7. Cliccare **"Calcola referto"**
+8. Verificare **alert** e **badge** rischio
+9. **Copiare referto** o **stampare PDF**
 
-### Shortcuts Tastiera
-- **Quick fill "Tutto negativo"**: setta tutti i campi a 0
-- **Quick fill "H. pylori+"**: precompila pattern base antro-predominante
+### Shortcuts e Quick Actions
+- **Quick fill globale "Tutto negativo"**: setta tutti i campi a 0
+- **Quick fill globale "H. pylori+"**: precompila pattern base antro-predominante
+- **Quick fill per sede "⚡ Tutto 0"** 🆕: setta velocemente antro/incisura/corpo singolarmente
 - **Reset completo**: cancella tutto e localStorage
+- **Alert reset permanente** 🆕: reminder sempre visibile per sicurezza
 
 ### Dati Salvati Automaticamente
 Il tool salva automaticamente tutti i campi compilati nel browser (localStorage).  
@@ -247,6 +211,108 @@ Per segnalazioni bug, richieste features o domande:
 
 ---
 
+---
+
+## 📝 Changelog
+
+### v5.7 "Bacchelli Edition" (24 gennaio 2026) 💣
+**🚨 THE NUCLEAR OPTION - Reset Obbligatorio Post-Referto**
+
+*"Gli stupidi impressionano sempre, non fosse altro che per il loro numero." - Riccardo Bacchelli*
+
+**Problema risolto:** Utenti che non fanno reset tra diagnosi diverse → mix dati tra pazienti
+
+**Soluzione definitiva:**
+- 🔒 **FORM COMPLETAMENTE BLOCCATO dopo "Calcola referto"**
+  - Tutti i campi (select, checkbox, textarea) → readonly (grigi, non cliccabili)
+  - Tutti i bottoni → disabilitati (tranne MEGA reset)
+  - **Impossibile compilare nuova diagnosi senza reset!**
+
+- 🚨 **Banner rosso fisso in alto**: "🔒 DIAGNOSI COMPLETATA - CAMPI BLOCCATI"
+  - Sempre visibile dopo referto
+  - Istruzioni chiare: "Per iniziare nuova diagnosi → Cliccare RESET COMPLETO"
+
+- 🟡 **Sfondo pagina diventa giallo** (#fffbeb) dopo referto
+  - Indicatore visivo impossibile da ignorare
+  - Torna bianco solo dopo reset
+
+- ⚡ **MEGA reset pulsa ancora più forte** (da 3s a 1.5s)
+  - Unico elemento interattivo nella pagina
+  - Attira inevitabilmente l'attenzione
+
+- 🔓 **Unlock automatico dopo reset**
+  - Campi tornano normali (bianchi, cliccabili)
+  - Bottoni riabilitati
+  - Sfondo torna bianco
+  - Form pronto per nuova diagnosi
+
+**Workflow forzato:**
+```
+1. Compila campi
+2. "Calcola referto" 
+   → TUTTO SI BLOCCA 🔒
+   → Banner rosso: "FARE RESET!"
+   → Sfondo giallo
+   → Solo MEGA reset attivo (pulsa forte)
+3. Leggi referto (campi bloccati)
+4. DEVI fare reset per continuare
+5. Reset → tutto si sblocca ✅
+6. Nuova diagnosi pulita
+```
+
+**Non c'è modo di sbagliare. Non più.** 🎯
+
+### v5.6.1 (24 gennaio 2026)
+**🚨 UX CRITICA - MEGA RESET Button**
+- ✅ **Bottone reset 2x più grande** con testo chiaro: "⚠️ RESET COMPLETO - NUOVA DIAGNOSI"
+- ✅ **Animazione pulsazione soft** (ogni 3 secondi) - impossibile non vederlo!
+- ✅ **Colore rosso fuoco** (#dc2626) con bordo spesso
+- ✅ **Shadow animato** rosso per massima visibilità
+- ✅ **Separated layout**: bottone reset su riga dedicata, width 100%
+- 🎯 **Rationale**: Prevenire errore comune "non ho fatto reset" che causa mix dati tra pazienti
+- 🎯 **Feedback utente**: "Se non è grande e lampeggiante, nessuno lo userà"
+
+### v5.6 (24 gennaio 2026)
+**🎯 Quick Fill per Sede + Sicurezza**
+- ✅ **Bottone "⚡ Tutto 0" per ogni sede** (antro, incisura, corpo)
+  - Permette di settare rapidamente tutti i campi di una singola sede a 0
+  - Utile per workflow: compilo antro/incisura → corpo tutto negativo con 1 click
+- ✅ **Alert permanente reset obbligatorio**
+  - Avviso sempre visibile: "⚠️ IMPORTANTE: Fare RESET COMPLETO prima di ogni nuova diagnosi!"
+  - Dismissibile temporaneamente, riappare al refresh
+  - **Sicurezza medico-legale**: previene mix dati tra pazienti diversi
+
+### v5.5 (24 gennaio 2026)
+**🚀 PWA + Fix Critici**
+- ✅ **PWA completa**: Installabile come app nativa su Android/iOS/Desktop
+- ✅ **Service worker**: Funzionamento offline dopo prima visita
+- ✅ **LocalStorage autosave**: Ripristino automatico dati in corso
+- ✅ **Icone personalizzate**: 192x192 e 512x512 per home screen
+- ✅ **Fix: Attività neutrofila in referto**
+  - Referto breve: "(attiva)" vs "(quiescente)" nel titolo
+  - Referto esteso: riga dedicata "ATTIVITÀ NEUTROFILA: Presente/Assente"
+- ✅ **Fix: MI tipo per sede** (non più globale)
+  - Campo tipo MI specifico per antro/incisura/corpo
+  - Output intelligente: "MI mista (antro: completa, corpo: incompleta)"
+  - Show/hide condizionale per campo tipo MI
+
+### v5.1 (gennaio 2026)
+- ✅ Code quality, disclaimer medico-legale, note cliniche HGD
+
+### v5.0 (gennaio 2026)
+- ✅ Metodo composito con disclaimer, note priorità HGD
+
+### v4.3 (gennaio 2026)
+- ✅ Fix visibilità reset button
+
+### v4.2 (dicembre 2025)
+- ✅ Forme speciali senza infiltrato
+
+### v3.9 (dicembre 2025)
+- ✅ **Fix critico**: Correzione matrice OLGA (bug stadio IV)
+
+---
+
 ## 📜 Licenza
 
 **Uso interno ASST Fatebenefratelli-Sacco**
@@ -254,7 +320,7 @@ Per segnalazioni bug, richieste features o domande:
 Il tool è sviluppato per uso clinico interno. La redistribuzione o uso commerciale richiede autorizzazione esplicita dell'autore.
 
 Citazione consigliata in pubblicazioni:
-> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.5. SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano. 2026.
+> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.7 "Bacchelli Edition". SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano. 2026.
 
 ---
 
@@ -266,7 +332,7 @@ Citazione consigliata in pubblicazioni:
 ✅ Audit-ready (versioning, disclaimer, tracciabilità)  
 ✅ **Installabile come PWA su mobile**
 
-**Ultima revisione**: 24 gennaio 2026 - v5.5  
+**Ultima revisione**: 24 gennaio 2026 - v5.7 "Bacchelli Edition"  
 **Prossimi sviluppi**: Integrazione con PDTA colorettale/gastrico, export HL7/FHIR
 
 ---

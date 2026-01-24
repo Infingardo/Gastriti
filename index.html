@@ -360,6 +360,43 @@
       body { background: white; }
       .card, .results { box-shadow: none; border: 1px solid #ccc; }
     }
+    
+    /* ============================================
+       MEGA RESET BUTTON - Animazione Pulsazione
+       ============================================ */
+    @keyframes pulse-soft {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 8px 12px rgba(220, 38, 38, 0.5);
+      }
+    }
+    
+    .mega-reset-btn {
+      animation: pulse-soft 3s ease-in-out infinite;
+      font-size: 1.1rem !important;
+      font-weight: 700 !important;
+      padding: 1rem 2rem !important;
+      background: #dc2626 !important;
+      color: white !important;
+      border: 3px solid #991b1b !important;
+      border-radius: 0.5rem !important;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .mega-reset-btn:hover {
+      background: #b91c1c !important;
+      transform: scale(1.08) !important;
+      box-shadow: 0 12px 20px rgba(220, 38, 38, 0.6) !important;
+    }
+    
+    .mega-reset-btn:active {
+      transform: scale(0.98) !important;
+    }
   </style>
 </head>
 <body>
@@ -374,11 +411,23 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.5</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7</div>
     </div>
   </header>
   
   <main class="container">
+    <!-- Banner blocco post-referto (nascosto di default) -->
+    <div id="postReportLockBanner" style="display: none; background: #dc2626; color: white; padding: 1.5rem; text-align: center; font-size: 1.2rem; font-weight: 700; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.5);">
+      🔒 DIAGNOSI COMPLETATA - CAMPI BLOCCATI<br>
+      <span style="font-size: 1rem; font-weight: 500;">Per iniziare nuova diagnosi → Cliccare RESET COMPLETO</span>
+    </div>
+    
+    <!-- Alert permanente reset -->
+    <div id="resetAlert" class="alert warning" style="display: block; position: relative; margin-top: 1rem;">
+      <strong>⚠️ IMPORTANTE:</strong> Fare <strong>RESET COMPLETO</strong> prima di ogni nuova diagnosi!
+      <button onclick="dismissResetAlert()" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: #7c2d12; padding: 0; line-height: 1;">×</button>
+    </div>
+    
     <div class="info-panel">
       <strong>Atrofia e metaplasia:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = severa<br>
       <strong>Altri parametri:</strong> 0 = assente · 1 = presente<br>
@@ -433,12 +482,17 @@
           <button class="secondary" style="flex: 1; min-width: 180px;" onclick="setHPyCase()">
             🦠 H. pylori+
           </button>
-          <button class="secondary" style="flex: 1; min-width: 180px; background: #fef2f2; color: #991b1b; border-color: #fecaca;" onclick="resetForm()">
-            🔄 Reset completo
+        </div>
+        
+        <!-- MEGA RESET BUTTON -->
+        <div style="margin-top: 1.5rem;">
+          <button class="mega-reset-btn" style="width: 100%;" onclick="resetForm()">
+            ⚠️ RESET COMPLETO - NUOVA DIAGNOSI
           </button>
         </div>
-        <small style="color: #1e40af;">
-          <strong>Shortcut:</strong> Casi comuni precompilati. <span style="color: #991b1b;">Reset cancella tutto e localStorage.</span>
+        
+        <small style="color: #1e40af; display: block; margin-top: 0.5rem;">
+          <strong>Shortcut:</strong> Casi comuni precompilati. <span style="color: #991b1b; font-weight: 600;">Reset cancella tutto prima di ogni nuova diagnosi!</span>
         </small>
       </div>
     </div>
@@ -510,6 +564,13 @@
             <option value="2">Alto grado (HGD)</option>
           </select>
         </div>
+        
+        <!-- Quick fill per sede -->
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <button class="secondary" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroAntrum()">
+            ⚡ Tutto 0 antro
+          </button>
+        </div>
       </div>
       
       <div class="card">
@@ -578,6 +639,13 @@
             <option value="2">Alto grado (HGD)</option>
           </select>
         </div>
+        
+        <!-- Quick fill per sede -->
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <button class="secondary" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroIncisura()">
+            ⚡ Tutto 0 incisura
+          </button>
+        </div>
       </div>
       
       <div class="card">
@@ -645,6 +713,13 @@
             <option value="1">Basso grado (LGD)</option>
             <option value="2">Alto grado (HGD)</option>
           </select>
+        </div>
+        
+        <!-- Quick fill per sede -->
+        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+          <button class="secondary" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroCorpus()">
+            ⚡ Tutto 0 corpo
+          </button>
         </div>
       </div>
     </div>
@@ -1388,7 +1463,7 @@
 'VALUTAZIONE RISCHIO: Basso rischio\n' +
 'FOLLOW-UP: Non indicata sorveglianza routinaria' + freeNotesSection + '\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.5 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         } else if (hasSpecialFormWithoutInflammation) {
           let reportTitle = '';
           let morphologySection = '';
@@ -1449,7 +1524,7 @@ diagnosisSection + '\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
 'OLGIM: stadio ' + olgimStage + freeNotesSection + '\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.5 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         } else {
           let specialFormsSection = '';
           if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
@@ -1510,7 +1585,7 @@ followUpText + freeNotesSection + '\n\n' +
 'Dixon MF+ 1996 (Sydney System) PMID:8827022 | Rugge M+ 2007 (OLGA) PMID:17142647\n' +
 'Capelle LG+ 2010 (OLGIM) PMID:20975341 | Dinis-Ribeiro M+ 2025 (MAPS III) DOI:10.1055/a-2529-5025\n\n' +
 '══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.5 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
+'Tool OLGA/OLGIM v5.7 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
         }
         
       } else {
@@ -1590,6 +1665,9 @@ CLINICAL_NOTES.stagingValidity;
       document.getElementById('reportText').textContent = report;
       document.getElementById('resultsSection').style.display = 'block';
       document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // LOCK form dopo generazione referto
+      lockFormAfterReport();
     }
     
     function copyReport() {
@@ -1662,6 +1740,149 @@ CLINICAL_NOTES.stagingValidity;
       saveFormData();
     }
     
+    // ============================================
+    // QUICK FILL PER SEDE
+    // ============================================
+    
+    function setZeroAntrum() {
+      document.getElementById('an_chronic').value = '0';
+      document.getElementById('an_activity').value = '0';
+      document.getElementById('an_atrophy').value = '0';
+      document.getElementById('an_metaplasia').value = '0';
+      document.getElementById('an_hp').value = '0';
+      document.getElementById('an_dysplasia').value = '0';
+      checkMetaplasiaAndShowMIType('an');
+      saveFormData();
+      showAlert('success', '✅ Antro impostato a 0');
+    }
+    
+    function setZeroIncisura() {
+      document.getElementById('in_chronic').value = '0';
+      document.getElementById('in_activity').value = '0';
+      document.getElementById('in_atrophy').value = '0';
+      document.getElementById('in_metaplasia').value = '0';
+      document.getElementById('in_hp').value = '0';
+      document.getElementById('in_dysplasia').value = '0';
+      checkMetaplasiaAndShowMIType('in');
+      saveFormData();
+      showAlert('success', '✅ Incisura impostata a 0');
+    }
+    
+    function setZeroCorpus() {
+      document.getElementById('co_chronic').value = '0';
+      document.getElementById('co_activity').value = '0';
+      document.getElementById('co_atrophy').value = '0';
+      document.getElementById('co_metaplasia').value = '0';
+      document.getElementById('co_hp').value = '0';
+      document.getElementById('co_dysplasia').value = '0';
+      checkMetaplasiaAndShowMIType('co');
+      saveFormData();
+      showAlert('success', '✅ Corpo impostato a 0');
+    }
+    
+    function dismissResetAlert() {
+      const alert = document.getElementById('resetAlert');
+      if (alert) {
+        alert.style.display = 'none';
+        // Salva stato dismissione (riappare al refresh - intenzionale per sicurezza)
+      }
+    }
+    
+    // ============================================
+    // LOCK/UNLOCK FORM POST-REFERTO (v5.7)
+    // ============================================
+    
+    function lockFormAfterReport() {
+      // Mostra banner rosso
+      document.getElementById('postReportLockBanner').style.display = 'block';
+      
+      // Sfondo pagina giallo
+      document.body.style.background = '#fffbeb';
+      
+      // Disabilita tutti i select
+      document.querySelectorAll('select').forEach(el => {
+        el.disabled = true;
+        el.style.opacity = '0.5';
+        el.style.cursor = 'not-allowed';
+      });
+      
+      // Disabilita tutti i checkbox
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.disabled = true;
+        el.style.opacity = '0.5';
+        el.style.cursor = 'not-allowed';
+      });
+      
+      // Disabilita textarea note libere
+      const freeNotesEl = document.getElementById('free_notes');
+      if (freeNotesEl) {
+        freeNotesEl.disabled = true;
+        freeNotesEl.style.opacity = '0.5';
+        freeNotesEl.style.cursor = 'not-allowed';
+      }
+      
+      // Disabilita TUTTI i bottoni TRANNE mega reset
+      document.querySelectorAll('button').forEach(el => {
+        if (!el.classList.contains('mega-reset-btn')) {
+          el.disabled = true;
+          el.style.opacity = '0.4';
+          el.style.cursor = 'not-allowed';
+        }
+      });
+      
+      // MEGA reset pulsa più forte
+      const megaReset = document.querySelector('.mega-reset-btn');
+      if (megaReset) {
+        megaReset.style.animation = 'pulse-soft 1.5s ease-in-out infinite';
+      }
+      
+      // Scroll in alto per vedere banner
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function unlockForm() {
+      // Nascondi banner rosso
+      document.getElementById('postReportLockBanner').style.display = 'none';
+      
+      // Ripristina sfondo normale
+      document.body.style.background = '#f5f7fa';
+      
+      // Riabilita tutti i select
+      document.querySelectorAll('select').forEach(el => {
+        el.disabled = false;
+        el.style.opacity = '1';
+        el.style.cursor = 'pointer';
+      });
+      
+      // Riabilita tutti i checkbox
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+        el.disabled = false;
+        el.style.opacity = '1';
+        el.style.cursor = 'pointer';
+      });
+      
+      // Riabilita textarea
+      const freeNotesEl = document.getElementById('free_notes');
+      if (freeNotesEl) {
+        freeNotesEl.disabled = false;
+        freeNotesEl.style.opacity = '1';
+        freeNotesEl.style.cursor = 'text';
+      }
+      
+      // Riabilita tutti i bottoni
+      document.querySelectorAll('button').forEach(el => {
+        el.disabled = false;
+        el.style.opacity = '1';
+        el.style.cursor = 'pointer';
+      });
+      
+      // MEGA reset torna a pulsazione normale
+      const megaReset = document.querySelector('.mega-reset-btn');
+      if (megaReset) {
+        megaReset.style.animation = 'pulse-soft 3s ease-in-out infinite';
+      }
+    }
+    
     function resetForm() {
       document.querySelectorAll('select').forEach(function(el) { el.value = ''; });
       document.querySelectorAll('input[type="checkbox"]').forEach(function(el) { el.checked = false; });
@@ -1680,6 +1901,9 @@ CLINICAL_NOTES.stagingValidity;
       
       localStorage.removeItem('gastritisFormData');
       showAlert('success', '✅ Reset completo eseguito');
+      
+      // UNLOCK form dopo reset
+      unlockForm();
     }
     
     function saveFormData() {
