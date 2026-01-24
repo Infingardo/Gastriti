@@ -1,6 +1,6 @@
 # 🔬 Tool OLGA/OLGIM per Refertazione Gastrite Cronica
 
-**Versione 5.1 FINAL** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
+**Versione 5.5** | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano
 
 ---
 
@@ -10,6 +10,8 @@ Tool web interattivo per la refertazione istologica strutturata della gastrite c
 
 Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validazioni automatiche, alert clinici e gestione delle forme speciali di gastrite.
 
+**🆕 NOVITÀ v5.5: Installabile come PWA (Progressive Web App) su Android/iOS!**
+
 ---
 
 ## ✨ Caratteristiche Principali
@@ -18,9 +20,7 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
 - **Sydney System** (Dixon et al. 1996): grading infiltrato, attività, atrofia, metaplasia
 - **OLGA staging** (Rugge et al. 2007): stratificazione rischio su base atrofia
 - **OLGIM staging** (Capelle et al. 2010): stratificazione rischio su base metaplasia intestinale
-- **Due metodi di calcolo OLGA**:
-  - Solo atrofia ghiandolare (OLGA originale)
-  - Metodo composito sensibile: max(atrofia, metaplasia) - *con disclaimer esplicito*
+- **Metodo composito**: max(atrofia, metaplasia) per sede - con disclaimer esplicito
 
 ### Forme Speciali di Gastrite
 - Gastropatia chimica/reattiva (reflusso biliare, FANS, alcol)
@@ -28,17 +28,24 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
 - Gastrite linfocitaria (associazione celiachia)
 - Gastrite eosinofila (soglia ≥30 eosinofili/HPF)
 
-### Refertazione
+### Refertazione Intelligente
 - **Modalità referto breve** (default): essenziale, veloce per routine
+  - Titolo con attività: "GASTRITE CRONICA (attiva)" vs "(quiescente)"
 - **Modalità referto estesa**: completa con Sydney, topografia, follow-up MAPS III, bibliografia
 - **Referti intelligenti**:
   - Caso completamente negativo → "Mucosa gastrica nei limiti della norma"
-  - Forme speciali senza infiltrato → referto specifico (es. "Gastropatia reattiva")
+  - Forme speciali senza infiltrato → referto specifico
   - Gastrite cronica → referto completo con staging
+
+### Metaplasia Intestinale per Sede 🆕
+- **Campo tipo MI specifico per ogni sede** (antro, incisura, corpo)
+- Classificazione Jass/Filipe: completa vs incompleta
+- Output intelligente pattern misto: "MI mista (antro: completa, corpo: incompleta)"
+- Show/hide condizionale: campo tipo MI appare solo se metaplasia >0
 
 ### Validazioni Cliniche
 - Alert attività neutrofila senza H. pylori
-- Alert metaplasia senza atrofia (con downgrade a INFO se post-eradicazione)
+- Alert metaplasia senza atrofia (downgrade a INFO se post-eradicazione)
 - Alert atrofia marcata senza infiltrato
 - Alert incompatibilità forme speciali
 - **Alert HGD**: nota automatica "displasia prevale su staging"
@@ -54,38 +61,55 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
   - Stadi 0-II: no sorveglianza routinaria
 
 ### Funzionalità Avanzate
-- **Quick fill**: precompilazione casi comuni (tutto negativo, H. pylori+, metaplasia assente)
-- **Campo atrofia globale**: setting "Assente" → azzera automaticamente tutte le sedi
-- **Campo tipo MI globale**: setting "Assente" → azzera automaticamente metaplasia
-- **Tooltip classificazione Jass/Filipe**: MI completa vs incompleta
-- **Displasia per sede anatomica**: antro, incisura, corpo (con output intelligente)
+- **Quick fill**: precompilazione casi comuni (tutto negativo, H. pylori+)
+- **Displasia per sede anatomica**: antro, incisura, corpo (output intelligente)
 - **Note libere**: campo testo per osservazioni aggiuntive
 - **LocalStorage**: autosalvataggio continuo dei dati inseriti
 - **Reset visibile**: bottone rosso in alto per cancellazione completa
 - **Responsive design**: ottimizzato per desktop, tablet e mobile
 - **Stampa/PDF**: referto pronto per archiviazione
 
+### 🆕 PWA - Progressive Web App
+- **Installabile** su Android/iOS come app nativa (icona home screen)
+- **Funziona offline** dopo prima visita
+- **Cache intelligente** con service worker
+- **Prompt installazione** personalizzato
+- **Aggiornamenti automatici** al refresh
+- **Zero dipendenze esterne** - tutto self-contained
+
 ---
 
 ## 📊 Changelog Versioni
 
+### v5.5 (24 gennaio 2026)
+**🆕 MAJOR UPDATE: PWA + Metaplasia per Sede**
+- ✅ **PWA Support**: installabile come app su Android/iOS
+  - Manifest.json completo
+  - Service worker per cache offline
+  - Prompt installazione con dismiss temporaneo
+  - Meta tag iOS ottimizzati
+- ✅ **Metaplasia intestinale per sede**: campo tipo MI specifico (antro, incisura, corpo)
+  - Show/hide condizionale per ogni sede
+  - Output intelligente pattern misto: "MI mista (antro: completa, corpo: incompleta)"
+  - Migliore aderenza al workflow diagnostico reale
+- ✅ **FIX CRITICO: Attività neutrofila nel referto breve**
+  - Titolo con attività: "GASTRITE CRONICA (attiva)" vs "(quiescente)"
+  - Riga dedicata attività nel referto esteso
+- ✅ **LocalStorage migration**: compatibilità dati vecchia versione
+
 ### v5.1 FINAL (22 gennaio 2026)
 **Rifiniture finali (code quality & medico-legale):**
-- ✅ **Centralizzazione stringhe cliniche**: costanti riutilizzabili per coerenza totale
-- ✅ **Sezione "Cosa NON fa il tool"**: disclaimer espandibile potente in sede medico-legale
-- ✅ **Linguaggio uniforme**: "non rientrano nella gastrite cronica infiammatoria" in tutto il codice
-- ✅ **Code cleanup**: eliminazione duplicazioni, stringhe hardcoded centralizzate
+- ✅ Centralizzazione stringhe cliniche
+- ✅ Sezione "Cosa NON fa il tool": disclaimer espandibile
+- ✅ Linguaggio uniforme forme speciali
+- ✅ Code cleanup eliminazione duplicazioni
 
 ### v5.0 FINAL (22 gennaio 2026)
 **Fix medico-legali critici:**
-- ✅ **Metodo composito blindato**: disclaimer espliciti nelle impostazioni e nel referto
-- ✅ **HGD prevale su staging**: nota automatica in referto breve/esteso
-- ✅ **Linguaggio forme speciali**: attenuato da "NON sono gastriti" a "non rientrano nella gastrite cronica infiammatoria"
-- ✅ **Nota topografia**: esplicitato che è basata su infiltrato cronico (Sydney System)
-- ✅ **Alert stacking**: max 3 alert con priorità (error > warning > success)
-- ✅ **Versioning corretto**: allineato a v5.0 in header e footer
-- ✅ Alert MI senza atrofia → downgrade a INFO se HP- e flogosi bassa
-- ✅ Rimosso metodo "combinato" (non standard, rischio medico-legale)
+- ✅ Metodo composito blindato con disclaimer
+- ✅ HGD prevale su staging: nota automatica
+- ✅ Linguaggio forme speciali attenuato
+- ✅ Alert stacking: max 3 alert con priorità
 
 ### v4.3 (21 gennaio 2026)
 - Reset spostato in alto con stile rosso visibile
@@ -93,39 +117,72 @@ Genera referti completi (brevi o estesi) per uso clinico quotidiano, con validaz
 
 ### v4.2 (21 gennaio 2026)
 - Referti specifici per forme speciali senza infiltrato cronico
-- Gastropatia reattiva/chimica con referto dedicato
-- Gastrite autoimmune, linfocitaria, eosinofila con output personalizzati
-
-### v4.0-4.1 (21 gennaio 2026)
-- Referto semplificato per casi completamente negativi
-- Gestione intelligente output in base a presenza lesioni
-- Fix syntax JavaScript
+- Output personalizzati per gastropatia, autoimmune, linfocitaria, eosinofila
 
 ### v3.9 (21 gennaio 2026)
 - **FIX CRITICO**: Correzione matrice OLGA (Rugge 2007)
-  - C1/A1: 'I' → 'II'
-  - C2/A1: 'II' → 'III'
-  - C3/A0: 'II' → 'III'
 
-### v3.6-3.8 (21 gennaio 2026)
-- Semplificazione classificazione MI (rimosso tipo II/III)
-- Tooltip classificazione Jass/Filipe
-- Fix quick fill con campi globali
+---
 
-### v3.3-3.5 (21 gennaio 2026)
-- Campo atrofia globale con auto-fill
-- Tutti campi vuoti di default
-- Tooltip interattivi
+## 🚀 Utilizzo
 
-### v3.2 (21 gennaio 2026)
-- Displasia per sede anatomica (antro, incisura, corpo)
-- Output intelligente con raggruppamento per grado
+### Installazione Standard (Web)
+1. Scaricare i file: `index.html`, `manifest.json`, `service-worker.js`
+2. Aprire `index.html` con qualsiasi browser moderno
+3. Nessuna connessione internet richiesta dopo prima visita
 
-### v3.0-3.1 (prima release pubblica)
-- Implementazione Sydney System completo
-- Staging OLGA/OLGIM con matrice
-- Forme speciali di gastrite
-- LocalStorage con autosave
+### Installazione PWA (App Mobile) 🆕
+
+#### Android (Chrome/Edge/Samsung Internet):
+1. Apri `index.html` nel browser mobile
+2. Apparirà prompt "Aggiungi a schermata Home" (o tap menu ⋮ → "Installa app")
+3. Conferma installazione
+4. **Icona app** appare nella home screen
+5. Apri come app nativa (no barra browser)
+
+#### iOS (Safari):
+1. Apri `index.html` in Safari
+2. Tap icona condivisione 📤
+3. Scorri e tap "Aggiungi a Home"
+4. Conferma nome e tap "Aggiungi"
+5. **Icona app** appare nella home screen
+
+#### Vantaggi PWA:
+- ✅ Lavora **offline** (dopo prima visita)
+- ✅ Avvio **istantaneo** (no browser)
+- ✅ **Full-screen** (no barra indirizzi)
+- ✅ **Aggiornamenti automatici** (al refresh)
+- ✅ **Storage persistente** (localStorage)
+
+### Workflow Tipico
+1. **Compilare campi Sydney** per antro, incisura, corpo
+2. **Se metaplasia >0**: specificare tipo MI (completa/incompleta) per ogni sede
+3. *Opzionale*: Usare **Quick Fill** per casi comuni
+4. *Opzionale*: Compilare **forme speciali** se pattern suggestivo
+5. *Opzionale*: Aggiungere **note libere**
+6. Cliccare **"Calcola referto"**
+7. Verificare **alert** e **badge** rischio
+8. **Copiare referto** o **stampare PDF**
+
+### Shortcuts Tastiera
+- **Quick fill "Tutto negativo"**: setta tutti i campi a 0
+- **Quick fill "H. pylori+"**: precompila pattern base antro-predominante
+- **Reset completo**: cancella tutto e localStorage
+
+### Dati Salvati Automaticamente
+Il tool salva automaticamente tutti i campi compilati nel browser (localStorage).  
+I dati vengono ripristinati alla riapertura della pagina.  
+**Reset completo** cancella tutto.
+
+---
+
+## 🔒 Privacy e Sicurezza
+
+- **Nessun dato inviato online**: tool completamente offline
+- **Nessun server esterno**: tutto funziona nel browser
+- **LocalStorage**: dati salvati solo sul dispositivo locale
+- **Nessun tracking**: zero analytics, zero cookies esterni
+- **PWA sicura**: HTTPS obbligatorio per installazione
 
 ---
 
@@ -138,15 +195,8 @@ ASST Fatebenefratelli-Sacco, Milano
 GitHub: [@infingardo](https://github.com/infingardo)
 
 ### Consulenza Tecnica e Quality Assurance
-- **Claude (Anthropic)** - Sviluppo algoritmi, implementazione features, debugging iterativo
+- **Claude (Anthropic)** - Sviluppo algoritmi, implementazione features, debugging iterativo, PWA implementation
 - **ChatGPT (OpenAI)** - Code review medico-legale, analisi criticità, validazione clinica
-
-**Ringraziamento speciale a ChatGPT** per:
-- Identificazione criticità medico-legali nel metodo composito OLGA
-- Suggerimento disclaimer espliciti per blindatura normativa
-- Alert prioritization e UX improvements
-- Analisi semantica forme speciali
-- Code review finale e best practices
 
 ### Bibliografia di Riferimento
 
@@ -181,52 +231,11 @@ Questo tool è un **supporto alla refertazione istologica** e non sostituisce:
 
 **Tutti i dati devono essere validati clinicamente prima dell'uso.**
 
-Il tool utilizza:
-- **OLGA originale** (solo atrofia): metodo validato e pubblicato
-- **Metodo composito** max(atrofia, metaplasia): approccio NON standard, utilizzato a fini di stratificazione prudenziale. Non validato in studi prospettici. Uso a discrezione del patologo.
+Il tool utilizza metodo composito max(atrofia, metaplasia): approccio NON standard, utilizzato a fini di stratificazione prudenziale. Non validato in studi prospettici. **Uso a discrezione del patologo.**
 
 **La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management clinico.**
 
 Lo staging OLGA/OLGIM è valido solo con campionamento bioptico adeguato (≥5 biopsie da almeno 3 sedi - MAPS III 2025).
-
----
-
-## 🚀 Utilizzo
-
-### Installazione
-1. Scaricare il file `gastrite_OLGA_OLGIM_v5.0_FINAL_ChatGPT_fixes.html`
-2. Aprire con qualsiasi browser moderno (Chrome, Firefox, Safari, Edge)
-3. Nessuna connessione internet richiesta (tool completamente offline)
-
-### Workflow Tipico
-1. **Selezionare metodo OLGA** (atrophy o max)
-2. **Compilare campi Sydney** per antro, incisura, corpo
-3. *Opzionale*: Usare **Quick Fill** per casi comuni
-4. *Opzionale*: Compilare **forme speciali** se pattern suggestivo
-5. *Opzionale*: Aggiungere **note libere**
-6. Cliccare **"Calcola referto"**
-7. Verificare **alert** e **badge** rischio
-8. **Copiare referto** o **stampare PDF**
-
-### Shortcuts Tastiera
-- **Quick fill "Tutto negativo"**: setta tutti i campi a 0
-- **Quick fill "H. pylori+"**: precompila pattern antro-predominante
-- **Quick fill "Metaplasia assente"**: azzera metaplasia in tutte le sedi
-- **Reset completo**: cancella tutto e localStorage
-
-### Dati Salvati Automaticamente
-Il tool salva automaticamente tutti i campi compilati nel browser (localStorage).  
-I dati vengono ripristinati alla riapertura della pagina.  
-**Reset completo** cancella tutto.
-
----
-
-## 🔒 Privacy e Sicurezza
-
-- **Nessun dato inviato online**: tool completamente offline
-- **Nessun server esterno**: tutto funziona nel browser
-- **LocalStorage**: dati salvati solo sul dispositivo locale
-- **Nessun tracking**: zero analytics, zero cookies esterni
 
 ---
 
@@ -245,7 +254,7 @@ Per segnalazioni bug, richieste features o domande:
 Il tool è sviluppato per uso clinico interno. La redistribuzione o uso commerciale richiede autorizzazione esplicita dell'autore.
 
 Citazione consigliata in pubblicazioni:
-> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.1. SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano. 2026.
+> Bianchi F. Tool OLGA/OLGIM per refertazione gastrite cronica v5.5. SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano. 2026.
 
 ---
 
@@ -255,9 +264,35 @@ Citazione consigliata in pubblicazioni:
 ✅ Validato medico-legalmente  
 ✅ Conforme MAPS III (2025)  
 ✅ Audit-ready (versioning, disclaimer, tracciabilità)  
+✅ **Installabile come PWA su mobile**
 
-**Ultima revisione**: 22 gennaio 2026 - v5.1 FINAL  
+**Ultima revisione**: 24 gennaio 2026 - v5.5  
 **Prossimi sviluppi**: Integrazione con PDTA colorettale/gastrico, export HL7/FHIR
+
+---
+
+## 🆕 Note PWA
+
+### Requisiti Sistema
+- **Android**: Chrome 70+, Edge 79+, Samsung Internet 10+
+- **iOS**: Safari 11.3+
+- **Desktop**: Chrome/Edge/Safari con HTTPS
+
+### Troubleshooting PWA
+**Prompt installazione non appare?**
+- Controlla che il sito sia servito via HTTPS (no file:// locale)
+- Verifica browser supportato
+- Ricarica pagina (Ctrl+R / Cmd+R)
+- Dismisso di recente? Riapparirà dopo 7 giorni
+
+**App non funziona offline?**
+- Prima visita deve essere online (per cache iniziale)
+- Verifica che service worker sia registrato (Console → Application → Service Workers)
+- Cancella cache e ricarica
+
+**Come disinstallare?**
+- Android: Long press icona → "Disinstalla" o "Rimuovi"
+- iOS: Long press icona → "Rimuovi app"
 
 ---
 
