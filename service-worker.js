@@ -1,4 +1,4 @@
-const CACHE_NAME = 'olga-olgim-v5.5';
+const CACHE_NAME = 'olga-olgim-v5.7.3';
 const urlsToCache = [
   './',
   './index.html',
