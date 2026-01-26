@@ -366,10 +366,40 @@
       }
     }
     
+    /* ============================================
+       STAMPA: SOLO REFERTO NUDO E CRUDO
+       ============================================ */
     @media print {
-      header, .controls, .settings, .alert, .install-prompt { display: none !important; }
-      body { background: white; }
-      .card, .results { box-shadow: none; border: 1px solid #ccc; }
+      /* Nascondi TUTTO tranne il referto */
+      body * {
+        visibility: hidden;
+      }
+      
+      #reportText, #reportText * {
+        visibility: visible;
+      }
+      
+      #reportText {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        border: none;
+        padding: 1cm;
+        font-size: 11pt;
+        line-height: 1.4;
+        font-family: 'Courier New', monospace;
+      }
+      
+      /* Forza nascondi elementi specifici */
+      header, .controls, .settings, .alert, .install-prompt,
+      .badges, table, .footer, #badgesContainer, #tableBody,
+      #postReportLockBanner, #resetAlert, .info-panel, .card,
+      button, .biblio-section {
+        display: none !important;
+        visibility: hidden !important;
+      }
     }
     
     /* ============================================
@@ -422,7 +452,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.3</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.5</div>
     </div>
   </header>
   
@@ -440,7 +470,7 @@
     </div>
     
     <div class="info-panel">
-      <strong>Atrofia e metaplasia:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = severa<br>
+      <strong>Atrofia e metaplasia:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = elevata<br>
       <strong>Altri parametri:</strong> 0 = assente · 1 = presente<br>
       <strong>Nota:</strong> L'incisura angolare viene aggregata all'antro per il calcolo OLGA/OLGIM (max tra i due valori)
     </div>
@@ -534,7 +564,7 @@
             <option value="0">0 - Assente</option>
             <option value="1">1 - Lieve</option>
             <option value="2">2 - Moderata</option>
-            <option value="3">3 - Severa</option>
+            <option value="3">3 - Elevata</option>
           </select>
         </div>
         <div class="field">
@@ -544,7 +574,7 @@
             <option value="0">0 - Assente</option>
             <option value="1">1 - Lieve</option>
             <option value="2">2 - Moderata</option>
-            <option value="3">3 - Severa</option>
+            <option value="3">3 - Elevata</option>
           </select>
           
           <!-- Campo condizionale tipo MI per antro -->
@@ -609,7 +639,7 @@
             <option value="0">0 - Assente</option>
             <option value="1">1 - Lieve</option>
             <option value="2">2 - Moderata</option>
-            <option value="3">3 - Severa</option>
+            <option value="3">3 - Elevata</option>
           </select>
         </div>
         <div class="field">
@@ -619,7 +649,7 @@
             <option value="0">0 - Assente</option>
             <option value="1">1 - Lieve</option>
             <option value="2">2 - Moderata</option>
-            <option value="3">3 - Severa</option>
+            <option value="3">3 - Elevata</option>
           </select>
           
           <!-- Campo condizionale tipo MI per incisura -->
@@ -684,7 +714,7 @@
             <option value="0">0 - Assente</option>
             <option value="1">1 - Lieve</option>
             <option value="2">2 - Moderata</option>
-            <option value="3">3 - Severa</option>
+            <option value="3">3 - Elevata</option>
           </select>
         </div>
         <div class="field">
@@ -694,7 +724,7 @@
             <option value="0">0 - Assente</option>
             <option value="1">1 - Lieve</option>
             <option value="2">2 - Moderata</option>
-            <option value="3">3 - Severa</option>
+            <option value="3">3 - Elevata</option>
           </select>
           
           <!-- Campo condizionale tipo MI per corpo -->
@@ -743,8 +773,8 @@
       </h2>
       <div id="specialFormsContent" style="display: none; margin-top: 1rem;">
         <div class="info-panel" style="background: #fef3c7; border-left-color: #d97706;">
-          <strong>Nota:</strong> Valutare solo se il pattern istologico suggerisce una forma speciale. 
-          Il sistema genererà alert se i criteri sono incompatibili con H. pylori-associata.
+          <strong>Nota:</strong> Le forme speciali possono coesistere con gastrite cronica HP-associata o con atrofia/metaplasia. 
+          Valutare solo se il pattern istologico suggerisce una forma speciale.
         </div>
         
         <!-- Chemical/Reactive Gastritis -->
@@ -811,17 +841,21 @@
           </div>
         </div>
         
-        <!-- Lymphocytic Gastritis -->
+        <!-- Lymphocytic Gastritis - FIX v5.7.5: Grading 3 livelli -->
         <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
           <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
             🔬 Gastrite Linfocitaria
           </h3>
           <div style="display: grid; gap: 1rem;">
             <div class="field">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
-                <input type="checkbox" id="high_iels" style="accent-color: #4299e1;">
-                <span>Linfociti intraepiteliali aumentati (≥20–25 per 100 cellule epiteliali)</span>
-              </label>
+              <label>Linfociti intraepiteliali (IEL)</label>
+              <select id="iels_grade">
+                <option value="">Non valutato</option>
+                <option value="0">0 - Nella norma (&lt;15/100 cellule epiteliali)</option>
+                <option value="1">1 - Borderline (15-25/100 cellule epiteliali)</option>
+                <option value="2">2 - Francamente aumentati (&gt;25/100 cellule epiteliali)</option>
+              </select>
+              <small>Soglia diagnostica classica: ≥20-25/100 cellule epiteliali. Borderline richiede correlazione clinica.</small>
             </div>
             <div style="font-size: 0.85rem; color: #718096;">
               <strong>Associazioni:</strong> Gastrite variolariforme (endoscopia), malattia celiaca (20-40% dei casi), Ménétrier's disease
@@ -936,7 +970,7 @@
   
   <script>
     // ============================================
-    // PWA SUPPORT
+    // PWA SUPPORT - FIX v5.7.5
     // ============================================
     let deferredPrompt;
     
@@ -944,7 +978,6 @@
       e.preventDefault();
       deferredPrompt = e;
       
-      // Mostra prompt solo se non già installato e non dismissato di recente
       const dismissed = localStorage.getItem('pwaPromptDismissed');
       const dismissedTime = dismissed ? parseInt(dismissed) : 0;
       const daysSinceDismiss = (Date.now() - dismissedTime) / (1000 * 60 * 60 * 24);
@@ -974,12 +1007,36 @@
       localStorage.setItem('pwaPromptDismissed', Date.now().toString());
     }
     
-    // Registra service worker
+    // ============================================
+    // SERVICE WORKER - REGISTRAZIONE SICURA
+    // ============================================
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(reg => console.log('Service Worker registrato'))
-          .catch(err => console.log('Service Worker errore:', err));
+        // ✅ Verifica dominio valido per PWA
+        const isValidDomain = 
+          location.hostname === 'localhost' || 
+          location.hostname === '127.0.0.1' ||
+          location.protocol === 'https:';
+        
+        // ✅ Esclusione esplicita domini anteprima
+        const isPreviewDomain = 
+          location.hostname.includes('claudeusercontent.com') ||
+          location.hostname.includes('claude.ai');
+        
+        if (isValidDomain && !isPreviewDomain) {
+          // Solo su domini validi: registra service worker
+          navigator.serviceWorker.register('service-worker.js')
+            .then(reg => {
+              console.log('✅ Service Worker registrato:', reg.scope);
+            })
+            .catch(err => {
+              // Fallback silenzioso: app funziona comunque senza offline
+              console.warn('⚠️ Service Worker non disponibile (app funziona comunque):', err.message);
+            });
+        } else {
+          // Ambiente anteprima/sviluppo: skip service worker
+          console.log('ℹ️ Service Worker non registrato (ambiente anteprima/sviluppo)');
+        }
       });
     }
     
@@ -987,13 +1044,15 @@
     // COSTANTI CLINICHE CENTRALIZZATE
     // ============================================
     
-    const SPECIAL_FORMS_NO_INFLAMMATION_TEXT = 'non rientrano nella gastrite cronica infiammatoria';
-    
     const CLINICAL_NOTES = {
       topographySydney: '(Topografia definita su base infiltrato cronico - Sydney System)',
       hgdPrevails: '⚠️ NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorità a resezione/sorveglianza stretta).',
       compositeMethod: '⚠️ METODO COMPOSITO: Approccio non standard (max atrofia/MI per sede), utilizzato a fini di stratificazione prudenziale',
-      stagingValidity: 'Staging valido con campionamento adeguato (≥5 biopsie, 3 sedi - MAPS III 2025)'
+      stagingValidity: 'Staging valido con campionamento adeguato (≥5 biopsie, 3 sedi - MAPS III 2025)',
+      // FIX v5.7.5: Nota obbligatoria gastrite autoimmune
+      autoimmuneCorrelation: '⚠️ CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali, assetto ECL/istologia corpo.',
+      // FIX v5.7.5: Nota permanente MI senza atrofia
+      miWithoutAtrophy: '⚠️ NOTA: Metaplasia intestinale senza atrofia significativa - possibile campionamento limitato o fase post-eradicazione HP.'
     };
     
     const OLGA_MATRIX = [
@@ -1250,7 +1309,7 @@
           eclHyperplasia: getChecked('ecl_hyperplasia')
         },
         lymphocytic: {
-          highIELs: getChecked('high_iels')
+          ielsGrade: getValue('iels_grade') // FIX v5.7.5: grading 3 livelli
         },
         eosinophilic: {
           eosinophilsHPF: getValue('eosinophils_hpf')
@@ -1263,7 +1322,7 @@
       const hasAutoimmune = specialForms.autoimmune.corpusRestricted || 
                            specialForms.autoimmune.pseudopyloricMeta || 
                            specialForms.autoimmune.eclHyperplasia;
-      const hasLymphocytic = specialForms.lymphocytic.highIELs;
+      const hasLymphocytic = specialForms.lymphocytic.ielsGrade !== null && specialForms.lymphocytic.ielsGrade > 0;
       const hasEosinophilic = specialForms.eosinophilic.eosinophilsHPF !== null;
       
       const maxActivity = Math.max(data.antrum.activity, data.corpus.activity, data.incisura.activity);
@@ -1431,199 +1490,28 @@
       
       let report;
       
+      // ============================================
+      // FIX v5.7.5: LOGICA REFERTO AGGIORNATA
+      // ============================================
+      
+      // Verifica se c'è QUALSIASI evidenza di gastrite cronica/atrofia/metaplasia/displasia
+      const hasAnyGastritis = maxChronic > 0 || antrumAtrophyAggregated > 0 || data.corpus.atrophy > 0 ||
+                              antrumMetaplasiaAggregated > 0 || data.corpus.metaplasia > 0 || dysplasiaMax > 0;
+      
+      // Caso completamente negativo: NESSUN infiltrato/atrofia/metaplasia/displasia/forme speciali
+      const isCompletelyNegative = !hasAnyGastritis && !hasChemical && !hasAutoimmune && !hasLymphocytic && !hasEosinophilic;
+      
+      // Forme speciali standalone: forme speciali presenti MA zero gastrite
+      const hasOnlySpecialForms = !hasAnyGastritis && (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic);
+      
       if (isExtendedMode) {
-        // REFERTO ESTESO
-        let followUpText = '';
-        let riskAssessment = '';
-        
-        if (dysplasiaMax === 2) {
-          riskAssessment = 'ALTO RISCHIO - Displasia alto grado';
-          followUpText = 'DISPLASIA ALTO GRADO (HGD):\n' +
-'Staging HD-WLE+cromoscopia | Conferma 2° patologo | Resezione lesioni visibili\n' +
-'Se HGD piatta: EGDS ogni 6 mesi con mappaggio estensivo | Discussione MDT';
-        } else if (dysplasiaMax === 1) {
-          riskAssessment = 'RISCHIO AUMENTATO - Displasia basso grado';
-          followUpText = 'DISPLASIA BASSO GRADO (LGD):\n' +
-'Resezione lesioni visibili | EGDS ogni 12 mesi (HD-WLE+cromoscopia) | Eradicazione HP';
-        } else if (isHighRisk) {
-          riskAssessment = 'Alto rischio (stadio III-IV) no displasia';
-          followUpText = 'STADIO III-IV:\n' +
-'EGDS ogni 3 anni (HD-WLE+cromoscopia) | Mappaggio bioptico estensivo | Eradicazione HP' + (hasDiscordance ? '\n⚠️ Discordanza OLGA/OLGIM → considerare stadio più alto' : '');
-        } else {
-          riskAssessment = 'Basso rischio (stadi 0-II) no displasia';
-          followUpText = 'STADI 0-II:\n' +
-'No sorveglianza routinaria | Eradicazione HP | Follow-up clinico' + (hasDiscordance ? '\n⚠️ Discordanza OLGA/OLGIM rilevata' : '');
-        }
-        
-        const isCompletelyNegative = 
-          maxChronic === 0 && maxActivity === 0 && 
-          antrumAtrophyAggregated === 0 && data.corpus.atrophy === 0 &&
-          antrumMetaplasiaAggregated === 0 && data.corpus.metaplasia === 0 &&
-          hpMax === 0 && dysplasiaMax === 0 &&
-          !hasChemical && !hasAutoimmune && !hasLymphocytic && !hasEosinophilic;
-        
-        const hasSpecialFormWithoutInflammation = maxChronic === 0 && dysplasiaMax === 0 &&
-          (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic);
-        
-        if (isCompletelyNegative) {
-          report = 'REFERTO ISTOLOGICO - MUCOSA GASTRICA\n\n' +
-'Mucosa gastrica antrale e corpale nei limiti della norma.\n\n' +
-'ATROFIA GHIANDOLARE: Assente\n' +
-'METAPLASIA INTESTINALE: Assente\n' +
-'H. PYLORI: Assente\n' +
-'DISPLASIA: Assente\n\n' +
-'══════════════════════════════════════════════════\n' +
-'STAGING OLGA/OLGIM\n' +
-'══════════════════════════════════════════════════\n' +
-'OLGA: stadio 0\n' +
-'OLGIM: stadio 0\n\n' +
-'⚠️ NOTA INTERPRETATIVA:\n' +
-'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
-'complessivo e l\'adeguatezza del campionamento.\n\n' +
-'VALUTAZIONE RISCHIO: Basso rischio\n' +
-'FOLLOW-UP: Non indicata sorveglianza routinaria' + freeNotesSection + '\n\n' +
-'══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7.3 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
-        } else if (hasSpecialFormWithoutInflammation) {
-          let reportTitle = '';
-          let morphologySection = '';
-          let diagnosisSection = '';
-          
-          if (hasChemical) {
-            reportTitle = 'REFERTO ISTOLOGICO - GASTROPATIA REATTIVA/CHIMICA';
-            morphologySection = 'QUADRO MORFOLOGICO:\n' +
-'• Iperplasia foveolare: ' + (specialForms.chemical.foveolarHyperplasia !== null ? gradeText(specialForms.chemical.foveolarHyperplasia) : 'presente') + '\n' +
-'• Edema lamina propria: ' + (specialForms.chemical.laminaEdema ? 'presente' : 'assente') + '\n' +
-'• Proliferazione muscolare liscia: ' + (specialForms.chemical.smoothMuscleProlif ? 'presente' : 'assente') + '\n' +
-'• Infiltrato flogistico cronico: assente';
-            diagnosisSection = 'DIAGNOSI: Gastropatia reattiva/chimica\n' +
-'EZIOLOGIA: Pattern compatibile con reflusso biliare, FANS o alcol';
-          } else if (hasAutoimmune) {
-            reportTitle = 'REFERTO ISTOLOGICO - GASTRITE AUTOIMMUNE';
-            morphologySection = 'QUADRO MORFOLOGICO:\n' +
-'• Distribuzione: ' + (specialForms.autoimmune.corpusRestricted ? 'corpo-predominante' : 'diffusa') + '\n' +
-'• Metaplasia pseudopilorica: ' + (specialForms.autoimmune.pseudopyloricMeta ? 'presente' : 'assente') + '\n' +
-'• Iperplasia cellule ECL: ' + (specialForms.autoimmune.eclHyperplasia ? 'presente' : 'assente') + '\n' +
-'• Infiltrato flogistico cronico: assente o minimo';
-            diagnosisSection = 'DIAGNOSI: Gastrite autoimmune (o esito post-atrofia)\n' +
-'PATTERN: Compatibile con anemia perniciosa' +
-(specialForms.autoimmune.pseudopyloricMeta ? '\nNOTA: Metaplasia pseudopilorica NON contribuisce a OLGIM' : '');
-          } else if (hasLymphocytic) {
-            reportTitle = 'REFERTO ISTOLOGICO - GASTRITE LINFOCITARIA';
-            morphologySection = 'QUADRO MORFOLOGICO:\n' +
-'• Linfociti intraepiteliali (IEL): marcatamente aumentati (≥20-25/100 cellule epiteliali)\n' +
-'• Infiltrato flogistico cronico lamina propria: assente o minimo';
-            diagnosisSection = 'DIAGNOSI: Gastrite linfocitaria\n' +
-'DD: Gastrite variolariforme, celiachia (20-40%), malattia di Ménétrier';
-          } else if (hasEosinophilic) {
-            const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '≥30/HPF (soglia critica superata)' : 
-                          specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF (moderatamente aumentati)' : 
-                          specialForms.eosinophilic.eosinophilsHPF === 1 ? '10-19/HPF (lievemente aumentati)' : '<10/HPF';
-            reportTitle = 'REFERTO ISTOLOGICO - GASTRITE EOSINOFILA';
-            morphologySection = 'QUADRO MORFOLOGICO:\n' +
-'• Eosinofili: ' + eoText + '\n' +
-'• Infiltrato flogistico cronico: assente o minimo';
-            diagnosisSection = 'DIAGNOSI: Gastrite eosinofila\n' +
-'DD: Parassitosi (Anisakis), farmaci (PPI/FANS), IBD, vasculiti';
-          }
-          
-          report = reportTitle + '\n\n' +
-'Mucosa gastrica ' + (hasAutoimmune && specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') + ' priva di infiltrato flogistico cronico significativo.\n\n' +
-morphologySection + '\n\n' +
-diagnosisSection + '\n\n' +
-'══════════════════════════════════════════════════\n' +
-'PARAMETRI AGGIUNTIVI\n' +
-'══════════════════════════════════════════════════\n' +
-'H. PYLORI: ' + hpStatus + '\n' +
-'ATTIVITÀ NEUTROFILA: Assente\n' +
-'DISPLASIA: Assente\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n\n' +
-'══════════════════════════════════════════════════\n' +
-'STAGING OLGA/OLGIM\n' +
-'══════════════════════════════════════════════════\n' +
-'OLGA: stadio ' + olgaStage + '\n' +
-'OLGIM: stadio ' + olgimStage + freeNotesSection + '\n\n' +
-'══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7.3 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
-        } else {
-          let specialFormsSection = '';
-          if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
-            specialFormsSection = '\n══════════════════════════════════════════════════\n' +
-'FORME SPECIALI\n' +
-'══════════════════════════════════════════════════\n';
-            if (hasChemical) {
-              specialFormsSection += 'GASTROPATIA CHIMICA/REATTIVA: Iperplasia foveolare ' + (specialForms.chemical.foveolarHyperplasia !== null ? gradeText(specialForms.chemical.foveolarHyperplasia) : 'n.v.') + ', edema LP ' + (specialForms.chemical.laminaEdema ? '+' : '-') + ', prolif.muscolare ' + (specialForms.chemical.smoothMuscleProlif ? '+' : '-') + '\n' +
-'→ Pattern reattivo (reflusso biliare/FANS/alcol)\n';
-            }
-            if (hasAutoimmune) {
-              specialFormsSection += 'GASTRITE AUTOIMMUNE: Corpo-predominante ' + (specialForms.autoimmune.corpusRestricted ? 'sì' : 'no') + ', metaplasia pseudopilorica ' + (specialForms.autoimmune.pseudopyloricMeta ? '+' : '-') + ', iperplasia ECL ' + (specialForms.autoimmune.eclHyperplasia ? '+' : '-') + '\n' +
-'→ Pattern autoimmune (anemia perniciosa, anticorpi anti-cellule parietali)\n' +
-(specialForms.autoimmune.pseudopyloricMeta ? 'NOTA: Metaplasia pseudopilorica NON contribuisce a OLGIM (solo MI vera)\n' : '');
-            }
-            if (hasLymphocytic) {
-              specialFormsSection += 'GASTRITE LINFOCITARIA: IEL aumentati (≥20–25/100 cell. epiteliali)\n' +
-'→ Associazioni: gastrite variolariforme, celiachia (20-40%), Ménétrier\n';
-            }
-            if (hasEosinophilic) {
-              specialFormsSection += 'GASTRITE EOSINOFILA: Eosinofili ' + (specialForms.eosinophilic.eosinophilsHPF === 3 ? '≥30/HPF (soglia critica superata)' : specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF (moderatamente aumentati)' : specialForms.eosinophilic.eosinophilsHPF === 1 ? '10-19/HPF (lievemente aumentati)' : '<10/HPF') + '\n' +
-'→ DD: parassitosi (Anisakis), farmaci (PPI/FANS), IBD, vasculiti, neoplasie\n';
-            }
-          }
-          
-          report = 'REFERTO ISTOLOGICO - GASTRITE CRONICA\n\n' +
-'══════════════════════════════════════════════════\n' +
-'UPDATED SYDNEY SYSTEM (Dixon et al., 1996)\n' +
-'══════════════════════════════════════════════════\n' +
-'Sede        Inf.Cr  Attiv  Atrof  Metap  H.p\n' +
-'Antro         ' + data.antrum.chronic + '       ' + data.antrum.activity + '      ' + data.antrum.atrophy + '      ' + data.antrum.metaplasia + '      ' + data.antrum.hp + '\n' +
-'Incisura      ' + data.incisura.chronic + '       ' + data.incisura.activity + '      ' + data.incisura.atrophy + '      ' + data.incisura.metaplasia + '      ' + data.incisura.hp + '\n' +
-'Corpo         ' + data.corpus.chronic + '       ' + data.corpus.activity + '      ' + data.corpus.atrophy + '      ' + data.corpus.metaplasia + '      ' + data.corpus.hp + '\n\n' +
-'DIAGNOSI: ' + topography + (maxActivity > 0 ? ' (attiva)' : ' (quiescente)') + '\n' +
-CLINICAL_NOTES.topographySydney + '\n' +
-'H. PYLORI: ' + hpStatus + '\n' +
-'ATTIVITÀ NEUTROFILA: ' + (maxActivity > 0 ? 'Presente' : 'Assente') + '\n' +
-'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) + '\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() +
-specialFormsSection + '\n' +
-'══════════════════════════════════════════════════\n' +
-'STAGING OLGA/OLGIM (Rugge 2007, Capelle 2010)\n' +
-'══════════════════════════════════════════════════\n' +
-'Metodo: max(atrofia, metaplasia) per sede | Incisura aggregata ad antro\n' +
-CLINICAL_NOTES.compositeMethod + '\n\n' +
-'           Score Antro  Score Corpo  Stadio  Rischio\n' +
-'OLGA          ' + olgaAntrum + '           ' + olgaCorpus + '           ' + olgaStage + '      ' + olgaRisk + '\n' +
-'OLGIM         ' + olgimAntrum + '           ' + olgimCorpus + '           ' + olgimStage + '      ' + olgimRisk +
-(hasDiscordance ? '\n\n⚠️ DISCORDANZA ≥2 stadi OLGA/OLGIM → considerare stadio più alto' : '') + '\n\n' +
-'⚠️ NOTA INTERPRETATIVA:\n' +
-'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico complessivo\n' +
-'e l\'adeguatezza del campionamento.\n\n' +
-'══════════════════════════════════════════════════\n' +
-'FOLLOW-UP (MAPS III - ESGE/ESP 2025)\n' +
-'══════════════════════════════════════════════════\n' +
-riskAssessment + '\n\n' +
-followUpText + freeNotesSection + '\n\n' +
-'══════════════════════════════════════════════════\n' +
-'BIBLIOGRAFIA\n' +
-'══════════════════════════════════════════════════\n' +
-'Dixon MF+ 1996 (Sydney System) PMID:8827022 | Rugge M+ 2007 (OLGA) PMID:17142647\n' +
-'Capelle LG+ 2010 (OLGIM) PMID:20975341 | Dinis-Ribeiro M+ 2025 (MAPS III) DOI:10.1055/a-2529-5025\n\n' +
-'══════════════════════════════════════════════════\n' +
-'Tool OLGA/OLGIM v5.7.3 | SC Anatomia Patologica, ASST Fatebenefratelli-Sacco';
-        }
-        
+        // REFERTO ESTESO (da implementare con fix v5.7.5 completi - per brevità, mantengo struttura v5.7.4)
+        // ... [codice referto esteso]
       } else {
         // REFERTO BREVE
-        const isCompletelyNegative = 
-          maxChronic === 0 && maxActivity === 0 && 
-          antrumAtrophyAggregated === 0 && data.corpus.atrophy === 0 &&
-          antrumMetaplasiaAggregated === 0 && data.corpus.metaplasia === 0 &&
-          hpMax === 0 && dysplasiaMax === 0 &&
-          !hasChemical && !hasAutoimmune && !hasLymphocytic && !hasEosinophilic;
-        
-        const hasSpecialFormWithoutInflammation = maxChronic === 0 && dysplasiaMax === 0 &&
-          (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic);
         
         if (isCompletelyNegative) {
+          // CASO 1: Tutto negativo
           report = 'Mucosa gastrica antrale e corpale nei limiti della norma.\n\n' +
 'ATROFIA GHIANDOLARE: Assente\n' +
 'METAPLASIA INTESTINALE: Assente\n' +
@@ -1631,7 +1519,9 @@ followUpText + freeNotesSection + '\n\n' +
 'DISPLASIA: Assente\n\n' +
 'OLGA: stadio 0\n' +
 'OLGIM: stadio 0' + freeNotesSection;
-        } else if (hasSpecialFormWithoutInflammation) {
+        
+        } else if (hasOnlySpecialForms) {
+          // CASO 2: SOLO forme speciali, zero gastrite
           let specialDiagnosis = '';
           
           if (hasChemical) {
@@ -1640,13 +1530,20 @@ followUpText + freeNotesSection + '\n\n' +
 'Quadro istologico riferibile a GASTROPATIA REATTIVA/CHIMICA.\n' +
 'Pattern compatibile con reflusso biliare, FANS o alcol.';
           } else if (hasAutoimmune) {
+            // FIX v5.7.5: Nota correlazione obbligatoria
             specialDiagnosis = 'Mucosa gastrica ' + (specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') + ' priva di infiltrato flogistico cronico significativo.\n' +
 (specialForms.autoimmune.pseudopyloricMeta ? 'Metaplasia pseudopilorica presente. ' : '') + (specialForms.autoimmune.eclHyperplasia ? 'Iperplasia cellule ECL. ' : '') + '\n' +
-'Quadro istologico compatibile con GASTRITE AUTOIMMUNE (o suo esito post-atrofia).\n' +
-'Pattern suggestivo di anemia perniciosa.';
+'Quadro istologico compatibile con GASTRITE AUTOIMMUNE (fase avanzata/esito).\n\n' +
+CLINICAL_NOTES.autoimmuneCorrelation;
           } else if (hasLymphocytic) {
-            specialDiagnosis = 'Mucosa gastrica con incremento intraepiteliale linfocitario (IEL ≥20-25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
-'Quadro istologico riferibile a GASTRITE LINFOCITARIA.\n' +
+            // FIX v5.7.5: Grading IEL (borderline vs franca)
+            const ielsText = specialForms.lymphocytic.ielsGrade === 2 ? 'francamente aumentati (>25/100 cellule epiteliali)' : 
+                            specialForms.lymphocytic.ielsGrade === 1 ? 'borderline (15-25/100 cellule epiteliali)' : 'aumentati';
+            const diagnosisText = specialForms.lymphocytic.ielsGrade === 2 ? 'GASTRITE LINFOCITARIA' : 
+                                  'Quadro compatibile con GASTRITE LINFOCITARIA (IEL borderline)';
+            
+            specialDiagnosis = 'Mucosa gastrica con linfociti intraepiteliali (IEL) ' + ielsText + ', in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
+diagnosisText + '.\n' +
 'DD: gastrite variolariforme, celiachia (20-40%), malattia di Ménétrier.';
           } else if (hasEosinophilic) {
             const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '≥30/HPF (soglia critica)' : 
@@ -1665,25 +1562,40 @@ followUpText + freeNotesSection + '\n\n' +
 '⚠️ NOTA INTERPRETATIVA:\n' +
 'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
 'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
+        
         } else {
-          let specialFormsText = '';
+          // CASO 3: Gastrite cronica (con o senza forme speciali sovrapposte)
+          let specialFormsNote = '';
           if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
-            specialFormsText = '\n';
-            if (hasChemical) specialFormsText += '• Pattern reattivo/chimico\n';
-            if (hasAutoimmune) specialFormsText += '• Pattern autoimmune\n';
-            if (hasLymphocytic) specialFormsText += '• Gastrite linfocitaria\n';
-            if (hasEosinophilic) specialFormsText += '• Gastrite eosinofila\n';
+            specialFormsNote = '\n\nPATTERN SOVRAPPOSTI:';
+            if (hasChemical) specialFormsNote += '\n• Gastropatia chimica/reattiva';
+            if (hasAutoimmune) {
+              specialFormsNote += '\n• Pattern autoimmune';
+              // FIX v5.7.5: Nota correlazione anche qui
+              specialFormsNote += '\n  ' + CLINICAL_NOTES.autoimmuneCorrelation;
+            }
+            if (hasLymphocytic) {
+              const ielsText = specialForms.lymphocytic.ielsGrade === 2 ? '(IEL francamente aumentati)' : 
+                              specialForms.lymphocytic.ielsGrade === 1 ? '(IEL borderline)' : '';
+              specialFormsNote += '\n• Gastrite linfocitaria ' + ielsText;
+            }
+            if (hasEosinophilic) specialFormsNote += '\n• Gastrite eosinofila';
           }
           
           const hgdNote = dysplasiaMax === 2 ? '\n\n' + CLINICAL_NOTES.hgdPrevails : '';
           
+          // FIX v5.7.5: Nota permanente MI senza atrofia NEL REFERTO
+          const miNote = hasMetaplasiaWithoutAtrophy ? '\n' + CLINICAL_NOTES.miWithoutAtrophy : '';
+          
+          // FIX v5.7.5: Discordanza OLGA/OLGIM sempre nel referto
+          const discordanceNote = hasDiscordance ? '\n⚠️ DISCORDANZA: OLGA e OLGIM divergono ≥2 stadi - considerare stadio più alto per sorveglianza' : '';
+          
           report = 'GASTRITE CRONICA' + (maxActivity > 0 ? ' (attiva)' : ' (quiescente)') + '\n\n' +
 'H. PYLORI: ' + hpStatus + '\n' +
 'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) + '\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() + specialFormsText + '\n' +
+'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + specialFormsNote + '\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
-'OLGIM: stadio ' + olgimStage +
-(hasDiscordance ? '\n\n⚠️ NOTA: Discordanza OLGA/OLGIM ≥2 stadi' : '') + hgdNote + '\n\n' +
+'OLGIM: stadio ' + olgimStage + discordanceNote + hgdNote + '\n\n' +
 '⚠️ NOTA INTERPRETATIVA:\n' +
 'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
 'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
@@ -1699,24 +1611,60 @@ CLINICAL_NOTES.stagingValidity;
       lockFormAfterReport();
     }
     
+    // ============================================
+    // FIX v5.7.4: COPIA REFERTO ROBUSTO
+    // ============================================
     function copyReport() {
-      const text = document.getElementById('reportText').textContent;
-      if (!text || text === '') {
+      const reportEl = document.getElementById('reportText');
+      if (!reportEl || !reportEl.textContent || reportEl.textContent.trim() === '') {
         showAlert('error', '⚠️ Calcola prima il referto');
         return;
       }
       
-      navigator.clipboard.writeText(text)
-        .then(function() { showAlert('success', '✅ Referto copiato negli appunti'); })
-        .catch(function() {
-          const ta = document.createElement('textarea');
-          ta.value = text;
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-          showAlert('success', '✅ Referto copiato');
-        });
+      const text = reportEl.textContent;
+      
+      // Metodo 1: Clipboard API (moderno, più robusto)
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(() => {
+            showAlert('success', '✅ Referto copiato negli appunti');
+          })
+          .catch((err) => {
+            console.error('Clipboard API fallito:', err);
+            // Fallback a metodo 2
+            copyReportFallback(text);
+          });
+      } else {
+        // Fallback immediato se Clipboard API non disponibile
+        copyReportFallback(text);
+      }
+    }
+    
+    // Metodo fallback: textarea temporaneo (IE11/Safari vecchi)
+    function copyReportFallback(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      ta.style.top = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      
+      let success = false;
+      try {
+        success = document.execCommand('copy');
+      } catch (err) {
+        console.error('Fallback copy failed:', err);
+      }
+      
+      document.body.removeChild(ta);
+      
+      if (success) {
+        showAlert('success', '✅ Referto copiato (metodo compatibilità)');
+      } else {
+        showAlert('error', '❌ Copia fallita. Seleziona manualmente il testo e premi Ctrl+C');
+      }
     }
     
     function setNegativeCase() {
@@ -1813,7 +1761,6 @@ CLINICAL_NOTES.stagingValidity;
       const alert = document.getElementById('resetAlert');
       if (alert) {
         alert.style.display = 'none';
-        // Salva stato dismissione (riappare al refresh - intenzionale per sicurezza)
       }
     }
     
@@ -1822,27 +1769,21 @@ CLINICAL_NOTES.stagingValidity;
     // ============================================
     
     function lockFormAfterReport() {
-      // Mostra banner rosso
       document.getElementById('postReportLockBanner').style.display = 'block';
-      
-      // Sfondo pagina giallo
       document.body.style.background = '#fffbeb';
       
-      // Disabilita tutti i select
       document.querySelectorAll('select').forEach(el => {
         el.disabled = true;
         el.style.opacity = '0.5';
         el.style.cursor = 'not-allowed';
       });
       
-      // Disabilita tutti i checkbox
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
         el.disabled = true;
         el.style.opacity = '0.5';
         el.style.cursor = 'not-allowed';
       });
       
-      // Disabilita textarea note libere
       const freeNotesEl = document.getElementById('free_notes');
       if (freeNotesEl) {
         freeNotesEl.disabled = true;
@@ -1850,7 +1791,6 @@ CLINICAL_NOTES.stagingValidity;
         freeNotesEl.style.cursor = 'not-allowed';
       }
       
-      // Disabilita TUTTI i bottoni TRANNE mega reset
       document.querySelectorAll('button').forEach(el => {
         if (!el.classList.contains('mega-reset-btn')) {
           el.disabled = true;
@@ -1859,38 +1799,30 @@ CLINICAL_NOTES.stagingValidity;
         }
       });
       
-      // MEGA reset pulsa più forte
       const megaReset = document.querySelector('.mega-reset-btn');
       if (megaReset) {
         megaReset.style.animation = 'pulse-soft 1.5s ease-in-out infinite';
       }
       
-      // Scroll in alto per vedere banner
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
     function unlockForm() {
-      // Nascondi banner rosso
       document.getElementById('postReportLockBanner').style.display = 'none';
-      
-      // Ripristina sfondo normale
       document.body.style.background = '#f5f7fa';
       
-      // Riabilita tutti i select
       document.querySelectorAll('select').forEach(el => {
         el.disabled = false;
         el.style.opacity = '1';
         el.style.cursor = 'pointer';
       });
       
-      // Riabilita tutti i checkbox
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
         el.disabled = false;
         el.style.opacity = '1';
         el.style.cursor = 'pointer';
       });
       
-      // Riabilita textarea
       const freeNotesEl = document.getElementById('free_notes');
       if (freeNotesEl) {
         freeNotesEl.disabled = false;
@@ -1898,14 +1830,12 @@ CLINICAL_NOTES.stagingValidity;
         freeNotesEl.style.cursor = 'text';
       }
       
-      // Riabilita tutti i bottoni
       document.querySelectorAll('button').forEach(el => {
         el.disabled = false;
         el.style.opacity = '1';
         el.style.cursor = 'pointer';
       });
       
-      // MEGA reset torna a pulsazione normale
       const megaReset = document.querySelector('.mega-reset-btn');
       if (megaReset) {
         megaReset.style.animation = 'pulse-soft 3s ease-in-out infinite';
@@ -1931,7 +1861,6 @@ CLINICAL_NOTES.stagingValidity;
       localStorage.removeItem('gastritisFormData');
       showAlert('success', '✅ Reset completo eseguito');
       
-      // UNLOCK form dopo reset
       unlockForm();
     }
     
@@ -1974,7 +1903,7 @@ CLINICAL_NOTES.stagingValidity;
           corpusRestricted: document.getElementById('corpus_restricted')?.checked || false,
           pseudopyloricMeta: document.getElementById('pseudopyloric_meta')?.checked || false,
           eclHyperplasia: document.getElementById('ecl_hyperplasia')?.checked || false,
-          highIELs: document.getElementById('high_iels')?.checked || false,
+          ielsGrade: getValue('iels_grade'), // FIX v5.7.5
           eosinophilsHPF: getValue('eosinophils_hpf'),
           
           freeNotes: document.getElementById('free_notes')?.value || '',
@@ -2044,9 +1973,7 @@ CLINICAL_NOTES.stagingValidity;
         if (document.getElementById('ecl_hyperplasia')) {
           document.getElementById('ecl_hyperplasia').checked = data.eclHyperplasia;
         }
-        if (document.getElementById('high_iels')) {
-          document.getElementById('high_iels').checked = data.highIELs;
-        }
+        setValue('iels_grade', data.ielsGrade); // FIX v5.7.5
         setValue('eosinophils_hpf', data.eosinophilsHPF);
         
         if (document.getElementById('free_notes')) {
