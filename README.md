@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.11 "Terminologia Fix"  
+**Versione:** 5.7.13 "Mixed MI Type"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,6 +300,46 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
+
+### v5.7.13 "Mixed MI Type" (2026-01-27)
+
+**Feature: Opzione "Mista" per Tipo Metaplasia Intestinale**
+- **RICHIESTA UTENTE:** Aggiungere opzione "mista" oltre a "completa" e "incompleta"
+- **RATIONALE CLINICO:** Campione bioptico può mostrare sia MI completa che incompleta in aree diverse
+- **MODIFICHE:**
+  - Aggiunta opzione "Mista (completa + incompleta)" nei 3 select tipo MI (antro, incisura, corpo)
+  - Funzione `getMITypeText()` aggiornata per gestire tipo "mixed":
+    - Se tutte le sedi hanno "mista" → "Presente, mista (antro, incisura, corpo)"
+    - Se mix di tipi (es: antro mista, corpo completa) → "Presente, pattern misto (antro: mista, corpo: completa)"
+    - Se singola sede con "mista" → dettaglio per sede
+- **OUTPUT REFERTO:**
+  - "METAPLASIA INTESTINALE: Presente, mista (antro, corpo)"
+  - "METAPLASIA INTESTINALE: Presente, pattern misto (antro: mista, corpo: completa)"
+
+**Esempi casi d'uso:**
+- Campione con coesistenza MI tipo I (completa) e tipo II/III (incompleta) → seleziona "Mista" 
+- Antro con solo MI completa + Corpo con MI mista → pattern misto con dettaglio
+
+---
+
+### v5.7.12 "Shortcut Fix" (2026-01-27)
+
+**Fix Tasti Scelta Rapida Bloccati**
+- **PROBLEMA:** Bottoni shortcut ("Tutto negativo", "H. pylori+", "Tutto 0 antro/incisura/corpo") venivano disabilitati dopo il calcolo del referto
+- **IMPATTO:** Utenti costretti a usare mega-reset per iniziare nuovo caso, rallentando workflow
+- **FIX APPLICATO:** 
+  - Ogni funzione shortcut ora chiama automaticamente `unlockForm()` prima di eseguire
+  - Form viene sbloccato e sezione risultati nascosta
+  - Workflow più fluido: puoi usare shortcut direttamente per nuovo caso
+- **BONUS:** Aggiunto `document.getElementById('resultsSection').style.display = 'none'` in setNegativeCase e setHPyCase per nascondere risultati precedenti
+
+**Comportamento Nuovo:**
+- Premi "Tutto negativo" ANCHE con form bloccato → Form si sblocca + campi settati a 0
+- Premi "H. pylori+" ANCHE con form bloccato → Form si sblocca + pattern HP precaricato
+- Premi "Tutto 0 antro" ANCHE con form bloccato → Form si sblocca + antro azzerato
+- Risultato: workflow molto più veloce per casi consecutivi
+
+---
 
 ### v5.7.11 "Terminologia Fix" (2026-01-27)
 

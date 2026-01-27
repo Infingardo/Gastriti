@@ -24,7 +24,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
-  <title>OLGA/OLGIM e H. pylori</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.13</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -434,7 +434,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.11</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.13</div>
     </div>
   </header>
   
@@ -561,6 +561,7 @@
               <option value="">-- Seleziona --</option>
               <option value="complete">Completa (Jass tipo I)</option>
               <option value="incomplete">Incompleta (Jass tipo II/III)</option>
+              <option value="mixed">Mista (completa + incompleta)</option>
             </select>
             <small>MI incompleta = rischio maggiore (MAPS III)</small>
           </div>
@@ -634,6 +635,7 @@
               <option value="">-- Seleziona --</option>
               <option value="complete">Completa (Jass tipo I)</option>
               <option value="incomplete">Incompleta (Jass tipo II/III)</option>
+              <option value="mixed">Mista (completa + incompleta)</option>
             </select>
             <small>MI incompleta = rischio maggiore (MAPS III)</small>
           </div>
@@ -707,6 +709,7 @@
               <option value="">-- Seleziona --</option>
               <option value="complete">Completa (Jass tipo I)</option>
               <option value="incomplete">Incompleta (Jass tipo II/III)</option>
+              <option value="mixed">Mista (completa + incompleta)</option>
             </select>
             <small>MI incompleta = rischio maggiore (MAPS III)</small>
           </div>
@@ -1120,17 +1123,25 @@
       
       const types = miData.map(d => d.type).filter(t => t !== '');
       const allSame = types.length > 0 && types.every(t => t === types[0]);
+      const hasMixed = types.includes('mixed');
       
-      if (allSame && types[0] === 'complete') {
+      // Se TUTTI hanno lo stesso tipo E nessuno è mixed
+      if (allSame && !hasMixed && types[0] === 'complete') {
         return 'Presente, completa (' + miData.map(d => d.site).join(', ') + ')';
-      } else if (allSame && types[0] === 'incomplete') {
+      } else if (allSame && !hasMixed && types[0] === 'incomplete') {
         return 'Presente, incompleta (' + miData.map(d => d.site).join(', ') + ')';
-      } else if (types.length > 1 && !allSame) {
+      } else if (allSame && types[0] === 'mixed') {
+        // Tutti hanno mixed
+        return 'Presente, mista (' + miData.map(d => d.site).join(', ') + ')';
+      } else if (types.length > 1 || hasMixed) {
+        // Tipi diversi O almeno una sede con mixed → mostra dettaglio per sede
         const details = miData.map(d => {
-          const typeText = d.type === 'complete' ? 'completa' : d.type === 'incomplete' ? 'incompleta' : 'n.d.';
+          const typeText = d.type === 'complete' ? 'completa' : 
+                          d.type === 'incomplete' ? 'incompleta' : 
+                          d.type === 'mixed' ? 'mista' : 'n.d.';
           return d.site + ': ' + typeText;
         }).join(', ');
-        return 'Presente, mista (' + details + ')';
+        return 'Presente, pattern misto (' + details + ')';
       } else {
         return 'Presente (' + miData.map(d => d.site).join(', ') + ')';
       }
@@ -1766,6 +1777,8 @@ CLINICAL_NOTES.stagingValidity;
     }
     
     function setNegativeCase() {
+      unlockForm(); // Sblocca form se era bloccato
+      
       const fields = [
         'an_chronic', 'an_activity', 'an_atrophy', 'an_metaplasia', 'an_hp', 'an_dysplasia',
         'co_chronic', 'co_activity', 'co_atrophy', 'co_metaplasia', 'co_hp', 'co_dysplasia',
@@ -1782,11 +1795,15 @@ CLINICAL_NOTES.stagingValidity;
         checkMetaplasiaAndShowMIType(site);
       });
       
+      document.getElementById('resultsSection').style.display = 'none';
+      
       showAlert('success', '✅ Caso negativo standard: tutti i campi settati a 0');
       saveFormData();
     }
     
     function setHPyCase() {
+      unlockForm(); // Sblocca form se era bloccato
+      
       document.getElementById('an_chronic').value = '1';
       document.getElementById('in_chronic').value = '1';
       document.getElementById('co_chronic').value = '0';
@@ -1811,11 +1828,14 @@ CLINICAL_NOTES.stagingValidity;
         checkMetaplasiaAndShowMIType(site);
       });
       
+      document.getElementById('resultsSection').style.display = 'none';
+      
       showAlert('success', '✅ H. pylori+: precompilato pattern base antro-predominante');
       saveFormData();
     }
     
     function setZeroAntrum() {
+      unlockForm(); // Sblocca form se era bloccato
       document.getElementById('an_chronic').value = '0';
       document.getElementById('an_activity').value = '0';
       document.getElementById('an_atrophy').value = '0';
@@ -1828,6 +1848,7 @@ CLINICAL_NOTES.stagingValidity;
     }
     
     function setZeroIncisura() {
+      unlockForm(); // Sblocca form se era bloccato
       document.getElementById('in_chronic').value = '0';
       document.getElementById('in_activity').value = '0';
       document.getElementById('in_atrophy').value = '0';
@@ -1840,6 +1861,7 @@ CLINICAL_NOTES.stagingValidity;
     }
     
     function setZeroCorpus() {
+      unlockForm(); // Sblocca form se era bloccato
       document.getElementById('co_chronic').value = '0';
       document.getElementById('co_activity').value = '0';
       document.getElementById('co_atrophy').value = '0';
