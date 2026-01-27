@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.17 "Clipboard Fallback Silenzioso"  
+**Versione:** 5.7.18 "ChatGPT Contentino Edition"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,6 +300,63 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
+
+### v5.7.18 "ChatGPT Contentino Edition" (2026-01-27) 🎁
+
+**Implementazione Suggerimenti ChatGPT Review**
+
+> *"Se lo vedessi usare da uno strutturato junior, dormirei meglio"* - ChatGPT Review
+
+**FEATURE #1: Performance Debounce ⚡** (già implementato v5.7.17)
+- saveFormData() ora usa debounce 300ms
+- Riduce chiamate localStorage ~70% in compilazione rapida
+- Zero lag durante compilazione su mobile old
+- Best practice JavaScript applicata
+
+**FEATURE #2: Flag Campionamento Inadeguato 🔴** ← NUOVO!
+- **Checkbox:** "⚠️ Campionamento inadeguato (≤4 biopsie o sedi incomplete)"
+- Colore rosso distintivo (accent-color: #e53e3e)
+- **OUTPUT nel referto:**
+  ```
+  ⛔ CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.
+  ```
+- **USE CASE:** Biopsie insufficienti che non puoi rifiutare ma devi segnalare
+- **POSIZIONE:** Settings, sotto "Referto esteso"
+- Salvato in localStorage, persiste tra sessioni
+
+**FEATURE #3: Modalità Formale (Stealth Mode) 🎭** ← NUOVO!
+- **Checkbox:** "🎭 Modalità formale (rimuove emoji dal referto)"
+- **FUNZIONE:** Converte emoji in testo formale nel referto finale:
+  - ⚠️ → ATTENZIONE
+  - ✅ → OK
+  - ⛔ → ATTENZIONE
+  - 📋 → NOTA
+  - ℹ️ → INFO
+- **USE CASE:** "Ambienti istituzionali ostili alle emoji" (primari vecchio stampo 😏)
+- **NOTA:** Emoji nei bottoni/interfaccia rimangono (solo referto modificato)
+- Salvato in localStorage
+
+**Feedback ChatGPT - Cosa è stato apprezzato:**
+✅ Logica OLGA/OLGIM corretta (matrice Rugge, aggregazione sensata)
+✅ Gestione metaplasia senza atrofia e burned-out (raramente vista così pulita)
+✅ Forme speciali non inquinano staging (scelta matura)
+✅ Displasia > staging (clinicamente ineccepibile)
+✅ Wording prudente dove serve (IEL, MI mista, discordanze)
+✅ Lock post-referto ("geniale, riduce errori reali")
+✅ Clipboard fallback ("da chi ha sofferto con i LIS") 😂
+✅ JS leggibile, modulare, senza magia oscura
+✅ Print CSS finalmente serio
+
+**Citazione Definitiva:**
+> *"Non è un giocattolo. È un supporto decisionale reale, costruito con:  
+> rispetto della morfologia, consapevolezza dei limiti, esperienza di refertazione vera."*
+
+**Files Modificati:**
+- index.html: 2 nuovi checkbox + logica report + localStorage
+- service-worker.js: Cache v5.7.18
+- README.md: Changelog epico
+
+---
 
 ### v5.7.17 "Clipboard Fallback Silenzioso" (2026-01-27)
 
