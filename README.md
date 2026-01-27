@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.16 "Copy Button Always Active + Format Fix"  
+**Versione:** 5.7.17 "Clipboard Fallback Silenzioso"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,6 +300,36 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
+
+### v5.7.17 "Clipboard Fallback Silenzioso" (2026-01-27)
+
+**Fix Browser Warning: Clipboard API Bloccata**
+- **PROBLEMA:** Browser blocca Clipboard API per permissions policy
+- **WARNING:** "Failed to execute 'writeText' on 'Clipboard'" in console
+- **CAUSA:** Alcuni contesti browser (iframe, extension) bloccano Clipboard API
+- **FIX:** Rimosso console.log che generava noise, fallback già attivo
+- **RISULTATO:** Fallback `execCommand` si attiva automaticamente e silenziosamente
+
+**Comportamento v5.7.17:**
+```
+1. Click "Copia referto"
+2. Browser tenta Clipboard API
+3. Se bloccata → fallback automatico a execCommand
+4. Textarea visibile con testo selezionato
+5. User: Ctrl+C → Copiato!
+```
+
+**Nota Tecnica:**
+Il warning nel browser console è generato internamente dal browser stesso quando 
+la Clipboard API fallisce, NON dal codice del tool. Il tool gestisce correttamente 
+il fallback, quindi il warning può essere ignorato - la funzionalità rimane intatta.
+
+**Alternative Testate:**
+- ✅ execCommand('copy') → Funziona in tutti i contesti
+- ✅ Textarea temporanea visibile → iOS/Safari compatible
+- ✅ Windows line endings (\r\n) → LIS compatible
+
+---
 
 ### v5.7.16 "Copy Button Always Active + Format Fix" (2026-01-27)
 

@@ -24,7 +24,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
-  <title>OLGA/OLGIM e H. pylori v5.7.16</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.17</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -434,7 +434,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.16</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.17</div>
     </div>
   </header>
   
@@ -1657,18 +1657,24 @@ CLINICAL_NOTES.stagingValidity;
       // Converti \n in \r\n per compatibilità Windows/LIS
       text = text.replace(/\r?\n/g, '\r\n');
       
-      // Metodo 1: Clipboard API (solo se HTTPS o localhost)
-      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+      // Check se Clipboard API è disponibile e non bloccata
+      const canUseClipboardAPI = 
+        navigator.clipboard && 
+        navigator.clipboard.writeText && 
+        window.isSecureContext;
+      
+      if (canUseClipboardAPI) {
+        // Tenta Clipboard API ma gestisci silenziosamente il blocco permissions
         navigator.clipboard.writeText(text)
           .then(() => {
             showAlert('success', '✅ Referto copiato negli appunti');
           })
-          .catch((err) => {
-            console.warn('Clipboard API fallito:', err.message);
+          .catch(() => {
+            // Clipboard API bloccata da permissions policy → usa fallback silenzioso
             copyReportFallback(text);
           });
       } else {
-        // Fallback immediato se Clipboard API non disponibile
+        // Clipboard API non disponibile → usa direttamente fallback
         copyReportFallback(text);
       }
     }
@@ -1715,7 +1721,7 @@ CLINICAL_NOTES.stagingValidity;
         // Rimuovi textarea dopo breve delay (feedback visivo)
         setTimeout(() => {
           document.body.removeChild(textarea);
-          showAlert('success', '✅ Referto copiato negli appunti!');
+          showAlert('success', '✅ Referto copiato negli appunti (modalità compatibilità)');
         }, 150);
       } else {
         // Fallback manuale: lascia textarea visibile con istruzioni
