@@ -434,7 +434,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.7</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.11</div>
     </div>
   </header>
   
@@ -813,7 +813,7 @@
         
         <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
           <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
-            🔬 Gastrite Linfocitaria
+            🔬 Gastrite Linfocitica
           </h3>
           <div style="display: grid; gap: 1rem;">
             <div class="field">
@@ -1012,11 +1012,14 @@
       olgaMethodSpecial: '⚠️ NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite (meccanismo non cancerogenetico classico).'
     };
     
+    // Matrice OLGA standard (Rugge et al. Gut 2007)
+    // Righe = Antrum score (0-3, verticale)
+    // Colonne = Corpus score (0-3, orizzontale)
     const OLGA_MATRIX = [
-      ['0',   'I',   'II',  'II' ],
-      ['I',   'II',  'II',  'III'],
-      ['II',  'III', 'III', 'IV' ],
-      ['III', 'III', 'IV',  'IV' ]
+      ['0',   'I',   'II',  'III'],  // Antrum 0
+      ['I',   'II',  'III', 'III'],  // Antrum 1
+      ['II',  'III', 'IV',  'IV' ],  // Antrum 2
+      ['II',  'III', 'IV',  'IV' ]   // Antrum 3
     ];
     
     function getValue(id) {
@@ -1133,6 +1136,24 @@
       }
     }
     
+    // v5.7.10: Funzione helper per testo atrofia con sedi
+    function getAtrophyText() {
+      const anAtrophy = getValue('an_atrophy') || 0;
+      const inAtrophy = getValue('in_atrophy') || 0;
+      const coAtrophy = getValue('co_atrophy') || 0;
+      
+      const sites = [];
+      if (anAtrophy > 0) sites.push('antro');
+      if (inAtrophy > 0) sites.push('incisura');
+      if (coAtrophy > 0) sites.push('corpo');
+      
+      if (sites.length === 0) {
+        return 'Assente';
+      }
+      
+      return 'Presente (' + sites.join(', ') + ')';
+    }
+    
     function validate() {
       clearErrors();
       const fields = [
@@ -1158,7 +1179,7 @@
     function calculateStage(antrumScore, corpusScore) {
       const a = Math.min(3, Math.max(0, antrumScore));
       const c = Math.min(3, Math.max(0, corpusScore));
-      return OLGA_MATRIX[c][a];
+      return OLGA_MATRIX[a][c]; // [antrum][corpus] - matrice standard Rugge
     }
     
     function getTopography(anChronic, coChronic) {
@@ -1400,7 +1421,7 @@
       
       if (hasLymphocytic) {
         const ielsGrade = specialForms.lymphocytic.ielsGrade;
-        let badgeText = 'Gastrite linfocitaria';
+        let badgeText = 'Gastrite linfocitica';
         let badgeClass = 'dysplasia';
         let badgeColor = '#6366f1';
         
@@ -1505,13 +1526,13 @@ CLINICAL_NOTES.autoimmuneCorrelation;
             if (ielsGrade === 1) {
               diagnosticHeader = 'INCREMENTO BORDERLINE LINFOCITI INTRAEPITELIALI';
               specialDiagnosis = 'Mucosa gastrica con incremento borderline dei linfociti intraepiteliali (15-25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
-'Quadro suggestivo ma NON diagnostico per gastrite linfocitaria.\n' +
+'Quadro suggestivo ma NON diagnostico per gastrite linfocitica.\n' +
 'Correlazione clinica ed endoscopica raccomandata.\n\n' +
-'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), fase precoce gastrite linfocitaria, variante normale.';
+'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), fase precoce gastrite linfocitica, variante normale.';
             } else {
-              diagnosticHeader = 'GASTRITE LINFOCITARIA';
+              diagnosticHeader = 'GASTRITE LINFOCITICA';
               specialDiagnosis = 'Mucosa gastrica con linfociti intraepiteliali francamente aumentati (>25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
-'GASTRITE LINFOCITARIA.\n\n' +
+'GASTRITE LINFOCITICA.\n\n' +
 'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), malattia di Ménétrier.';
             }
             olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
@@ -1527,8 +1548,9 @@ CLINICAL_NOTES.autoimmuneCorrelation;
           
           report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
 'H. PYLORI: ' + hpStatus + '\n' +
-'DISPLASIA: Assente\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n\n' +
+'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
+'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
+'DISPLASIA: Assente\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
 'OLGIM: stadio ' + olgimStage + olgaContextNote + '\n\n' +
 '⚠️ NOTA INTERPRETATIVA:\n' +
@@ -1561,9 +1583,9 @@ CLINICAL_NOTES.autoimmuneCorrelation;
               const ielsGrade = specialForms.lymphocytic.ielsGrade;
               if (ielsGrade === 1) {
                 specialFormsNote += '\n• Incremento borderline linfociti intraepiteliali (15-25/100 cellule)';
-                specialFormsNote += '\n  Suggestivo ma NON diagnostico per gastrite linfocitaria';
+                specialFormsNote += '\n  Suggestivo ma NON diagnostico per gastrite linfocitica';
               } else {
-                specialFormsNote += '\n• Gastrite linfocitaria (IEL francamente aumentati)';
+                specialFormsNote += '\n• Gastrite linfocitica (IEL francamente aumentati)';
               }
             }
             if (hasEosinophilic) specialFormsNote += '\n• Gastrite eosinofila';
@@ -1589,8 +1611,9 @@ CLINICAL_NOTES.autoimmuneCorrelation;
           
           report = diagnosticHeader + '\n\n' +
 'H. PYLORI: ' + hpStatus + '\n' +
-'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) + '\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + specialFormsNote + '\n\n' +
+'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
+'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + '\n' +
+'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) + specialFormsNote + '\n\n' +
 'OLGA: stadio ' + olgaStage + '\n' +
 'OLGIM: stadio ' + olgimStage + discordanceNote + olgaContextNote + hgdNote + '\n\n' +
 '⚠️ NOTA INTERPRETATIVA:\n' +
@@ -1600,7 +1623,7 @@ CLINICAL_NOTES.stagingValidity;
         }
       }
       
-      document.getElementById('reportText').textContent = report;
+      document.getElementById('reportText').innerText = report;
       document.getElementById('resultsSection').style.display = 'block';
       document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
       
@@ -1612,89 +1635,122 @@ CLINICAL_NOTES.stagingValidity;
     // ============================================
     function copyReport() {
       const reportEl = document.getElementById('reportText');
-      if (!reportEl || !reportEl.textContent || reportEl.textContent.trim() === '') {
+      if (!reportEl || !reportEl.innerText || reportEl.innerText.trim() === '') {
         showAlert('error', '⚠️ Calcola prima il referto');
         return;
       }
       
-      const text = reportEl.textContent;
+      const text = reportEl.innerText;
       
-      // Metodo 1: Clipboard API (moderno)
-      if (navigator.clipboard && navigator.clipboard.writeText) {
+      // Metodo 1: Clipboard API (solo se HTTPS o localhost)
+      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
         navigator.clipboard.writeText(text)
           .then(() => {
             showAlert('success', '✅ Referto copiato negli appunti');
           })
           .catch((err) => {
-            console.warn('Clipboard API bloccato:', err.message);
+            console.warn('Clipboard API fallito:', err.message);
             copyReportFallback(text);
           });
       } else {
+        // Fallback immediato se Clipboard API non disponibile
         copyReportFallback(text);
       }
     }
     
-    // Fallback ultra-robusto (v5.7.7)
+    // Fallback iOS-friendly (v5.7.9)
     function copyReportFallback(text) {
-      // Metodo 2A: ContentEditable (più affidabile di textarea)
-      const div = document.createElement('div');
-      div.contentEditable = true;
-      div.style.position = 'fixed';
-      div.style.left = '-9999px';
-      div.style.top = '0';
-      div.style.opacity = '0';
-      div.textContent = text;
-      document.body.appendChild(div);
+      // iOS/Safari richiede elemento VISIBILE e con focus reale
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.readOnly = true;
       
-      div.focus();
+      // Style: temporaneamente visibile (iOS non copia elementi hidden)
+      textarea.style.position = 'fixed';
+      textarea.style.top = '50%';
+      textarea.style.left = '50%';
+      textarea.style.transform = 'translate(-50%, -50%)';
+      textarea.style.width = '90%';
+      textarea.style.height = '200px';
+      textarea.style.zIndex = '9999';
+      textarea.style.border = '3px solid #4CAF50';
+      textarea.style.background = '#fff';
+      textarea.style.padding = '10px';
+      textarea.style.fontSize = '14px';
       
-      // Range selection esplicita
-      const range = document.createRange();
-      range.selectNodeContents(div);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
+      document.body.appendChild(textarea);
+      
+      // iOS: focus + selezione con delay
+      textarea.focus();
+      textarea.setSelectionRange(0, text.length);
+      
+      // Scroll to top della textarea (iOS fix)
+      textarea.scrollTop = 0;
       
       let success = false;
-      let attempts = 0;
-      const maxAttempts = 3;
       
-      // Retry logic
-      while (attempts < maxAttempts && !success) {
-        try {
-          success = document.execCommand('copy');
-          if (success) break;
-        } catch (err) {
-          console.warn('Tentativo', attempts + 1, 'fallito:', err);
-        }
-        attempts++;
+      try {
+        // execCommand('copy') deve essere chiamato DOPO focus
+        success = document.execCommand('copy');
+      } catch (err) {
+        console.warn('execCommand fallito:', err);
       }
       
-      // Cleanup
-      window.getSelection().removeAllRanges();
-      document.body.removeChild(div);
-      
       if (success) {
-        showAlert('success', '✅ Referto copiato (metodo compatibilità)');
+        // Rimuovi textarea dopo breve delay (feedback visivo)
+        setTimeout(() => {
+          document.body.removeChild(textarea);
+          showAlert('success', '✅ Referto copiato negli appunti!');
+        }, 150);
       } else {
-        // Fallback finale: selezione manuale assistita
-        copyReportManual();
+        // Fallback manuale: lascia textarea visibile con istruzioni
+        copyReportManual(textarea);
       }
     }
     
-    // Fallback finale: selezione manuale (v5.7.7)
-    function copyReportManual() {
-      const reportEl = document.getElementById('reportText');
-      
-      // Seleziona il contenuto del box referto
-      const range = document.createRange();
-      range.selectNodeContents(reportEl);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-      
-      // Alert con istruzioni
-      showAlert('warning', '⚠️ Copia automatica non disponibile. Il testo è selezionato → Premi Ctrl+C (Cmd+C su Mac)');
+    // Fallback finale: copia manuale assistita (v5.7.9)
+    function copyReportManual(textarea) {
+      if (!textarea) {
+        // Se textarea non passata, usa reportText direttamente
+        const reportEl = document.getElementById('reportText');
+        const range = document.createRange();
+        range.selectNodeContents(reportEl);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        
+        showAlert('warning', '⚠️ Copia automatica non supportata. Testo selezionato → Premi Ctrl+C (o Cmd+C su Mac)', 8000);
+      } else {
+        // Textarea già visibile e selezionata - mostra istruzioni
+        textarea.focus();
+        textarea.setSelectionRange(0, textarea.value.length);
+        
+        // Box istruzioni sovrapposto
+        const instructionBox = document.createElement('div');
+        instructionBox.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: #ff9800;
+          color: white;
+          padding: 15px 25px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: bold;
+          z-index: 10000;
+          box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        `;
+        instructionBox.textContent = '📋 Premi Ctrl+C (Cmd+C su Mac) per copiare';
+        document.body.appendChild(instructionBox);
+        
+        // Rimuovi tutto dopo 10 secondi
+        setTimeout(() => {
+          if (document.body.contains(textarea)) document.body.removeChild(textarea);
+          if (document.body.contains(instructionBox)) document.body.removeChild(instructionBox);
+        }, 10000);
+      }
+    }
       
       // Scroll al referto
       reportEl.scrollIntoView({ behavior: 'smooth', block: 'center' });

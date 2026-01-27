@@ -1,7 +1,7 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.7 "Nosological Precision"  
-**Autore:** Dr. Filippo Fraggetta  
+**Versione:** 5.7.11 "Terminologia Fix"  
+**Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
 ---
@@ -301,6 +301,78 @@ if (dysplasiaMax === 2) {
 
 ## 📚 Changelog
 
+### v5.7.11 "Terminologia Fix" (2026-01-27)
+
+**Fix Terminologico: "Linfocitaria" → "Linfocitica"**
+- Corretto termine in tutto il tool: gastrite **linfocitica** (non linfocitaria)
+- Aggiornate 8 occorrenze in:
+  - Titolo sezione form
+  - Badge risultati
+  - Diagnostica header
+  - Testo referto
+  - Note pattern sovrapposti
+- Terminologia corretta secondo nomenclatura WHO/Sydney System
+
+---
+
+### v5.7.10 "Triple Fix" (2026-01-27) 🚨 HIGH PRIORITY
+
+**Fix #1: "ATROFIA GHIANDOLARE" Scomparsa dal Referto** 🐛 CRITICAL
+- **PROBLEMA:** Voce "ATROFIA GHIANDOLARE" NON compariva nel referto gastrite cronica
+- **IMPATTO:** Impossibile vedere distribuzione atrofia nel referto copiato
+- **FIX:** Aggiunta funzione `getAtrophyText()` + voce nel referto
+- **OUTPUT:** "ATROFIA GHIANDOLARE: Presente (antro, incisura)" o "Assente"
+- **POSIZIONE:** Tra "H. PYLORI" e "METAPLASIA INTESTINALE" (ordine logico)
+
+**Fix #2: Funzione "Copia Referto" Non Funzionava**
+- **PROBLEMA:** Bottone "📋 Copia Referto" non copiava correttamente
+- **CAUSA:** textContent non preserva newline in alcuni contesti
+- **FIX:** Cambiato `textContent` → `innerText` (rispetta white-space: pre-wrap)
+- **RISULTATO:** Copia funzionante con newline preservate
+
+**Fix #3: Ctrl+C Manuale Perdeva Formattazione**
+- **PROBLEMA:** Copia manuale (Ctrl+C sul box) perdeva newline in LIS/Word
+- **CAUSA:** textContent ignora CSS white-space in alcuni browser
+- **FIX:** innerText rispetta rendering CSS → newline preservate
+- **BONUS:** CSS già aveva `white-space: pre-wrap` (era solo problema JS)
+
+**Riepilogo Fix:**
+1. ✅ ATROFIA ora visibile nel referto
+2. ✅ Copia referto funziona (bottone)
+3. ✅ Ctrl+C manuale preserva formattazione
+
+**Deploy urgente consigliato** - Fix #1 è critico per completezza referto!
+
+---
+
+### v5.7.9 "iOS Clipboard Fix" (2026-01-27)
+
+**Fix: Clipboard iOS-Friendly**
+- **PROBLEMA:** Funzione "Copia Referto" non funzionava su iOS/Safari
+- **CAUSA:** contentEditable nascosto non copiabile su iOS, Clipboard API richiede secure context
+- **FIX APPLICATO:**
+  - Textarea VISIBILE temporaneamente (iOS non copia elementi hidden)
+  - Focus esplicito con setSelectionRange
+  - Fallback manuale assistito con box istruzioni visibile
+  - Check window.isSecureContext per Clipboard API
+- **UX:** Se copia auto fallisce, textarea rimane visibile 10sec con istruzioni "Premi Ctrl+C"
+
+---
+
+### v5.7.8 "Matrix Fix" (2026-01-27) 🚨 CRITICAL
+
+**Fix Critico: Matrice OLGA Invertita**
+- **BUG IDENTIFICATO:** Matrice usava [corpus][antrum] invece di [antrum][corpus]
+- **IMPATTO:** Gastrite corpo-predominante (tipo A) veniva SOTTOSTIMATA
+- **FIX:** Ricostruita matrice secondo standard Rugge 2007 (Antrum=righe, Corpus=colonne)
+- **ESEMPIO CRITICO FIXATO:**
+  - Corpus severo (3) + Antrum normale (0):
+    - PRIMA (bug): Stadio II ❌
+    - DOPO (fix): Stadio III ✅
+- **Deploy urgente consigliato per tutti gli utenti**
+
+---
+
 ### v5.7.7 "Nosological Precision" (2026-01-26)
 
 **Fix #1: Intestazioni Diagnostiche Differenziate**
@@ -436,7 +508,7 @@ if (dysplasiaMax === 2) {
 
 ## 📧 Contatti
 
-**Autore:** Dr. Filippo Fraggetta  
+**Autore:** Dr. Filippo Bianchi  
 **Istituzione:** SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano  
 **GitHub:** [@infingardo](https://github.com/infingardo)  
 **Repository:** [olga-olgim](https://github.com/infingardo/olga-olgim)
@@ -445,7 +517,7 @@ if (dysplasiaMax === 2) {
 
 ## 📜 Licenza
 
-Copyright © 2026 Dr. Filippo Fraggetta  
+Copyright © 2026 Dr. Filippo Bianchi  
 Tutti i diritti riservati.
 
 Uso consentito per:
