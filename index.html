@@ -24,7 +24,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
-  <title>OLGA/OLGIM e H. pylori v5.7.13</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.15</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -434,7 +434,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.13</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.15</div>
     </div>
   </header>
   
@@ -496,10 +496,10 @@
       <h2 style="color: #1e40af; border-bottom-color: #93c5fd;">⚡ Compilazione rapida</h2>
       <div style="display: grid; gap: 1rem; margin-top: 1rem;">
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button class="secondary" style="flex: 1; min-width: 180px;" onclick="setNegativeCase()">
+          <button class="secondary shortcut-btn" style="flex: 1; min-width: 180px;" onclick="setNegativeCase()">
             ✅ Tutto negativo
           </button>
-          <button class="secondary" style="flex: 1; min-width: 180px;" onclick="setHPyCase()">
+          <button class="secondary shortcut-btn" style="flex: 1; min-width: 180px;" onclick="setHPyCase()">
             🦠 H. pylori+
           </button>
         </div>
@@ -585,7 +585,7 @@
         </div>
         
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <button class="secondary" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroAntrum()">
+          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroAntrum()">
             ⚡ Tutto 0 antro
           </button>
         </div>
@@ -659,7 +659,7 @@
         </div>
         
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <button class="secondary" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroIncisura()">
+          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroIncisura()">
             ⚡ Tutto 0 incisura
           </button>
         </div>
@@ -733,7 +733,7 @@
         </div>
         
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <button class="secondary" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroCorpus()">
+          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroCorpus()">
             ⚡ Tutto 0 corpo
           </button>
         </div>
@@ -1762,19 +1762,6 @@ CLINICAL_NOTES.stagingValidity;
         }, 10000);
       }
     }
-      
-      // Scroll al referto
-      reportEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      // Highlight temporaneo
-      reportEl.style.background = '#fff3cd';
-      reportEl.style.border = '3px solid #ffc107';
-      
-      setTimeout(() => {
-        reportEl.style.background = '#f7fafc';
-        reportEl.style.border = '2px dashed #cbd5e0';
-      }, 3000);
-    }
     
     function setNegativeCase() {
       unlockForm(); // Sblocca form se era bloccato
@@ -1904,7 +1891,7 @@ CLINICAL_NOTES.stagingValidity;
       }
       
       document.querySelectorAll('button').forEach(el => {
-        if (!el.classList.contains('mega-reset-btn')) {
+        if (!el.classList.contains('mega-reset-btn') && !el.classList.contains('shortcut-btn')) {
           el.disabled = true;
           el.style.opacity = '0.4';
           el.style.cursor = 'not-allowed';

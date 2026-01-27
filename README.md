@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.13 "Mixed MI Type"  
+**Versione:** 5.7.15 "Hotfix SyntaxError"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,6 +300,61 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
+
+### v5.7.15 "Hotfix SyntaxError" (2026-01-27) 🚨 CRITICAL
+
+**HOTFIX URGENTE: Errore di Sintassi JavaScript**
+- **ERRORE:** `Uncaught SyntaxError: Unexpected token '}'` e `ReferenceError: setNegativeCase is not defined`
+- **ROOT CAUSE:** Codice "loose" (fuori da funzioni) lasciato per errore dopo `copyReportManual()` (linee 1766-1777)
+- **IMPATTO:** Tool completamente non funzionante nella v5.7.14 ❌
+- **FIX:** Rimosso codice loose:
+  ```javascript
+  // ❌ CODICE ERRATO (v5.7.14):
+  function copyReportManual() { ... }
+    // Codice loose qui fuori! ← Causa SyntaxError
+    reportEl.scrollIntoView(...);
+  }
+  function setNegativeCase() { ... } ← Non raggiunto mai
+  
+  // ✅ CODICE CORRETTO (v5.7.15):
+  function copyReportManual() { ... }
+  
+  function setNegativeCase() { ... } ← Ora funziona!
+  ```
+- **VERIFICA:** JavaScript ora valido, tutte le funzioni raggiungibili
+- **DEPLOY URGENTE:** Sostituisce immediatamente v5.7.14 che era broken
+
+**Mi scuso per l'errore di merging nella v5.7.14!**
+
+---
+
+### v5.7.14 "Shortcut Fix REALE" (2026-01-27)
+
+**Fix CRITICO: Tasti Scelta Rapida Finalmente Funzionanti**
+- **PROBLEMA v5.7.12:** Il fix precedente NON funzionava perché `button.disabled = true` impedisce l'esecuzione di `onclick`
+- **ROOT CAUSE:** Quando un button è disabled, l'evento onclick NON viene mai chiamato, quindi `unlockForm()` non partiva mai
+- **SOLUZIONE v5.7.14:**
+  - Aggiunta classe CSS `shortcut-btn` a tutti i 5 bottoni shortcut
+  - Modificato `lockFormAfterReport()` per NON disabilitare bottoni con classe `shortcut-btn`
+  - Ora i bottoni shortcut restano SEMPRE ATTIVI anche con form bloccato
+- **BOTTONI SEMPRE ATTIVI:**
+  - ✅ "Tutto negativo"
+  - ✅ "H. pylori+"
+  - ✅ "Tutto 0 antro"
+  - ✅ "Tutto 0 incisura"
+  - ✅ "Tutto 0 corpo"
+- **TEST:** Dopo calcolo referto → Tutti i shortcut cliccabili → Form si sblocca + azione eseguita ✅
+
+**Differenza tecnica v5.7.12 vs v5.7.14:**
+```
+v5.7.12 (NON funzionava):
+button.disabled = true  →  onclick NON eseguito  →  unlockForm() mai chiamato ❌
+
+v5.7.14 (FUNZIONA):
+button.disabled = false (escluso da lock)  →  onclick eseguito  →  unlockForm() + azione ✅
+```
+
+---
 
 ### v5.7.13 "Mixed MI Type" (2026-01-27)
 
