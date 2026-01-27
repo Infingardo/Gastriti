@@ -24,7 +24,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
-  <title>OLGA/OLGIM e H. pylori v5.7.15</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.16</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -434,7 +434,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.15</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.16</div>
     </div>
   </header>
   
@@ -872,7 +872,7 @@
     
     <div class="controls">
       <button class="primary" onclick="calculate()">📊 Calcola referto</button>
-      <button class="secondary" onclick="copyReport()">📋 Copia referto</button>
+      <button class="secondary copy-report-btn" onclick="copyReport()">📋 Copia referto</button>
       <button class="secondary" onclick="window.print()">🖨️ Stampa/PDF</button>
     </div>
     
@@ -1651,7 +1651,11 @@ CLINICAL_NOTES.stagingValidity;
         return;
       }
       
-      const text = reportEl.innerText;
+      // Usa innerText per preservare newline, poi converti in Windows format
+      let text = reportEl.innerText;
+      
+      // Converti \n in \r\n per compatibilità Windows/LIS
+      text = text.replace(/\r?\n/g, '\r\n');
       
       // Metodo 1: Clipboard API (solo se HTTPS o localhost)
       if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
@@ -1891,7 +1895,9 @@ CLINICAL_NOTES.stagingValidity;
       }
       
       document.querySelectorAll('button').forEach(el => {
-        if (!el.classList.contains('mega-reset-btn') && !el.classList.contains('shortcut-btn')) {
+        if (!el.classList.contains('mega-reset-btn') && 
+            !el.classList.contains('shortcut-btn') && 
+            !el.classList.contains('copy-report-btn')) {
           el.disabled = true;
           el.style.opacity = '0.4';
           el.style.cursor = 'not-allowed';

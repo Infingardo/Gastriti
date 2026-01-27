@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.15 "Hotfix SyntaxError"  
+**Versione:** 5.7.16 "Copy Button Always Active + Format Fix"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,6 +300,48 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
+
+### v5.7.16 "Copy Button Always Active + Format Fix" (2026-01-27)
+
+**Fix UX Critico: Bottone "Copia Referto" Sempre Disponibile**
+- **PROBLEMA WORKFLOW:** Dopo "Calcola referto", bottone "Copia referto" veniva disabilitato
+- **IMPATTO:** Impossibile copiare referto perché devi LEGGERLO prima di copiare!
+- **FIX #1:** Aggiunta classe `copy-report-btn` al bottone "📋 Copia referto"
+- **FIX #2:** Escluso `copy-report-btn` dal lock in `lockFormAfterReport()`
+- **RISULTATO:** Bottone "Copia referto" ora SEMPRE ATTIVO anche con form bloccato ✅
+
+**Fix Formattazione: Windows Line Endings**
+- **PROBLEMA:** Formattazione persa quando incolli in Word/LIS
+- **CAUSA:** Line endings Unix (\n) non sempre compatibili con Windows
+- **FIX:** Conversione automatica \n → \r\n prima di copiare
+- **CODICE:** `text = text.replace(/\r?\n/g, '\r\n');`
+- **BENEFICIO:** Formattazione preservata meglio in Word/LIS Windows
+
+**Workflow Migliorato:**
+```
+PRIMA (v5.7.15):
+1. Calcola referto → Form bloccato
+2. Leggi referto
+3. Prova "Copia referto" → ❌ DISABLED
+4. DEVI fare RESET → Perdi referto dalla vista
+5. Workflow rotto
+
+DOPO (v5.7.16):
+1. Calcola referto → Form bloccato
+2. Leggi referto
+3. Click "Copia referto" → ✅ FUNZIONA!
+4. Incolla in LIS → ✅ Formattazione OK
+5. Workflow fluido
+```
+
+**Bottoni Sempre Attivi dopo calcolo referto:**
+- ✅ "RESET COMPLETO"
+- ✅ "Tutto negativo" (shortcut)
+- ✅ "H. pylori+" (shortcut)
+- ✅ "Tutto 0 antro/incisura/corpo" (shortcut)
+- ✅ "Copia referto" ← NUOVO!
+
+---
 
 ### v5.7.15 "Hotfix SyntaxError" (2026-01-27) 🚨 CRITICAL
 
