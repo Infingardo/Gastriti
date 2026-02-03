@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool OLGA/OLGIM - Quick Reference</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      max-width: 21cm;
+      margin: 1cm auto;
+      padding: 1cm;
+      background: white;
+      color: #1a202c;
+      line-height: 1.5;
+    }
+    h1 {
+      color: #2c5282;
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      border-bottom: 3px solid #4299e1;
+      padding-bottom: 0.5rem;
+    }
+    .subtitle {
+      color: #718096;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    .url-box {
+      background: #ebf8ff;
+      border: 2px solid #4299e1;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .url-box a {
+      color: #2c5282;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .section {
+      margin: 1.5rem 0;
+    }
+    .section-title {
+      color: #2d3748;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .icon { font-size: 1.3rem; }
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .step {
+      background: #f7fafc;
+      border: 2px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .step-number {
+      background: #4299e1;
+      color: white;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .shortcuts {
+      background: #fffaf0;
+      border-left: 4px solid #ed8936;
+      padding: 1rem;
+      margin-top: 0.5rem;
+    }
+    .shortcuts-list {
+      list-style: none;
+      padding-left: 0;
+    }
+    .shortcuts-list li {
+      padding: 0.3rem 0;
+    }
+    .shortcuts-list li:before {
+      content: "⚡ ";
+      color: #ed8936;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .info-box {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 0.8rem;
+    }
+    .info-box strong {
+      color: #2d3748;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .tip {
+      background: #f0fff4;
+      border-left: 4px solid #48bb78;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .footer {
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      color: #718096;
+      font-size: 0.85rem;
+    }
+    @media print {
+      body { margin: 0; padding: 1cm; }
+      .url-box a { color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🔬 Tool OLGA/OLGIM - Quick Reference</h1>
+  <div class="subtitle">Refertazione strutturata gastriti croniche | SC Anatomia Patologica | v5.7.20</div>
+  
+  <div class="url-box">
+    <a href="https://infingardo.github.io/Gastriti/" target="_blank">
+      https://infingardo.github.io/Gastriti/
+    </a>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">
+      <span class="icon">📋</span> WORKFLOW 3 STEP
+    </div>
+    <div class="workflow">
+      <div class="step">
+        <div class="step-number">1</div>
+        <strong>Compila</strong>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Score Sydney per antro, incisura, corpo</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <strong>Calcola</strong>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Genera referto + staging OLGA/OLGIM</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <strong>Copia</strong>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">Incolla in LIS/Word</p>
+      </div>
+    </div>
+    
+    <div class="shortcuts">
+      <strong>⚡ SHORTCUT RAPIDI</strong>
+      <ul class="shortcuts-list">
+        <li><strong>Tutto negativo</strong> → Azzera tutto (caso normale)</li>
+        <li><strong>H. pylori+</strong> → Pattern gastrite HP+ tipica</li>
+        <li><strong>Tutto 0 antro/incisura/corpo</strong> → Azzera una sede</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">
+      <span class="icon">🎯</span> STAGING AUTOMATICO
+    </div>
+    <div class="info-grid">
+      <div class="info-box">
+        <strong>OLGA</strong>
+        Basato su ATROFIA ghiandolare<br>
+        <span style="font-size: 0.85rem; color: #718096;">Matrice Rugge (Gut 2008)</span>
+      </div>
+      <div class="info-box">
+        <strong>OLGIM</strong>
+        Basato su METAPLASIA intestinale<br>
+        <span style="font-size: 0.85rem; color: #718096;">Capelle (Am J Gastro 2010)</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">
+      <span class="icon">⚙️</span> SETTINGS UTILI
+    </div>
+    <div style="margin-top: 0.8rem; font-size: 0.9rem;">
+      <div style="margin-bottom: 0.5rem;">
+        <strong>☑️ Referto esteso</strong> → Include tabella Sydney, topografia, bibliografia (per casi complessi/MDT)
+      </div>
+      <div style="margin-bottom: 0.5rem;">
+        <strong>☑️ Campionamento inadeguato</strong> → Disclaimer staging limitato (≤4 biopsie o sedi incomplete)
+      </div>
+      <div>
+        <strong>☑️ Modalità formale</strong> → Rimuove emoji dal referto (per export PDF ufficiali)
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">
+      <span class="icon">🔍</span> FORME DIAGNOSTICHE COPERTE
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.8rem; font-size: 0.9rem;">
+      <div>• Gastrite cronica HP-associata</div>
+      <div>• Gastrite linfocitica</div>
+      <div>• Gastrite autoimmune</div>
+      <div>• Gastrite eosinofila</div>
+      <div>• Gastropatia chimica/reattiva</div>
+      <div>• Displasia LGD/HGD</div>
+    </div>
+  </div>
+  
+  <div class="tip">
+    <strong>💡 TIP:</strong> Dopo il primo accesso, il tool funziona anche <strong>offline</strong>! 
+    I dati sono salvati automaticamente nel browser (localStorage) e non vengono inviati a server esterni.
+  </div>
+  
+  <div class="section">
+    <div class="section-title">
+      <span class="icon">🐛</span> PROBLEMI O FEEDBACK?
+    </div>
+    <div style="margin-top: 0.8rem; font-size: 0.9rem;">
+      <p><strong>Screenshot + descrizione</strong> → Dr. Filippo Bianchi (Direttore SC)</p>
+      <p style="margin-top: 0.5rem; color: #718096;">
+        Browser consigliati: Chrome, Firefox, Edge, Safari<br>
+        ⚠️ Internet Explorer non supportato
+      </p>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <strong>Tool OLGA/OLGIM v5.7.20</strong> | Production Ready<br>
+    SC Anatomia Patologica ASST Fatebenefratelli-Sacco | Dr. Filippo Bianchi<br>
+    Validato secondo Rugge M et al. (Gut 2008), MAPS III guidelines (Endoscopy 2025)
+  </div>
+</body>
+</html>
