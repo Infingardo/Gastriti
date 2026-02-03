@@ -24,7 +24,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
-  <title>OLGA/OLGIM e H. pylori v5.7.18</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.20</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -434,7 +434,7 @@
   <header>
     <div class="container">
       <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.18</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.20</div>
     </div>
   </header>
   
@@ -1036,9 +1036,9 @@
     // Colonne = Corpus score (0-3, orizzontale)
     const OLGA_MATRIX = [
       ['0',   'I',   'II',  'III'],  // Antrum 0
-      ['I',   'II',  'III', 'III'],  // Antrum 1
-      ['II',  'III', 'IV',  'IV' ],  // Antrum 2
-      ['II',  'III', 'IV',  'IV' ]   // Antrum 3
+      ['I',   'I',   'II',  'III'],  // Antrum 1 (fix: [1,1] era II → I)
+      ['II',  'II',  'III', 'IV' ],  // Antrum 2 (fix: [2,1] era III → II)
+      ['III', 'III', 'IV',  'IV' ]   // Antrum 3 (fix: [3,0] era II → III)
     ];
     
     function getValue(id) {
@@ -1198,8 +1198,9 @@
       return true;
     }
     
-    function getOLGAScore(atrophy, metaplasia) {
-      return Math.max(atrophy, metaplasia);
+    function getOLGAScore(atrophy) {
+      // OLGA si basa SOLO su atrofia ghiandolare (non metaplasia)
+      return atrophy;
     }
     
     function calculateStage(antrumScore, corpusScore) {
@@ -1382,8 +1383,8 @@
       const antrumAtrophyAggregated = Math.max(data.antrum.atrophy, data.incisura.atrophy);
       const antrumMetaplasiaAggregated = Math.max(data.antrum.metaplasia, data.incisura.metaplasia);
       
-      const olgaAntrum = getOLGAScore(antrumAtrophyAggregated, antrumMetaplasiaAggregated);
-      const olgaCorpus = getOLGAScore(data.corpus.atrophy, data.corpus.metaplasia);
+      const olgaAntrum = getOLGAScore(antrumAtrophyAggregated);
+      const olgaCorpus = getOLGAScore(data.corpus.atrophy);
       const olgaStage = calculateStage(olgaAntrum, olgaCorpus);
       
       const olgimAntrum = antrumMetaplasiaAggregated;
