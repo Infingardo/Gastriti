@@ -1204,11 +1204,11 @@
         return 'Assente';
       }
       
-      // Helper per testo grado
+      // Helper per testo grado con numero
       function gradeText(grade) {
-        if (grade === 1) return 'lieve';
-        if (grade === 2) return 'moderata';
-        if (grade === 3) return 'elevata';
+        if (grade === 1) return 'lieve (1/3)';
+        if (grade === 2) return 'moderata (2/3)';
+        if (grade === 3) return 'elevata (3/3)';
         return '';
       }
       
@@ -1698,7 +1698,7 @@ CLINICAL_NOTES.stagingValidity;
         }
       }
       
-      // Stealth mode: rimuovi emoji dal report se attivo
+      // Stealth mode: rimuovi emoji e sostituisci con testo
       if (document.getElementById('stealth_mode')?.checked) {
         report = report
           .replace(/⚠️/g, 'ATTENZIONE')
@@ -1708,9 +1708,19 @@ CLINICAL_NOTES.stagingValidity;
           .replace(/🔬/g, '')
           .replace(/ℹ️/g, 'INFO')
           .trim();
+      } else {
+        // Default: rimuovi TUTTE le emoji dal referto (non sostituire)
+        report = report
+          .replace(/⚠️|✅|⛔|📋|🔬|ℹ️|🦠|🎯|🧪|🔴|📝|⚡|🔒/g, '')
+          .trim();
       }
       
-      document.getElementById('reportText').innerText = report;
+      // Converti markdown bold (**testo**) in HTML (<strong>testo</strong>)
+      const htmlReport = report
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+      
+      document.getElementById('reportText').innerHTML = htmlReport;
       document.getElementById('resultsSection').style.display = 'block';
       document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
       
@@ -1722,13 +1732,17 @@ CLINICAL_NOTES.stagingValidity;
     // ============================================
     function copyReport() {
       const reportEl = document.getElementById('reportText');
-      if (!reportEl || !reportEl.innerText || reportEl.innerText.trim() === '') {
+      if (!reportEl || !reportEl.innerHTML || reportEl.innerHTML.trim() === '') {
         showAlert('error', '⚠️ Calcola prima il referto');
         return;
       }
       
-      // Usa innerText per preservare newline, poi converti in Windows format
-      let text = reportEl.innerText;
+      // Estrai testo da HTML: converti <br> in \n e rimuovi tags HTML
+      let text = reportEl.innerHTML
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<strong>/gi, '')
+        .replace(/<\/strong>/gi, '')
+        .replace(/<[^>]+>/g, '');
       
       // Converti \n in \r\n per compatibilità Windows/LIS
       text = text.replace(/\r?\n/g, '\r\n');
@@ -2204,48 +2218,23 @@ CLINICAL_NOTES.stagingValidity;
         el.addEventListener('change', saveFormDataDebounced);
       });
       
-      // v5.7.21: Auto-fill pattern topografici gastriti speciali
-      const gastriteSpecialeSelect = document.getElementById('gastrite_speciale');
-      if (gastriteSpecialeSelect) {
-        gastriteSpecialeSelect.addEventListener('change', function() {
-          const specialType = this.value;
-          
-          const anAtrophy = document.getElementById('an_atrophy');
-          const inAtrophy = document.getElementById('in_atrophy');
-          const coAtrophy = document.getElementById('co_atrophy');
-          
-          if (specialType === 'Autoimmune') {
+      // v5.7.21: Auto-fill gastrite autoimmune quando si seleziona pattern corpo-predominante
+      const corpusRestrictedCheckbox = document.getElementById('corpus_restricted');
+      if (corpusRestrictedCheckbox) {
+        corpusRestrictedCheckbox.addEventListener('change', function() {
+          if (this.checked) {
             // Pattern gastrite autoimmune: corpo atrofico, antro risparmiato
-            coAtrophy.value = '2';  // Moderata
-            anAtrophy.value = '0';
-            inAtrophy.value = '0';
+            document.getElementById('co_atrophy').value = '2';  // Moderata default
+            document.getElementById('an_atrophy').value = '0';
+            document.getElementById('in_atrophy').value = '0';
             
-            // Blocca antro/incisura, corpo modificabile
-            anAtrophy.disabled = true;
-            inAtrophy.disabled = true;
-            coAtrophy.disabled = false;
+            // Suggerisci anche altri parametri tipici
+            document.getElementById('co_chronic').value = '1';
+            document.getElementById('an_chronic').value = '0';
+            document.getElementById('in_chronic').value = '0';
             
-          } else if (specialType === 'Reattiva') {
-            // Gastropatia reattiva: NO atrofia per definizione
-            anAtrophy.value = '0';
-            inAtrophy.value = '0';
-            coAtrophy.value = '0';
-            
-            // Blocca TUTTI i campi atrofia
-            anAtrophy.disabled = true;
-            inAtrophy.disabled = true;
-            coAtrophy.disabled = true;
-            
-          } else {
-            // Altre gastriti: re-enable tutto
-            anAtrophy.disabled = false;
-            inAtrophy.disabled = false;
-            coAtrophy.disabled = false;
-          }
-          
-          // Rigenera referto dopo modifica
-          if (typeof validate === 'function') {
-            validate();
+            showAlert('success', '✅ Pattern autoimmune: precompilato corpo atrofico, antro risparmiato');
+            saveFormData();
           }
         });
       }
