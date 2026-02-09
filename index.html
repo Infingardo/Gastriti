@@ -1153,7 +1153,6 @@
       const maxGrade = Math.max(...miData.map(d => d.grade));
       const gradeTextStr = gradeText(maxGrade);
       
-      // FIX v5.7.21: Rinomina variabile per evitare doppia dichiarazione
       const sitesText = miData.map(d => d.site).join(', ');
       
       // Se TUTTI hanno lo stesso tipo E nessuno è mixed
@@ -1283,18 +1282,18 @@
     }
     
     function getDysplasiaTextWithSites(anDys, inDys, coDys) {
-      const sites = [];
-      if (anDys === 1) sites.push({site: 'antro', grade: 'LGD'});
-      if (anDys === 2) sites.push({site: 'antro', grade: 'HGD'});
-      if (inDys === 1) sites.push({site: 'incisura', grade: 'LGD'});
-      if (inDys === 2) sites.push({site: 'incisura', grade: 'HGD'});
-      if (coDys === 1) sites.push({site: 'corpo', grade: 'LGD'});
-      if (coDys === 2) sites.push({site: 'corpo', grade: 'HGD'});
+      const dysplasiaSites = [];
+      if (anDys === 1) dysplasiaSites.push({site: 'antro', grade: 'LGD'});
+      if (anDys === 2) dysplasiaSites.push({site: 'antro', grade: 'HGD'});
+      if (inDys === 1) dysplasiaSites.push({site: 'incisura', grade: 'LGD'});
+      if (inDys === 2) dysplasiaSites.push({site: 'incisura', grade: 'HGD'});
+      if (coDys === 1) dysplasiaSites.push({site: 'corpo', grade: 'LGD'});
+      if (coDys === 2) dysplasiaSites.push({site: 'corpo', grade: 'HGD'});
       
-      if (sites.length === 0) return 'Assente';
+      if (dysplasiaSites.length === 0) return 'Assente';
       
-      const lgdSites = sites.filter(s => s.grade === 'LGD').map(s => s.site);
-      const hgdSites = sites.filter(s => s.grade === 'HGD').map(s => s.site);
+      const lgdSites = dysplasiaSites.filter(s => s.grade === 'LGD').map(s => s.site);
+      const hgdSites = dysplasiaSites.filter(s => s.grade === 'HGD').map(s => s.site);
       
       const parts = [];
       if (lgdSites.length > 0) parts.push('LGD (' + lgdSites.join(', ') + ')');
@@ -1519,13 +1518,13 @@
       
       document.getElementById('badgesContainer').innerHTML = badgesHTML;
       
-      const sites = [
+      const tableSites = [
         ['Antro', data.antrum],
         ['Incisura', data.incisura],
         ['Corpo', data.corpus]
       ];
       
-      document.getElementById('tableBody').innerHTML = sites.map(function(item) {
+      document.getElementById('tableBody').innerHTML = tableSites.map(function(item) {
         const name = item[0];
         const d = item[1];
         return '<tr>' +
