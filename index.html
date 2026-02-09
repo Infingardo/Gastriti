@@ -24,7 +24,7 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   
-  <title>OLGA/OLGIM e H. pylori v5.7.20</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.21</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -1020,15 +1020,15 @@
     // Costanti cliniche
     const CLINICAL_NOTES = {
       topographySydney: '(Topografia definita su base infiltrato cronico - Sydney System)',
-      hgdPrevails: '⚠️ NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorità a resezione/sorveglianza stretta).',
-      compositeMethod: '⚠️ METODO COMPOSITO: Approccio non standard (max atrofia/MI per sede), utilizzato a fini di stratificazione prudenziale',
+      hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorità a resezione/sorveglianza stretta).',
+      compositeMethod: 'METODO COMPOSITO: Approccio non standard (max atrofia/MI per sede), utilizzato a fini di stratificazione prudenziale',
       stagingValidity: 'Staging valido con campionamento adeguato (≥5 biopsie, 3 sedi - MAPS III 2025)',
-      autoimmuneCorrelation: '⚠️ CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali, assetto ECL/istologia corpo.',
-      miWithoutAtrophy: '⚠️ NOTA: Metaplasia intestinale senza atrofia significativa - possibile campionamento limitato o fase post-eradicazione HP.',
+      autoimmuneCorrelation: 'CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali, assetto ECL/istologia corpo.',
+      miWithoutAtrophy: 'NOTA: Metaplasia intestinale senza atrofia significativa - possibile campionamento limitato o fase post-eradicazione HP.',
       // FIX v5.7.7: Note metodologiche OLGIM per forme speciali
-      olgaMethodAutoimmune: '⚠️ NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
-      olgaMethodChemical: '⚠️ NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
-      olgaMethodSpecial: '⚠️ NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite (meccanismo non cancerogenetico classico).'
+      olgaMethodAutoimmune: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
+      olgaMethodChemical: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
+      olgaMethodSpecial: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite (meccanismo non cancerogenetico classico).'
     };
     
     // Matrice OLGA standard (Rugge et al. Gut 2007)
@@ -1127,6 +1127,7 @@
         if (metaValue > 0) {
           miData.push({
             site: siteNames[site],
+            grade: metaValue,
             type: miType
           });
         }
@@ -1136,29 +1137,54 @@
         return 'Assente';
       }
       
+      // Helper per testo grado
+      function gradeText(grade) {
+        if (grade === 1) return 'lieve';
+        if (grade === 2) return 'moderata';
+        if (grade === 3) return 'elevata';
+        return '';
+      }
+      
       const types = miData.map(d => d.type).filter(t => t !== '');
       const allSame = types.length > 0 && types.every(t => t === types[0]);
       const hasMixed = types.includes('mixed');
       
+      // Calcola grado massimo
+      const maxGrade = Math.max(...miData.map(d => d.grade));
+      const gradeTextStr = gradeText(maxGrade);
+      
+      const sites = miData.map(d => d.site).join(', ');
+      
       // Se TUTTI hanno lo stesso tipo E nessuno è mixed
       if (allSame && !hasMixed && types[0] === 'complete') {
-        return 'Presente, completa (' + miData.map(d => d.site).join(', ') + ')';
+        if (gradeTextStr) {
+          return 'Presente, ' + gradeTextStr + ' e completa (' + sites + ')';
+        }
+        return 'Presente, completa (' + sites + ')';
       } else if (allSame && !hasMixed && types[0] === 'incomplete') {
-        return 'Presente, incompleta (' + miData.map(d => d.site).join(', ') + ')';
+        if (gradeTextStr) {
+          return 'Presente, ' + gradeTextStr + ' e incompleta (' + sites + ')';
+        }
+        return 'Presente, incompleta (' + sites + ')';
       } else if (allSame && types[0] === 'mixed') {
-        // Tutti hanno mixed
-        return 'Presente, mista (' + miData.map(d => d.site).join(', ') + ')';
+        if (gradeTextStr) {
+          return 'Presente, ' + gradeTextStr + ' e mista (' + sites + ')';
+        }
+        return 'Presente, mista (' + sites + ')';
       } else if (types.length > 1 || hasMixed) {
         // Tipi diversi O almeno una sede con mixed → mostra dettaglio per sede
         const details = miData.map(d => {
           const typeText = d.type === 'complete' ? 'completa' : 
                           d.type === 'incomplete' ? 'incompleta' : 
                           d.type === 'mixed' ? 'mista' : 'n.d.';
-          return d.site + ': ' + typeText;
+          return d.site + ': ' + gradeText(d.grade) + ' e ' + typeText;
         }).join(', ');
         return 'Presente, pattern misto (' + details + ')';
       } else {
-        return 'Presente (' + miData.map(d => d.site).join(', ') + ')';
+        if (gradeTextStr) {
+          return 'Presente, ' + gradeTextStr + ' (' + sites + ')';
+        }
+        return 'Presente (' + sites + ')';
       }
     }
     
@@ -1168,16 +1194,35 @@
       const inAtrophy = getValue('in_atrophy') || 0;
       const coAtrophy = getValue('co_atrophy') || 0;
       
-      const sites = [];
-      if (anAtrophy > 0) sites.push('antro');
-      if (inAtrophy > 0) sites.push('incisura');
-      if (coAtrophy > 0) sites.push('corpo');
+      const atrophyData = [];
+      if (anAtrophy > 0) atrophyData.push({site: 'antro', grade: anAtrophy});
+      if (inAtrophy > 0) atrophyData.push({site: 'incisura', grade: inAtrophy});
+      if (coAtrophy > 0) atrophyData.push({site: 'corpo', grade: coAtrophy});
       
-      if (sites.length === 0) {
+      if (atrophyData.length === 0) {
         return 'Assente';
       }
       
-      return 'Presente (' + sites.join(', ') + ')';
+      // Helper per testo grado
+      function gradeText(grade) {
+        if (grade === 1) return 'lieve';
+        if (grade === 2) return 'moderata';
+        if (grade === 3) return 'elevata';
+        return '';
+      }
+      
+      // Tutti con stesso grado?
+      const grades = atrophyData.map(d => d.grade);
+      const allSame = grades.every(g => g === grades[0]);
+      
+      if (allSame) {
+        const gText = gradeText(grades[0]);
+        return 'Presente, ' + gText + ' (' + atrophyData.map(d => d.site).join(', ') + ')';
+      } else {
+        // Gradi diversi - pattern misto
+        const details = atrophyData.map(d => d.site + ': ' + gradeText(d.grade)).join(', ');
+        return 'Presente, pattern misto (' + details + ')';
+      }
     }
     
     function validate() {
@@ -1526,22 +1571,22 @@
 'METAPLASIA INTESTINALE: Assente\n' +
 'H. PYLORI: Assente\n' +
 'DISPLASIA: Assente\n\n' +
-'OLGA: stadio 0\n' +
-'OLGIM: stadio 0' + freeNotesSection;
+'**OLGA**: stadio 0\n' +
+'**OLGIM**: stadio 0' + freeNotesSection;
         
         } else if (hasOnlySpecialForms) {
           let specialDiagnosis = '';
           let olgaContextNote = '';
           
           if (hasChemical) {
-            diagnosticHeader = 'GASTROPATIA REATTIVA (chimica/farmacologica)';
+            diagnosticHeader = 'Gastropatia reattiva (chimica/farmacologica)';
             const fovHyp = specialForms.chemical.foveolarHyperplasia;
             specialDiagnosis = 'Mucosa gastrica priva di infiltrato flogistico cronico' + (fovHyp > 0 ? ', con iperplasia foveolare ' + gradeText(fovHyp).toLowerCase() : '') + (specialForms.chemical.laminaEdema ? ', edema lamina propria' : '') + (specialForms.chemical.smoothMuscleProlif ? ', proliferazione muscolo liscio' : '') + '.\n\n' +
 'Quadro istologico compatibile con GASTROPATIA REATTIVA/CHIMICA.\n' +
 'Pattern suggestivo per reflusso biliare, FANS o alcol.';
             olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
           } else if (hasAutoimmune) {
-            diagnosticHeader = 'GASTRITE CRONICA AUTOIMMUNE';
+            diagnosticHeader = 'Gastrite cronica autoimmune';
             specialDiagnosis = 'Mucosa gastrica ' + (specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') + ' priva di infiltrato flogistico cronico significativo.\n' +
 (specialForms.autoimmune.pseudopyloricMeta ? 'Metaplasia pseudopilorica presente. ' : '') + (specialForms.autoimmune.eclHyperplasia ? 'Iperplasia cellule ECL. ' : '') + '\n' +
 'Quadro istologico compatibile con GASTRITE AUTOIMMUNE (fase avanzata/esito).\n\n' +
@@ -1551,20 +1596,20 @@ CLINICAL_NOTES.autoimmuneCorrelation;
             const ielsGrade = specialForms.lymphocytic.ielsGrade;
             // FIX v5.7.7: Wording ultra-prudente per IEL borderline
             if (ielsGrade === 1) {
-              diagnosticHeader = 'INCREMENTO BORDERLINE LINFOCITI INTRAEPITELIALI';
+              diagnosticHeader = 'Incremento borderline linfociti intraepiteliali';
               specialDiagnosis = 'Mucosa gastrica con incremento borderline dei linfociti intraepiteliali (15-25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
 'Quadro suggestivo ma NON diagnostico per gastrite linfocitica.\n' +
 'Correlazione clinica ed endoscopica raccomandata.\n\n' +
 'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), fase precoce gastrite linfocitica, variante normale.';
             } else {
-              diagnosticHeader = 'GASTRITE LINFOCITICA';
+              diagnosticHeader = 'Gastrite linfocitica';
               specialDiagnosis = 'Mucosa gastrica con linfociti intraepiteliali francamente aumentati (>25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
 'GASTRITE LINFOCITICA.\n\n' +
 'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), malattia di Ménétrier.';
             }
             olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
           } else if (hasEosinophilic) {
-            diagnosticHeader = 'GASTRITE EOSINOFILA';
+            diagnosticHeader = 'Gastrite eosinofila';
             const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '≥30/HPF (soglia critica)' : 
                           specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF' : '10-19/HPF';
             specialDiagnosis = 'Mucosa gastrica con marcato incremento eosinofili (' + eoText + '), in assenza di significativo infiltrato flogistico cronico.\n\n' +
@@ -1578,9 +1623,9 @@ CLINICAL_NOTES.autoimmuneCorrelation;
 'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
 'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
 'DISPLASIA: Assente\n\n' +
-'OLGA: stadio ' + olgaStage + '\n' +
-'OLGIM: stadio ' + olgimStage + olgaContextNote + '\n\n' +
-'⚠️ NOTA INTERPRETATIVA:\n' +
+'**OLGA**: stadio ' + olgaStage + '\n' +
+'**OLGIM**: stadio ' + olgimStage + olgaContextNote + '\n\n' +
+'NOTA INTERPRETATIVA:\n' +
 'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
 'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
         
@@ -1589,11 +1634,11 @@ CLINICAL_NOTES.autoimmuneCorrelation;
           // FIX v5.7.7: Intestazione differenziata per gastrite cronica
           // ============================================
           if (hpMax > 0) {
-            diagnosticHeader = 'GASTRITE CRONICA HP-ASSOCIATA';
+            diagnosticHeader = 'Gastrite cronica HP-associata';
           } else if (hasAutoimmune && maxAntrumChronic === 0) {
-            diagnosticHeader = 'GASTRITE CRONICA AUTOIMMUNE';
+            diagnosticHeader = 'Gastrite cronica autoimmune';
           } else {
-            diagnosticHeader = 'GASTRITE CRONICA';
+            diagnosticHeader = 'Gastrite cronica';
           }
           
           diagnosticHeader += (maxActivity > 0 ? ' (attiva)' : ' (quiescente)');
@@ -1622,7 +1667,7 @@ CLINICAL_NOTES.autoimmuneCorrelation;
           
           const miNote = hasMetaplasiaWithoutAtrophy ? '\n' + CLINICAL_NOTES.miWithoutAtrophy : '';
           
-          const discordanceNote = hasDiscordance ? '\n⚠️ DISCORDANZA: OLGA e OLGIM divergono ≥2 stadi - considerare stadio più alto per sorveglianza' : '';
+          const discordanceNote = hasDiscordance ? '\nDISCORDANZA: OLGA e OLGIM divergono ≥2 stadi - considerare stadio più alto per sorveglianza' : '';
           
           // FIX v5.7.7: OLGIM relativizzato per forme speciali sovrapposte
           let olgaContextNote = '';
@@ -1641,11 +1686,11 @@ CLINICAL_NOTES.autoimmuneCorrelation;
 'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
 'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + '\n' +
 'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) + specialFormsNote + '\n\n' +
-'OLGA: stadio ' + olgaStage + '\n' +
-'OLGIM: stadio ' + olgimStage + discordanceNote + olgaContextNote + hgdNote + '\n\n' +
-'⚠️ NOTA INTERPRETATIVA:\n' +
+'**OLGA**: stadio ' + olgaStage + '\n' +
+'**OLGIM**: stadio ' + olgimStage + discordanceNote + olgaContextNote + hgdNote + '\n\n' +
+'NOTA INTERPRETATIVA:\n' +
 (document.getElementById('inadequate_sampling')?.checked ? 
-  '⛔ CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.\n' : '') +
+  'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.\n' : '') +
 'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
 'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
 CLINICAL_NOTES.stagingValidity;
@@ -2157,6 +2202,52 @@ CLINICAL_NOTES.stagingValidity;
       document.querySelectorAll('select, input, textarea').forEach(function(el) {
         el.addEventListener('change', saveFormDataDebounced);
       });
+      
+      // v5.7.21: Auto-fill pattern topografici gastriti speciali
+      const gastriteSpecialeSelect = document.getElementById('gastrite_speciale');
+      if (gastriteSpecialeSelect) {
+        gastriteSpecialeSelect.addEventListener('change', function() {
+          const specialType = this.value;
+          
+          const anAtrophy = document.getElementById('an_atrophy');
+          const inAtrophy = document.getElementById('in_atrophy');
+          const coAtrophy = document.getElementById('co_atrophy');
+          
+          if (specialType === 'Autoimmune') {
+            // Pattern gastrite autoimmune: corpo atrofico, antro risparmiato
+            coAtrophy.value = '2';  // Moderata
+            anAtrophy.value = '0';
+            inAtrophy.value = '0';
+            
+            // Blocca antro/incisura, corpo modificabile
+            anAtrophy.disabled = true;
+            inAtrophy.disabled = true;
+            coAtrophy.disabled = false;
+            
+          } else if (specialType === 'Reattiva') {
+            // Gastropatia reattiva: NO atrofia per definizione
+            anAtrophy.value = '0';
+            inAtrophy.value = '0';
+            coAtrophy.value = '0';
+            
+            // Blocca TUTTI i campi atrofia
+            anAtrophy.disabled = true;
+            inAtrophy.disabled = true;
+            coAtrophy.disabled = true;
+            
+          } else {
+            // Altre gastriti: re-enable tutto
+            anAtrophy.disabled = false;
+            inAtrophy.disabled = false;
+            coAtrophy.disabled = false;
+          }
+          
+          // Rigenera referto dopo modifica
+          if (typeof validate === 'function') {
+            validate();
+          }
+        });
+      }
     });
   </script>
 </body>

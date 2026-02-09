@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.18 "ChatGPT Contentino Edition"  
+**Versione:** 5.7.21 "Formattazione Referto + Auto-fill Pattern"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,6 +300,242 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
+
+### v5.7.21 "Formattazione Referto + Auto-fill Pattern" (2026-02-09) 🎨
+
+**MIGLIORAMENTI FORMATTAZIONE REFERTO**
+
+**Intestazioni diagnostiche più professionali:**
+- Tutte le intestazioni ora usano solo la prima lettera maiuscola
+  - `GASTRITE CRONICA HP-ASSOCIATA` → `Gastrite cronica HP-associata`
+  - `GASTROPATIA REATTIVA` → `Gastropatia reattiva`
+  - `GASTRITE LINFOCITICA` → `Gastrite linfocitica`
+  - Etc.
+
+**OLGA/OLGIM evidenziati:**
+- Gli acronimi OLGA e OLGIM ora appaiono in **grassetto** nel referto
+  - `OLGA: stadio II` → `**OLGA**: stadio II`
+  - `OLGIM: stadio I` → `**OLGIM**: stadio I`
+
+**Grading esplicito nel referto:**
+- **Atrofia ghiandolare:** ora include il grado
+  - Prima: `ATROFIA GHIANDOLARE: Presente (antro, corpo)`
+  - Dopo: `ATROFIA GHIANDOLARE: Presente, moderata (antro, corpo)`
+  - Pattern misti: `Presente, pattern misto (antro: lieve, corpo: moderata)`
+- **Metaplasia intestinale:** grado + tipo combinati
+  - Prima: `METAPLASIA INTESTINALE: Presente, completa (antro)`
+  - Dopo: `METAPLASIA INTESTINALE: Presente, moderata e completa (antro)`
+
+**Emoji rimosse dal referto copiabile:**
+- Tutte le emoji rimosse per compatibilità LIS
+  - `⚠️ NOTA INTERPRETATIVA:` → `NOTA INTERPRETATIVA:`
+  - `🔴 ATTENZIONE:` → `ATTENZIONE:`
+  - `⚡ URGENZA:` → `URGENZA:`
+  - `📋 NOTA:` → `NOTA:`
+- Emoji rimangono nell'interfaccia utente (bottoni, labels)
+
+**AUTO-FILL PATTERN TOPOGRAFICI**
+
+**Gastrite autoimmune:**
+- Selezione automatica del pattern topografico tipico
+  - Corpo: atrofia grado 2 (modificabile)
+  - Antro: atrofia 0 (bloccato)
+  - Incisura: atrofia 0 (bloccato)
+- Razionale: Pattern tipo A con risparmio antrale patognomonico
+
+**Gastropatia reattiva:**
+- Blocco automatico dell'atrofia
+  - Tutti i campi atrofia = 0 (bloccati)
+- Razionale: Per definizione la gastropatia chimica NON ha atrofia
+
+**MODIFICHE TECNICHE:**
+- Funzioni `getAtrophyText()` e `getMITypeText()` riscritte
+- Nuovo listener `gastrite_speciale` per auto-fill
+- service-worker.js: bump v5.7.21
+- Compatibilità: retro-compatibile con v5.7.20
+
+---
+
+### v5.7.20 "Matrice OLGA Rugge Fix" (2026-01-27) 🚨 CRITICAL BUG FIX #2
+
+**SECONDO BUG CRITICO: Matrice OLGA Non Conforme a Rugge Standard**
+
+**PROBLEMA IDENTIFICATO:**
+- Dopo fix v5.7.19, verifica della matrice OLGA ha rivelato **3 celle sbagliate**
+- Matrice nel tool NON corrispondeva alla matrice Rugge standard (Gut 2008)
+- Errori nelle celle di media gravità (antrum 1-3, corpus 0-1)
+
+**ERRORI NELLA MATRICE v5.7.19:**
+
+| Cella [Antrum, Corpus] | Codice v5.7.19 | Rugge Standard | Errore |
+|------------------------|----------------|----------------|--------|
+| [1, 1] | **II** | **I** | -1 stadio (sovrastima) |
+| [2, 1] | **III** | **II** | -1 stadio (sovrastima) |
+| [3, 0] | **II** | **III** | +1 stadio (sottostima) |
+
+**MATRICE SBAGLIATA (v5.7.19):**
+```
+        Corpus →  0    1    2    3
+Antrum ↓
+    0            0    I    II   III
+    1            I    II❌  III  III
+    2            II   III❌ IV   IV
+    3            II❌  III  IV   IV
+```
+
+**MATRICE CORRETTA (v5.7.20 - Rugge Standard):**
+```
+        Corpus →  0    1    2    3
+Antrum ↓
+    0            0    I    II   III
+    1            I    I✅   II   III
+    2            II   II✅  III  IV
+    3            III✅ III  IV   IV
+```
+
+**FIX APPLICATO:**
+```javascript
+const OLGA_MATRIX = [
+  ['0',   'I',   'II',  'III'],  // Antrum 0
+  ['I',   'I',   'II',  'III'],  // Antrum 1 (fix: [1,1] era II → I)
+  ['II',  'II',  'III', 'IV' ],  // Antrum 2 (fix: [2,1] era III → II)
+  ['III', 'III', 'IV',  'IV' ]   // Antrum 3 (fix: [3,0] era II → III)
+];
+```
+
+**CASI CLINICI AFFETTI:**
+
+**Caso 1: Antrum lieve, Corpus lieve [1,1]**
+```
+INPUT: Atrofia antrum=1, corpus=1
+v5.7.19 (SBAGLIATO): OLGA stadio II (sovrastima) ❌
+v5.7.20 (CORRETTO):  OLGA stadio I ✅
+```
+
+**Caso 2: Antrum moderato, Corpus lieve [2,1]**
+```
+INPUT: Atrofia antrum=2, corpus=1
+v5.7.19 (SBAGLIATO): OLGA stadio III (sovrastima, alto rischio!) ❌
+v5.7.20 (CORRETTO):  OLGA stadio II (basso rischio) ✅
+```
+
+**Caso 3: Antrum severo, Corpus assente [3,0]**
+```
+INPUT: Atrofia antrum=3, corpus=0 (gastrite antrale severa)
+v5.7.19 (SBAGLIATO): OLGA stadio II (sottostima) ❌
+v5.7.20 (CORRETTO):  OLGA stadio III (alto rischio) ✅
+```
+
+**IMPATTO CLINICO:**
+- **CRITICO per Caso 2:** Stadio III (alto rischio) → Stadio II (basso rischio)
+  - Follow-up inadeguato per pazienti alto rischio!
+  - Sorveglianza ogni 3 anni invece di ogni anno
+- **MODERATO per Caso 1:** Sovrastima rischio basso → basso
+- **MODERATO per Caso 3:** Sottostima rischio alto (raro pattern)
+
+**RIFERIMENTO BIBLIOGRAFICO:**
+- Rugge M, et al. "OLGA staging for gastritis: a tutorial."  
+  *Gut* 2008;57(10):1360-1365. doi:10.1136/gut.2007.142760
+- **Figura 2, Tabella 1:** Matrice OLGA standard
+
+**VALIDAZIONE POST-FIX:**
+- ✅ Tutte le 16 celle ora conformi a Rugge 2008
+- ✅ Stadio 0 corretto (fix v5.7.19)
+- ✅ Matrice OLGIM invariata (già corretta)
+- ✅ Aggregazione antro+incisura invariata (corretta)
+
+**Files Modificati:**
+- index.html: OLGA_MATRIX (4 righe)
+- service-worker.js: cache v5.7.20
+- README.md: changelog completo
+
+**PRIORITÀ:** DEPLOY URGENTISSIMO 🚨🚨
+
+**NOTA:** Questo bug era presente dalla v1.0, passato inosservato per mesi.  
+Scoperto durante verifica post-fix v5.7.19. **Sempre verificare tutto!**
+
+---
+
+### v5.7.19 "OLGA Stadio 0 Hotfix" (2026-01-27) 🚨 CRITICAL BUG FIX
+
+**BUG CRITICO: OLGA Stadio I invece di Stadio 0**
+
+**PROBLEMA IDENTIFICATO:**
+- Caso con atrofia=0 ovunque, metaplasia intestinale antro=1
+- OLGA calcolato erroneamente come **stadio I** invece di **stadio 0**
+- OLGIM corretto (stadio I)
+
+**ROOT CAUSE:**
+```javascript
+// CODICE SBAGLIATO (v5.7.18)
+function getOLGAScore(atrophy, metaplasia) {
+  return Math.max(atrophy, metaplasia);  // ← BUG!
+}
+
+// Chiamato con:
+const olgaAntrum = getOLGAScore(0, 1);  // Restituiva 1 invece di 0!
+```
+
+**SPIEGAZIONE BUG:**
+- `Math.max(atrophy, metaplasia)` prende il MASSIMO tra i due valori
+- Con atrofia=0, metaplasia=1 → restituiva 1
+- **OLGA deve basarsi SOLO su atrofia, NON su metaplasia!**
+
+**FIX APPLICATO:**
+```javascript
+// CODICE CORRETTO (v5.7.19)
+function getOLGAScore(atrophy) {
+  // OLGA si basa SOLO su atrofia ghiandolare (non metaplasia)
+  return atrophy;
+}
+
+// Chiamate corrette:
+const olgaAntrum = getOLGAScore(antrumAtrophyAggregated);  // Passa solo atrofia
+const olgaCorpus = getOLGAScore(data.corpus.atrophy);      // Passa solo atrofia
+```
+
+**SISTEMI CORRETTI:**
+
+| Sistema | Parametro | Logica |
+|---------|-----------|--------|
+| **OLGA** | SOLO atrofia | `getOLGAScore(atrophy)` |
+| **OLGIM** | SOLO metaplasia | Usa direttamente `metaplasia` |
+
+**CASO TEST:**
+```
+INPUT:
+- Atrofia: antro=0, incisura=0, corpo=0
+- Metaplasia intestinale: antro=1, incisura=0, corpo=0
+- H. pylori: assente
+
+RISULTATO v5.7.18 (SBAGLIATO):
+❌ OLGA: stadio I
+✅ OLGIM: stadio I
+
+RISULTATO v5.7.19 (CORRETTO):
+✅ OLGA: stadio 0  ← FIXED!
+✅ OLGIM: stadio I
+```
+
+**IMPATTO CLINICO:**
+- **CRITICO:** Staging OLGA errato portava a sovrastima del rischio
+- **PREVALENZA:** Tutti i casi con MI senza atrofia significativa
+- **PATTERN TIPICO:** Post-eradicazione HP, burned-out, campionamento limitato
+
+**VALIDAZIONE:**
+- ✅ Atrofia 0 ovunque → OLGA stadio 0 (corretto)
+- ✅ MI presente senza atrofia → OLGIM calcola correttamente
+- ✅ Matrice Rugge rispettata per entrambi i sistemi
+- ✅ Alert "MI senza atrofia" ancora presente (comportamento atteso)
+
+**Files Modificati:**
+- index.html: funzione getOLGAScore + 2 chiamate (3 righe totali)
+- service-worker.js: cache v5.7.19
+- README.md: changelog critico
+
+**PRIORITÀ:** DEPLOY IMMEDIATO CONSIGLIATO 🚨
+
+---
 
 ### v5.7.18 "ChatGPT Contentino Edition" (2026-01-27) 🎁
 
