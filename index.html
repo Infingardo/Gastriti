@@ -1117,33 +1117,77 @@
     }
     
     function getMITypeText() {
-      const sites = ['an', 'in', 'co'];
-      const siteNames = { 'an': 'antro', 'in': 'incisura', 'co': 'corpo' };
-      const miData = [];
-      
-      sites.forEach(site => {
-        const metaValue = getValue(site + '_metaplasia') || 0;
-        const miType = getStringValue(site + '_mi_type');
-        if (metaValue > 0) {
-          miData.push({
-            site: siteNames[site],
-            grade: metaValue,
-            type: miType
-          });
-        }
+     function getMITypeText() {
+  const sites = ['an', 'in', 'co'];
+  const siteNames = { 'an': 'antro', 'in': 'incisura', 'co': 'corpo' };
+  const miData = [];
+  
+  sites.forEach(site => {
+    const metaValue = getValue(site + '_metaplasia') || 0;
+    const miType = getStringValue(site + '_mi_type');
+    if (metaValue > 0) {
+      miData.push({
+        site: siteNames[site],
+        grade: metaValue,
+        type: miType
       });
-      
-      if (miData.length === 0) {
-        return 'Assente';
-      }
-      
-      // Helper per testo grado
-      function gradeText(grade) {
-        if (grade === 1) return 'lieve';
-        if (grade === 2) return 'moderata';
-        if (grade === 3) return 'elevata';
-        return '';
-      }
+    }
+  });
+  
+  if (miData.length === 0) {
+    return 'Assente';
+  }
+  
+  // Helper per testo grado
+  function gradeText(grade) {
+    if (grade === 1) return 'lieve';
+    if (grade === 2) return 'moderata';
+    if (grade === 3) return 'elevata';
+    return '';
+  }
+  
+  const types = miData.map(d => d.type).filter(t => t !== '');
+  const allSame = types.length > 0 && types.every(t => t === types[0]);
+  const hasMixed = types.includes('mixed');
+  
+  // Calcola grado massimo
+  const maxGrade = Math.max(...miData.map(d => d.grade));
+  const gradeTextStr = gradeText(maxGrade);
+  
+  const sitesText = miData.map(d => d.site).join(', ');  // ← RINOMINATO in sitesText
+  
+  // Se TUTTI hanno lo stesso tipo E nessuno è mixed
+  if (allSame && !hasMixed && types[0] === 'complete') {
+    if (gradeTextStr) {
+      return 'Presente, ' + gradeTextStr + ' e completa (' + sitesText + ')';
+    }
+    return 'Presente, completa (' + sitesText + ')';
+  } else if (allSame && !hasMixed && types[0] === 'incomplete') {
+    if (gradeTextStr) {
+      return 'Presente, ' + gradeTextStr + ' e incompleta (' + sitesText + ')';
+    }
+    return 'Presente, incompleta (' + sitesText + ')';
+  } else if (allSame && types[0] === 'mixed') {
+    if (gradeTextStr) {
+      return 'Presente, ' + gradeTextStr + ' e mista (' + sitesText + ')';
+    }
+    return 'Presente, mista (' + sitesText + ')';
+  } else if (types.length > 1 || hasMixed) {
+    // Tipi diversi O almeno una sede con mixed → mostra dettaglio per sede
+    const details = miData.map(d => {
+      const typeText = d.type === 'complete' ? 'completa' : 
+                      d.type === 'incomplete' ? 'incompleta' : 
+                      d.type === 'mixed' ? 'mista' : 'n.d.';
+      return d.site + ': ' + gradeText(d.grade) + ' e ' + typeText;
+    }).join(', ');
+    return 'Presente, pattern misto (' + details + ')';
+  } else {
+    if (gradeTextStr) {
+      return 'Presente, ' + gradeTextStr + ' (' + sitesText + ')';  // ← sitesText
+    }
+    return 'Presente (' + sitesText + ')';  // ← sitesText
+  }
+}
       
       const types = miData.map(d => d.type).filter(t => t !== '');
       const allSame = types.length > 0 && types.every(t => t === types[0]);
