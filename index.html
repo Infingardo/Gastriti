@@ -1153,7 +1153,7 @@
       const maxGrade = Math.max(...miData.map(d => d.grade));
       const gradeTextStr = gradeText(maxGrade);
       
-      const sites = miData.map(d => d.site).join(', ');
+      const sitesText = miData.map(d => d.site).join(', ');
       
       // Se TUTTI hanno lo stesso tipo E nessuno è mixed
       if (allSame && !hasMixed && types[0] === 'complete') {
