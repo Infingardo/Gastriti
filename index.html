@@ -1158,19 +1158,19 @@
       // Se TUTTI hanno lo stesso tipo E nessuno è mixed
       if (allSame && !hasMixed && types[0] === 'complete') {
         if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' e completa (' + sites + ')';
+          return 'Presente, ' + gradeTextStr + ' e completa (' + sitesText + ')';
         }
-        return 'Presente, completa (' + sites + ')';
+        return 'Presente, completa (' + sitesText + ')';
       } else if (allSame && !hasMixed && types[0] === 'incomplete') {
         if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' e incompleta (' + sites + ')';
+          return 'Presente, ' + gradeTextStr + ' e incompleta (' + sitesText + ')';
         }
-        return 'Presente, incompleta (' + sites + ')';
+        return 'Presente, incompleta (' + sitesText + ')';
       } else if (allSame && types[0] === 'mixed') {
         if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' e mista (' + sites + ')';
+          return 'Presente, ' + gradeTextStr + ' e mista (' + sitesText + ')';
         }
-        return 'Presente, mista (' + sites + ')';
+        return 'Presente, mista (' + sitesText + ')';
       } else if (types.length > 1 || hasMixed) {
         // Tipi diversi O almeno una sede con mixed → mostra dettaglio per sede
         const details = miData.map(d => {
