@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.22</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.23</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -265,7 +265,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.22</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.23</div>
     </div>
   </header>
 
@@ -545,7 +545,7 @@
               <option value="1">1 - Borderline (15-25/100 cellule epiteliali)</option>
               <option value="2">2 - Francamente aumentati (&gt;25/100 cellule epiteliali)</option>
             </select>
-            <small>Soglia diagnostica: >=20-25/100. Borderline richiede correlazione clinica.</small>
+            <small>Soglia diagnostica variabile in letteratura (20-25/100). Borderline richiede correlazione clinica.</small>
           </div>
           <div style="font-size: 0.85rem; color: #718096;"><strong>Associazioni:</strong> Gastrite variolariforme, malattia celiaca (20-40%), Menetrier's disease</div>
         </div>
@@ -605,6 +605,26 @@
           <div class="biblio-item">- Capelle LG et al. Gastrointest Endosc 2010;71(7):1150-8. <a href="https://pubmed.ncbi.nlm.nih.gov/20381801/" target="_blank">PMID:20381801</a></div>
           <div class="biblio-item">- Dinis-Ribeiro M et al. MAPS III. Endoscopy 2025. <a href="https://doi.org/10.1055/a-2529-5025" target="_blank">DOI:10.1055/a-2529-5025</a></div>
         </div>
+      </div>
+    </div>
+    <!-- TAB AUDIT INTERNO -->
+    <div class="card" style="border: 2px solid #6366f1; background: #f5f3ff; margin-top: 1rem;">
+      <h2 style="color: #4338ca; border-bottom-color: #a5b4fc; cursor: pointer; user-select: none;" onclick="toggleAudit()">
+        Audit interno / Export dati
+        <span id="auditToggle" style="float: right; font-size: 1.2rem;">v</span>
+      </h2>
+      <div id="auditContent" style="display: none; margin-top: 1rem;">
+        <div class="info-panel" style="background: #ede9fe; border-left-color: #6366f1;">
+          <strong>Modalita audit:</strong> I dati di ogni referto calcolato vengono accumulati localmente.
+          Utile per sorveglianza epidemiologica interna di reparto.
+          I dati restano nel browser (localStorage) e non vengono inviati a nessun server.
+        </div>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0;">
+          <button class="secondary" style="background: #6366f1; color: white;" onclick="exportAuditJSON()">Export JSON (tutti i casi)</button>
+          <button class="secondary" onclick="showAuditStats()">Statistiche reparto</button>
+          <button class="secondary" style="background: #fee2e2; color: #991b1b;" onclick="clearAuditData()">Cancella archivio audit</button>
+        </div>
+        <div id="auditStats" style="display: none; margin-top: 1rem;"></div>
       </div>
     </div>
   </main>
@@ -926,6 +946,8 @@
       if ((anDysplasia === 1 || inDysplasia === 1 || coDysplasia === 1) && maxActivity > 0)
         showAlert('warning', 'LGD in contesto infiammatorio attivo: considerare regressione post-eradicazione.');
 
+      const incisuraNote = getIncisuraNote(data.incisura.atrophy, data.incisura.metaplasia);
+
       const hasMetaplasiaWithoutAtrophy =
         (data.antrum.metaplasia > 0 && data.antrum.atrophy === 0) ||
         (data.corpus.metaplasia > 0 && data.corpus.atrophy === 0) ||
@@ -960,6 +982,15 @@
       const hasMetaplasia = antrumMetaplasiaAggregated > 0 || data.corpus.metaplasia > 0;
       const maxAntrumChronic = Math.max(data.antrum.chronic, data.incisura.chronic);
 
+      // NET tipo I: corpo atrofico >= 2 + ECL iperplasia + HP negativo
+      const netRisk = hasAutoimmune && specialForms.autoimmune.eclHyperplasia &&
+                      data.corpus.atrophy >= 2 && hpMax === 0;
+
+      // Salva in audit log
+      saveAuditEntry(olgaStage, olgimStage, hpMax, hasDiscordance, hasAutoimmune, netRisk,
+                     antrumAtrophyAggregated, data.corpus.atrophy,
+                     antrumMetaplasiaAggregated, data.corpus.metaplasia, dysplasiaMax);
+
       // BADGES
       let badgesHTML = '';
       const addBadge = (cls, color, text) =>
@@ -971,6 +1002,9 @@
       if (hasDiscordance) addBadge('warning', '#ed8936', 'Discordanza OLGA/OLGIM');
       if (hasChemical)    addBadge('warning', '#f59e0b', 'Gastropatia chimica/reattiva');
       if (hasAutoimmune)  addBadge('info', '#8b5cf6', 'Pattern autoimmune');
+
+      // NET tipo I: gia calcolato sopra
+      if (netRisk) addBadge('warning', '#dc2626', 'Rischio NET tipo I - sorveglianza ECL');
       if (hasLymphocytic) {
         const g = specialForms.lymphocytic.ielsGrade;
         addBadge(g === 1 ? 'info' : 'dysplasia', g === 1 ? '#3b82f6' : '#6366f1', g === 1 ? 'IEL aumentati (borderline)' : 'Gastrite linfocitica');
@@ -1036,6 +1070,7 @@
             diagnosticHeader = 'Incremento borderline linfociti intraepiteliali';
             specialDiagnosis = 'Mucosa gastrica con incremento borderline dei linfociti intraepiteliali (15-25/100 cellule epiteliali).\n\n' +
               'Quadro suggestivo ma NON diagnostico per gastrite linfocitica.\n' +
+              'Nota: la soglia diagnostica e variabile in letteratura (20-25/100 cellule epiteliali).\n' +
               'Correlazione clinica ed endoscopica raccomandata.\n\n' +
               'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), variante normale.';
           } else {
@@ -1044,15 +1079,23 @@
           }
           olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
         } else if (hasEosinophilic) {
-          diagnosticHeader = 'Gastrite eosinofila';
-          const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '>=30/HPF (soglia critica)' : specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF' : '10-19/HPF';
-          specialDiagnosis = 'Mucosa gastrica con marcato incremento eosinofili (' + eoText + ').\n\nQuadro istologico compatibile con GASTRITE EOSINOFILA.\nDD: parassitosi (Anisakis), farmaci, IBD, vasculiti.';
+          diagnosticHeader = 'Incremento eosinofilico significativo - gastrite eosinofila';
+          const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '>=30/HPF' : specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF' : '10-19/HPF';
+          specialDiagnosis = 'Mucosa gastrica con marcato incremento degli eosinofili (' + eoText + ').\n\n' +
+            'Quadro compatibile con incremento eosinofilico significativo della mucosa gastrica.\n' +
+            'Per diagnosi definitiva di gastrite eosinofila correlare con:\n' +
+            '- distribuzione (diffusa vs patchy)\n' +
+            '- coinvolgimento degli strati profondi\n' +
+            '- presenza di microascessi eosinofilici\n' +
+            '- contesto clinico (atopia, ipereosinofilia periferica)\n\n' +
+            'DD: parassitosi (Anisakis), farmaci (PPI, FANS), IBD, vasculiti, linfoma.';
           olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
         }
 
         report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
           'H. PYLORI: ' + hpStatus + '\n' +
           'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
+          (incisuraNote ? incisuraNote + '\n' : '') +
           'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
           'DISPLASIA: Assente\n\n' +
           '**OLGA**: stadio ' + olgaStage + '\n' +
@@ -1097,14 +1140,17 @@
         else if (hasChemical) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
         else if (hasLymphocytic || hasEosinophilic) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
 
+        const netNote = netRisk ? '\n\nALLERT CLINICO:\nPattern compatibile con gastrite autoimmune con iperplasia ECL.\nRischio NET gastrico tipo I (ben differenziato, HP negativo, ipergastrinemia da atrofia corpale).\nIndicata sorveglianza cromogranina A + gastrinemia + endoscopia con biopsie ECL.' : '';
+
         report = diagnosticHeader + '\n\n' +
           'H. PYLORI: ' + hpStatus + '\n' +
           'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
+          (incisuraNote ? incisuraNote + '\n' : '') +
           'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + '\n' +
           'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) +
           specialFormsNote + '\n\n' +
           '**OLGA**: stadio ' + olgaStage + '\n' +
-          '**OLGIM**: stadio ' + olgimStage + discordNote + olgaContextNote + hgdNote + '\n\n' +
+          '**OLGIM**: stadio ' + olgimStage + discordNote + olgaContextNote + hgdNote + netNote + '\n\n' +
           'NOTA INTERPRETATIVA:\n' +
           (document.getElementById('inadequate_sampling')?.checked ?
             'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilita limitata.\n' : '') +
@@ -1378,6 +1424,128 @@
         }
       });
     });
+    // ============================================================
+    // INCISURA NEL REFERTO: helper per visibilita clinica
+    // ============================================================
+    function getIncisuraNote(inAtrophy, inMetaplasia) {
+      const parts = [];
+      if (inAtrophy > 0) parts.push('atrofia ' + (inAtrophy === 1 ? 'lieve' : inAtrophy === 2 ? 'moderata' : 'elevata'));
+      if (inMetaplasia > 0) parts.push('MI ' + (inMetaplasia === 1 ? 'lieve' : inMetaplasia === 2 ? 'moderata' : 'elevata'));
+      if (parts.length === 0) return null;
+      return 'Incisura angolare: ' + parts.join(', ') + ' (punto sentinella atrofia corpo-predominante)';
+    }
+
+    // ============================================================
+    // AUDIT - salvataggio casi refertati
+    // ============================================================
+    const AUDIT_KEY = 'gastritis_audit_log';
+
+    function saveAuditEntry(olgaStage, olgimStage, hpMax, hasDiscordance, hasAutoimmune, netRisk,
+                             antrumAtrophyAgg, corpusAtrophy, antrumMIAgg, corpusMI, dysplasiaMax) {
+      try {
+        const log = JSON.parse(localStorage.getItem(AUDIT_KEY) || '[]');
+        log.push({
+          ts: new Date().toISOString(),
+          olga: olgaStage,
+          olgim: olgimStage,
+          hp: hpMax > 0,
+          discordance: hasDiscordance,
+          autoimmune: hasAutoimmune,
+          netRisk: netRisk,
+          atrophyAntrum: antrumAtrophyAgg,
+          atrophyCorpus: corpusAtrophy,
+          miAntrum: antrumMIAgg,
+          miCorpus: corpusMI,
+          dysplasia: dysplasiaMax
+        });
+        localStorage.setItem(AUDIT_KEY, JSON.stringify(log));
+      } catch(e) { console.warn('Audit save error:', e); }
+    }
+
+    function exportAuditJSON() {
+      try {
+        const log = JSON.parse(localStorage.getItem(AUDIT_KEY) || '[]');
+        if (log.length === 0) { showAlert('warning', 'Nessun caso in archivio. Calcola almeno un referto.'); return; }
+        const blob = new Blob([JSON.stringify(log, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'olga_audit_' + new Date().toISOString().slice(0,10) + '.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showAlert('success', 'Export JSON completato (' + log.length + ' casi)');
+      } catch(e) { showAlert('error', 'Errore export: ' + e.message); }
+    }
+
+    function showAuditStats() {
+      try {
+        const log = JSON.parse(localStorage.getItem(AUDIT_KEY) || '[]');
+        const statsDiv = document.getElementById('auditStats');
+        if (log.length === 0) {
+          statsDiv.innerHTML = '<p style="color:#718096;padding:1rem;">Nessun dato disponibile. Calcola almeno un referto.</p>';
+          statsDiv.style.display = 'block';
+          return;
+        }
+        const n = log.length;
+        // OLGA distribution
+        const olgaDist = {'0':0,'I':0,'II':0,'III':0,'IV':0};
+        const olgimDist = {'0':0,'I':0,'II':0,'III':0,'IV':0};
+        let hpPos = 0, discordN = 0, dysN = 0, miInc = 0, netN = 0;
+        log.forEach(e => {
+          if(olgaDist[e.olga] !== undefined) olgaDist[e.olga]++;
+          if(olgimDist[e.olgim] !== undefined) olgimDist[e.olgim]++;
+          if(e.hp) hpPos++;
+          if(e.discordance) discordN++;
+          if(e.dysplasia > 0) dysN++;
+          if(e.netRisk) netN++;
+        });
+        const pct = v => Math.round(v/n*100);
+        const barColor = s => s === 'III' || s === 'IV' ? '#f56565' : s === 'II' ? '#ed8936' : '#48bb78';
+
+        const stageBar = (label, dist) => ['0','I','II','III','IV'].map(s => {
+          const v = dist[s]; if(!v) return '';
+          return '<div style="display:flex;align-items:center;gap:0.5rem;margin:0.2rem 0;">' +
+            '<span style="width:2rem;text-align:right;font-weight:600;">' + s + '</span>' +
+            '<div style="flex:1;background:#e2e8f0;border-radius:4px;height:20px;">' +
+            '<div style="width:' + pct(v) + '%;background:' + barColor(s) + ';height:100%;border-radius:4px;"></div></div>' +
+            '<span style="width:4rem;">' + v + ' (' + pct(v) + '%)</span></div>';
+        }).join('');
+
+        statsDiv.innerHTML = '<div style="background:white;padding:1rem;border-radius:0.5rem;border:1px solid #e2e8f0;">' +
+          '<h3 style="color:#4338ca;margin-bottom:1rem;">Statistiche archivio (' + n + ' casi)</h3>' +
+          '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem;">' +
+          '<div style="background:#f0fdf4;padding:0.75rem;border-radius:0.5rem;border-left:4px solid #48bb78;"><strong>HP+</strong><br><span style="font-size:1.5rem;font-weight:700;">' + pct(hpPos) + '%</span> (' + hpPos + '/' + n + ')</div>' +
+          '<div style="background:#fffbeb;padding:0.75rem;border-radius:0.5rem;border-left:4px solid #ed8936;"><strong>Discordanza OLGA/OLGIM</strong><br><span style="font-size:1.5rem;font-weight:700;">' + pct(discordN) + '%</span> (' + discordN + '/' + n + ')</div>' +
+          '<div style="background:#fef2f2;padding:0.75rem;border-radius:0.5rem;border-left:4px solid #f56565;"><strong>Displasia (LGD/HGD)</strong><br><span style="font-size:1.5rem;font-weight:700;">' + pct(dysN) + '%</span> (' + dysN + '/' + n + ')</div>' +
+          (netN > 0 ? '<div style="background:#fef2f2;padding:0.75rem;border-radius:0.5rem;border-left:4px solid #dc2626;"><strong>Rischio NET tipo I</strong><br><span style="font-size:1.5rem;font-weight:700;">' + netN + '</span> casi</div>' : '') +
+          '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">' +
+          '<div><strong style="display:block;margin-bottom:0.5rem;">Distribuzione OLGA</strong>' + stageBar('OLGA', olgaDist) + '</div>' +
+          '<div><strong style="display:block;margin-bottom:0.5rem;">Distribuzione OLGIM</strong>' + stageBar('OLGIM', olgimDist) + '</div>' +
+          '</div>' +
+          '<p style="margin-top:1rem;font-size:0.8rem;color:#718096;">Prima voce: ' + log[0].ts.slice(0,10) + ' | Ultima: ' + log[n-1].ts.slice(0,10) + '</p>' +
+          '</div>';
+        statsDiv.style.display = 'block';
+      } catch(e) { showAlert('error', 'Errore statistiche: ' + e.message); }
+    }
+
+    function clearAuditData() {
+      if (!confirm('Cancellare tutto l\'archivio audit? Operazione irreversibile.')) return;
+      localStorage.removeItem(AUDIT_KEY);
+      document.getElementById('auditStats').style.display = 'none';
+      showAlert('success', 'Archivio audit cancellato');
+    }
+
+    function toggleAudit() {
+      const c = document.getElementById('auditContent');
+      const t = document.getElementById('auditToggle');
+      const isHidden = c.style.display === 'none';
+      c.style.display = isHidden ? 'block' : 'none';
+      t.textContent = isHidden ? '^' : 'v';
+    }
+
   </script>
 </body>
 </html>
