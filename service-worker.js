@@ -1,4 +1,4 @@
-const CACHE_NAME = 'olga-olgim-v5.7.23';
+const CACHE_NAME = 'olga-olgim-v5.7.25';
 const urlsToCache = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', event => {
