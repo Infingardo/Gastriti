@@ -5,26 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Tool OLGA/OLGIM per refertazione gastrite cronica - SC Anatomia Patologica ASST Fatebenefratelli-Sacco">
   <meta name="theme-color" content="#4299e1">
-  
-  <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  
-  <!-- iOS Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="OLGA/OLGIM">
-  
-  <!-- iOS Icons -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="152x152" href="icon-192.png">
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
-  
-  <!-- Standard Icons -->
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  
-  <title>OLGA/OLGIM e H. pylori v5.7.21</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.22</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -45,7 +36,6 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
     h1 { font-size: 1.75rem; font-weight: 700; color: #2d3748; margin-bottom: 0.25rem; }
     .subtitle { font-size: 0.9rem; color: #718096; text-transform: uppercase; letter-spacing: 0.05em; }
-    
     .info-panel {
       background: #edf2f7;
       border-left: 4px solid #4299e1;
@@ -55,7 +45,6 @@
       font-size: 0.9rem;
     }
     .info-panel strong { color: #2b6cb0; }
-    
     .settings {
       background: white;
       padding: 1rem;
@@ -71,9 +60,7 @@
       margin: 0.5rem 0;
     }
     .settings input[type="radio"] { accent-color: #4299e1; cursor: pointer; }
-    
     .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1rem 0; }
-    
     .card {
       background: white;
       border-radius: 0.5rem;
@@ -81,15 +68,12 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
     .card h2 { font-size: 1.1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
-    .card.global { background: #f0f9ff; border: 2px solid #90cdf4; }
-    .card.global h2 { color: #2b6cb0; border-bottom-color: #90cdf4; }
-    
     .field { margin-bottom: 1rem; }
-    .field label { 
-      display: block; 
-      font-size: 0.85rem; 
-      font-weight: 600; 
-      color: #4a5568; 
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4a5568;
       margin-bottom: 0.25rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -106,9 +90,7 @@
     }
     .field select:focus { outline: none; border-color: #4299e1; }
     .field select.error { border-color: #f56565; background: #fff5f5; }
-    .field select.optional { border-style: dashed; }
     .field small { display: block; color: #718096; font-size: 0.8rem; margin-top: 0.25rem; }
-    
     .mi-type-field {
       display: none;
       margin-top: 0.75rem;
@@ -118,25 +100,15 @@
       border-radius: 0.375rem;
     }
     .mi-type-field.show { display: block; }
-    .mi-type-field label { 
-      text-transform: none; 
-      letter-spacing: normal; 
+    .mi-type-field label {
+      text-transform: none;
+      letter-spacing: normal;
       font-weight: normal;
       color: #166534;
       font-size: 0.85rem;
     }
-    .mi-type-field select {
-      border-color: #86efac;
-      background: white;
-      margin-top: 0.5rem;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      margin: 1rem 0;
-    }
+    .mi-type-field select { border-color: #86efac; background: white; margin-top: 0.5rem; }
+    .controls { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1rem 0; }
     button {
       padding: 0.75rem 1.5rem;
       border: none;
@@ -151,7 +123,6 @@
     button.secondary { background: #e2e8f0; color: #2d3748; }
     button.secondary:hover { background: #cbd5e0; }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
-    
     .alert {
       padding: 1rem;
       border-radius: 0.375rem;
@@ -162,7 +133,6 @@
     .alert.success { background: #f0fff4; border-left: 4px solid #48bb78; color: #22543d; }
     .alert.warning { background: #fffaf0; border-left: 4px solid #ed8936; color: #7c2d12; }
     .alert.show { display: block; }
-    
     .results {
       background: white;
       padding: 1.5rem;
@@ -170,13 +140,7 @@
       margin: 1rem 0;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    
-    .badges {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin: 1rem 0;
-    }
+    .badges { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
     .badge {
       display: inline-flex;
       align-items: center;
@@ -192,26 +156,10 @@
     .badge.warning { background: #feebc8; color: #7c2d12; }
     .badge.dysplasia { background: #e9d8fd; color: #553c9a; }
     .dot { width: 8px; height: 8px; border-radius: 50%; }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    th, td {
-      padding: 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    th {
-      background: #f7fafc;
-      font-weight: 600;
-      color: #4a5568;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-    }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
+    th { background: #f7fafc; font-weight: 600; color: #4a5568; font-size: 0.85rem; text-transform: uppercase; }
     td { font-size: 0.95rem; }
-    
     .report-box {
       background: #f7fafc;
       border: 2px dashed #cbd5e0;
@@ -222,9 +170,7 @@
       font-family: ui-monospace, monospace;
       font-size: 0.9rem;
       line-height: 1.8;
-      transition: all 0.3s ease;
     }
-    
     .footer {
       margin-top: 2rem;
       padding-top: 1.5rem;
@@ -234,17 +180,8 @@
     }
     .footer a { color: #4299e1; text-decoration: none; font-weight: 500; }
     .footer a:hover { text-decoration: underline; }
-    
-    .biblio-section {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid #e2e8f0;
-    }
-    .biblio-item {
-      margin: 0.5rem 0;
-      padding-left: 1rem;
-    }
-    
+    .biblio-section { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; }
+    .biblio-item { margin: 0.5rem 0; padding-left: 1rem; }
     .install-prompt {
       position: fixed;
       bottom: 20px;
@@ -261,143 +198,46 @@
       text-align: center;
     }
     .install-prompt.show { display: block; }
-    .install-prompt button {
-      background: white;
-      color: #667eea;
-      margin: 0.5rem 0.25rem;
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-    }
-    
+    .install-prompt button { background: white; color: #667eea; margin: 0.5rem 0.25rem; padding: 0.5rem 1rem; font-size: 0.9rem; }
     @media (max-width: 768px) {
       h1 { font-size: 1.4rem; }
-      .subtitle { font-size: 0.85rem; }
       .container { padding: 0.5rem; }
-      
-      .grid { 
-        grid-template-columns: 1fr; 
-        gap: 0.75rem; 
-      }
-      
-      .card { 
-        padding: 1rem; 
-        margin-bottom: 0.75rem;
-      }
-      .card h2 { font-size: 1rem; }
-      
-      .field label { font-size: 0.8rem; }
-      .field select {
-        padding: 0.75rem 0.5rem;
-        font-size: 1rem;
-      }
-      
-      button {
-        width: 100%;
-        padding: 1rem;
-        font-size: 1rem;
-      }
-      
-      .controls {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      
-      .badges {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .badge {
-        justify-content: center;
-        padding: 0.75rem 1rem;
-      }
-      
-      table {
-        font-size: 0.85rem;
-      }
-      th, td {
-        padding: 0.5rem 0.25rem;
-      }
-      
-      .report-box {
-        font-size: 0.8rem;
-        padding: 1rem;
-      }
-      
-      .info-panel {
-        font-size: 0.85rem;
-        padding: 0.75rem;
-      }
-      
-      #specialFormsContent > div {
-        padding: 0.75rem;
-      }
-      #specialFormsContent h3 {
-        font-size: 0.95rem;
-      }
+      .grid { grid-template-columns: 1fr; gap: 0.75rem; }
+      .card { padding: 1rem; }
+      .field select { padding: 0.75rem 0.5rem; font-size: 1rem; }
+      button { width: 100%; padding: 1rem; font-size: 1rem; }
+      .controls { flex-direction: column; gap: 0.5rem; }
+      .badges { flex-direction: column; align-items: stretch; }
+      .badge { justify-content: center; }
+      .report-box { font-size: 0.8rem; padding: 1rem; }
     }
-    
     @media (max-width: 480px) {
       h1 { font-size: 1.2rem; }
       .container { padding: 0.25rem; }
       .card { padding: 0.75rem; }
-      
-      table {
-        font-size: 0.75rem;
-      }
-      th, td {
-        padding: 0.4rem 0.2rem;
-      }
-      th {
-        font-size: 0.7rem;
-      }
-      
-      .report-box {
-        font-size: 0.75rem;
-      }
+      table { font-size: 0.75rem; }
+      th, td { padding: 0.4rem 0.2rem; }
+      th { font-size: 0.7rem; }
+      .report-box { font-size: 0.75rem; }
     }
-    
     @media print {
-      body * {
-        visibility: hidden;
-      }
-      
-      #reportText, #reportText * {
-        visibility: visible;
-      }
-      
+      body * { visibility: hidden; }
+      #reportText, #reportText * { visibility: visible; }
       #reportText {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        background: white;
-        border: none;
-        padding: 1cm;
-        font-size: 11pt;
-        line-height: 1.4;
+        position: absolute; left: 0; top: 0; width: 100%;
+        background: white; border: none; padding: 1cm;
+        font-size: 11pt; line-height: 1.4;
         font-family: 'Courier New', monospace;
       }
-      
       header, .controls, .settings, .alert, .install-prompt,
       .badges, table, .footer, #badgesContainer, #tableBody,
       #postReportLockBanner, #resetAlert, .info-panel, .card,
-      button, .biblio-section {
-        display: none !important;
-        visibility: hidden !important;
-      }
+      button, .biblio-section { display: none !important; visibility: hidden !important; }
     }
-    
     @keyframes pulse-soft {
-      0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3);
-      }
-      50% {
-        transform: scale(1.05);
-        box-shadow: 0 8px 12px rgba(220, 38, 38, 0.5);
-      }
+      0%, 100% { transform: scale(1); box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3); }
+      50% { transform: scale(1.05); box-shadow: 0 8px 12px rgba(220, 38, 38, 0.5); }
     }
-    
     .mega-reset-btn {
       animation: pulse-soft 3s ease-in-out infinite;
       font-size: 1.1rem !important;
@@ -408,171 +248,130 @@
       border: 3px solid #991b1b !important;
       border-radius: 0.5rem !important;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
-    
-    .mega-reset-btn:hover {
-      background: #b91c1c !important;
-      transform: scale(1.08) !important;
-      box-shadow: 0 12px 20px rgba(220, 38, 38, 0.6) !important;
-    }
-    
-    .mega-reset-btn:active {
-      transform: scale(0.98) !important;
-    }
+    .mega-reset-btn:hover { background: #b91c1c !important; transform: scale(1.08) !important; }
+    .mega-reset-btn:active { transform: scale(0.98) !important; }
   </style>
 </head>
 <body>
   <div id="installPrompt" class="install-prompt">
-    📱 Installa OLGA/OLGIM come app sul tuo dispositivo!
+    Installa OLGA/OLGIM come app sul tuo dispositivo!
     <div>
       <button onclick="installPWA()">Installa</button>
-      <button onclick="dismissInstallPrompt()" style="background: transparent; color: white; border: 1px solid white;">Più tardi</button>
+      <button onclick="dismissInstallPrompt()" style="background: transparent; color: white; border: 1px solid white;">Piu tardi</button>
     </div>
   </div>
 
   <header>
     <div class="container">
-      <h1>🔬 OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.21</div>
+      <h1>OLGA/OLGIM e H. pylori</h1>
+      <div class="subtitle">Tool per refertazione istologica v5.7.22</div>
     </div>
   </header>
-  
+
   <main class="container">
     <div id="postReportLockBanner" style="display: none; background: #dc2626; color: white; padding: 1.5rem; text-align: center; font-size: 1.2rem; font-weight: 700; border-radius: 0.5rem; margin-bottom: 1rem; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.5);">
-      🔒 DIAGNOSI COMPLETATA - CAMPI BLOCCATI<br>
+      DIAGNOSI COMPLETATA - CAMPI BLOCCATI<br>
       <span style="font-size: 1rem; font-weight: 500;">Per iniziare nuova diagnosi → Cliccare RESET COMPLETO</span>
     </div>
-    
+
     <div id="resetAlert" class="alert warning" style="display: block; position: relative; margin-top: 1rem;">
-      <strong>⚠️ IMPORTANTE:</strong> Fare <strong>RESET COMPLETO</strong> prima di ogni nuova diagnosi!
-      <button onclick="dismissResetAlert()" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: #7c2d12; padding: 0; line-height: 1;">×</button>
+      <strong>IMPORTANTE:</strong> Fare <strong>RESET COMPLETO</strong> prima di ogni nuova diagnosi!
+      <button onclick="dismissResetAlert()" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: #7c2d12; padding: 0; line-height: 1;">x</button>
     </div>
-    
+
     <div class="info-panel">
       <strong>Atrofia e metaplasia:</strong> 0 = assente · 1 = lieve · 2 = moderata · 3 = elevata<br>
       <strong>Altri parametri:</strong> 0 = assente · 1 = presente<br>
       <strong>Nota:</strong> L'incisura angolare viene aggregata all'antro per il calcolo OLGA/OLGIM (max tra i due valori)
     </div>
-    
+
     <div class="info-panel" style="border-left-color: #e53e3e; background: #fff5f5;">
-      <strong>⚠️ Avvertenza medico-legale:</strong> Tool di supporto alla refertazione istologica. 
-      Non sostituisce il giudizio diagnostico e la responsabilità del patologo refertante. 
+      <strong>Avvertenza medico-legale:</strong> Tool di supporto alla refertazione istologica.
+      Non sostituisce il giudizio diagnostico e la responsabilita del patologo refertante.
       Tutti i dati devono essere validati clinicamente prima dell'uso.
-      
       <details style="margin-top: 1rem; cursor: pointer;">
-        <summary style="font-weight: 600; color: #c53030; user-select: none;">📋 Cosa NON fa questo tool (importante per uso corretto)</summary>
+        <summary style="font-weight: 600; color: #c53030; user-select: none;">Cosa NON fa questo tool (importante per uso corretto)</summary>
         <div style="margin-top: 0.75rem; padding-left: 1rem; font-size: 0.9rem; line-height: 1.8;">
           <strong>Il tool NON:</strong><br>
-          • Sostituisce l'esame microscopico diretto del patologo<br>
-          • Interpreta artefatti, qualità del campione o adeguatezza bioptica<br>
-          • Diagnostica lesioni neoplastiche (adenocarcinoma, NET, linfoma, GIST)<br>
-          • Valuta margini di resezione o invasione vascolare/perineurale<br>
-          • Integra dati clinici, endoscopici, laboratoristici o radiologici<br>
-          • Fornisce indicazioni terapeutiche dirette (eradicazione HP, PPI, chirurgia)<br>
-          • Genera referto firmato digitalmente o validato per archiviazione LIS<br>
-          • Garantisce accuratezza in assenza di campionamento adeguato (≥5 biopsie, 3 sedi)<br>
+          - Sostituisce l'esame microscopico diretto del patologo<br>
+          - Interpreta artefatti, qualita del campione o adeguatezza bioptica<br>
+          - Diagnostica lesioni neoplastiche (adenocarcinoma, NET, linfoma, GIST)<br>
+          - Valuta margini di resezione o invasione vascolare/perineurale<br>
+          - Integra dati clinici, endoscopici, laboratoristici o radiologici<br>
+          - Fornisce indicazioni terapeutiche dirette<br>
+          - Genera referto firmato digitalmente<br>
+          - Garantisce accuratezza in assenza di campionamento adeguato (>=5 biopsie, 3 sedi)<br>
           <br>
           <strong style="color: #7c2d12;">Il referto generato richiede SEMPRE revisione, integrazione e firma del patologo responsabile.</strong>
         </div>
       </details>
     </div>
-    
+
     <div class="settings">
-      <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+      <label>
         <input type="checkbox" id="extended_report" style="accent-color: #4299e1;">
         <span><strong>Referto esteso</strong> (completo per casi complessi/MDT)</span>
       </label>
       <small style="display: block; margin-top: 0.25rem; color: #718096;">
-        Include: tabella Sydney, topografia, bibliografia, validazioni cliniche. Default: referto breve per routine.
+        Include: tabella Sydney, topografia, bibliografia, validazioni cliniche.
       </small>
-      
-      <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-top: 1rem;">
+      <label style="margin-top: 1rem;">
         <input type="checkbox" id="inadequate_sampling" style="accent-color: #e53e3e;">
-        <span><strong>⚠️ Campionamento inadeguato</strong> (≤4 biopsie o sedi incomplete)</span>
+        <span><strong>Campionamento inadeguato</strong> (<=4 biopsie o sedi incomplete)</span>
       </label>
       <small style="display: block; margin-top: 0.25rem; color: #718096;">
-        Aggiunge disclaimer: "Staging OLGA/OLGIM di affidabilità limitata per campionamento inadeguato."
+        Aggiunge disclaimer nel referto.
       </small>
-      
-      <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; margin-top: 1rem;">
+      <label style="margin-top: 1rem;">
         <input type="checkbox" id="stealth_mode" style="accent-color: #718096;">
-        <span><strong>🎭 Modalità formale</strong> (rimuove emoji dal referto)</span>
+        <span><strong>Modalita formale</strong> (rimuove emoji dal referto)</span>
       </label>
       <small style="display: block; margin-top: 0.25rem; color: #718096;">
-        Per ambienti istituzionali formali. Note: "⚠️" → "ATTENZIONE", "📋" → "NOTA", ecc.
+        Per ambienti istituzionali formali o export LIS.
       </small>
     </div>
-    
+
     <div id="errorAlert" class="alert error"></div>
     <div id="successAlert" class="alert success"></div>
     <div id="warningAlert" class="alert warning"></div>
-    
+
     <div class="card" style="background: #f0f9ff; border: 2px solid #3b82f6;">
-      <h2 style="color: #1e40af; border-bottom-color: #93c5fd;">⚡ Compilazione rapida</h2>
+      <h2 style="color: #1e40af; border-bottom-color: #93c5fd;">Compilazione rapida</h2>
       <div style="display: grid; gap: 1rem; margin-top: 1rem;">
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <button class="secondary shortcut-btn" style="flex: 1; min-width: 180px;" onclick="setNegativeCase()">
-            ✅ Tutto negativo
-          </button>
-          <button class="secondary shortcut-btn" style="flex: 1; min-width: 180px;" onclick="setHPyCase()">
-            🦠 H. pylori+
-          </button>
+          <button class="secondary shortcut-btn" style="flex: 1; min-width: 180px;" onclick="setNegativeCase()">Tutto negativo</button>
+          <button class="secondary shortcut-btn" style="flex: 1; min-width: 180px;" onclick="setHPyCase()">H. pylori+</button>
         </div>
-        
         <div style="margin-top: 1.5rem;">
           <button class="mega-reset-btn" style="width: 100%;" onclick="resetForm()">
-            ⚠️ RESET COMPLETO - NUOVA DIAGNOSI
+            RESET COMPLETO - NUOVA DIAGNOSI
           </button>
         </div>
-        
-        <small style="color: #1e40af; display: block; margin-top: 0.5rem;">
-          <strong>Shortcut:</strong> Casi comuni precompilati. <span style="color: #991b1b; font-weight: 600;">Reset cancella tutto prima di ogni nuova diagnosi!</span>
-        </small>
       </div>
     </div>
-    
+
     <div class="grid">
+      <!-- ANTRO -->
       <div class="card">
         <h2>Antro</h2>
         <div class="field">
           <label>Infiltrato cronico</label>
-          <select id="an_chronic">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <select id="an_chronic"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
-          <label>Attività (neutrofili)</label>
-          <select id="an_activity">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <label>Attivita (neutrofili)</label>
+          <select id="an_activity"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
           <label>Atrofia ghiandolare</label>
-          <select id="an_atrophy">
-            <option value="" selected></option>
-            <option value="0">0 - Assente</option>
-            <option value="1">1 - Lieve</option>
-            <option value="2">2 - Moderata</option>
-            <option value="3">3 - Elevata</option>
-          </select>
+          <select id="an_atrophy"><option value="" selected></option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
         </div>
         <div class="field">
           <label>Metaplasia intestinale</label>
-          <select id="an_metaplasia" onchange="checkMetaplasiaAndShowMIType('an')">
-            <option value="" selected></option>
-            <option value="0">0 - Assente</option>
-            <option value="1">1 - Lieve</option>
-            <option value="2">2 - Moderata</option>
-            <option value="3">3 - Elevata</option>
-          </select>
-          
+          <select id="an_metaplasia" onchange="checkMetaplasiaAndShowMIType('an')"><option value="" selected></option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
           <div id="an_mi_type_field" class="mi-type-field">
-            <label>🔬 Tipo metaplasia intestinale</label>
+            <label>Tipo metaplasia intestinale</label>
             <select id="an_mi_type">
               <option value="">-- Seleziona --</option>
               <option value="complete">Completa (Jass tipo I)</option>
@@ -584,69 +383,37 @@
         </div>
         <div class="field">
           <label>Helicobacter pylori</label>
-          <select id="an_hp">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <select id="an_hp"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
           <label>Displasia</label>
-          <select id="an_dysplasia">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Basso grado (LGD)</option>
-            <option value="2">Alto grado (HGD)</option>
-          </select>
+          <select id="an_dysplasia"><option value="" selected></option><option value="0">Assente</option><option value="1">Basso grado (LGD)</option><option value="2">Alto grado (HGD)</option></select>
         </div>
-        
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroAntrum()">
-            ⚡ Tutto 0 antro
-          </button>
+          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroAntrum()">Tutto 0 antro</button>
         </div>
       </div>
-      
+
+      <!-- INCISURA -->
       <div class="card">
         <h2>Incisura angolare</h2>
         <div class="field">
           <label>Infiltrato cronico</label>
-          <select id="in_chronic">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <select id="in_chronic"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
-          <label>Attività (neutrofili)</label>
-          <select id="in_activity">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <label>Attivita (neutrofili)</label>
+          <select id="in_activity"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
           <label>Atrofia ghiandolare</label>
-          <select id="in_atrophy">
-            <option value="" selected></option>
-            <option value="0">0 - Assente</option>
-            <option value="1">1 - Lieve</option>
-            <option value="2">2 - Moderata</option>
-            <option value="3">3 - Elevata</option>
-          </select>
+          <select id="in_atrophy"><option value="" selected></option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
         </div>
         <div class="field">
           <label>Metaplasia intestinale</label>
-          <select id="in_metaplasia" onchange="checkMetaplasiaAndShowMIType('in')">
-            <option value="" selected></option>
-            <option value="0">0 - Assente</option>
-            <option value="1">1 - Lieve</option>
-            <option value="2">2 - Moderata</option>
-            <option value="3">3 - Elevata</option>
-          </select>
-          
+          <select id="in_metaplasia" onchange="checkMetaplasiaAndShowMIType('in')"><option value="" selected></option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
           <div id="in_mi_type_field" class="mi-type-field">
-            <label>🔬 Tipo metaplasia intestinale</label>
+            <label>Tipo metaplasia intestinale</label>
             <select id="in_mi_type">
               <option value="">-- Seleziona --</option>
               <option value="complete">Completa (Jass tipo I)</option>
@@ -658,69 +425,37 @@
         </div>
         <div class="field">
           <label>Helicobacter pylori</label>
-          <select id="in_hp">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <select id="in_hp"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
           <label>Displasia</label>
-          <select id="in_dysplasia">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Basso grado (LGD)</option>
-            <option value="2">Alto grado (HGD)</option>
-          </select>
+          <select id="in_dysplasia"><option value="" selected></option><option value="0">Assente</option><option value="1">Basso grado (LGD)</option><option value="2">Alto grado (HGD)</option></select>
         </div>
-        
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroIncisura()">
-            ⚡ Tutto 0 incisura
-          </button>
+          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroIncisura()">Tutto 0 incisura</button>
         </div>
       </div>
-      
+
+      <!-- CORPO -->
       <div class="card">
         <h2>Corpo</h2>
         <div class="field">
           <label>Infiltrato cronico</label>
-          <select id="co_chronic">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <select id="co_chronic"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
-          <label>Attività (neutrofili)</label>
-          <select id="co_activity">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <label>Attivita (neutrofili)</label>
+          <select id="co_activity"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
           <label>Atrofia ghiandolare</label>
-          <select id="co_atrophy">
-            <option value="" selected></option>
-            <option value="0">0 - Assente</option>
-            <option value="1">1 - Lieve</option>
-            <option value="2">2 - Moderata</option>
-            <option value="3">3 - Elevata</option>
-          </select>
+          <select id="co_atrophy"><option value="" selected></option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
         </div>
         <div class="field">
           <label>Metaplasia intestinale</label>
-          <select id="co_metaplasia" onchange="checkMetaplasiaAndShowMIType('co')">
-            <option value="" selected></option>
-            <option value="0">0 - Assente</option>
-            <option value="1">1 - Lieve</option>
-            <option value="2">2 - Moderata</option>
-            <option value="3">3 - Elevata</option>
-          </select>
-          
+          <select id="co_metaplasia" onchange="checkMetaplasiaAndShowMIType('co')"><option value="" selected></option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
           <div id="co_mi_type_field" class="mi-type-field">
-            <label>🔬 Tipo metaplasia intestinale</label>
+            <label>Tipo metaplasia intestinale</label>
             <select id="co_mi_type">
               <option value="">-- Seleziona --</option>
               <option value="complete">Completa (Jass tipo I)</option>
@@ -732,379 +467,264 @@
         </div>
         <div class="field">
           <label>Helicobacter pylori</label>
-          <select id="co_hp">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Presente</option>
-          </select>
+          <select id="co_hp"><option value="" selected></option><option value="0">Assente</option><option value="1">Presente</option></select>
         </div>
         <div class="field">
           <label>Displasia</label>
-          <select id="co_dysplasia">
-            <option value="" selected></option>
-            <option value="0">Assente</option>
-            <option value="1">Basso grado (LGD)</option>
-            <option value="2">Alto grado (HGD)</option>
-          </select>
+          <select id="co_dysplasia"><option value="" selected></option><option value="0">Assente</option><option value="1">Basso grado (LGD)</option><option value="2">Alto grado (HGD)</option></select>
         </div>
-        
         <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
-          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroCorpus()">
-            ⚡ Tutto 0 corpo
-          </button>
+          <button class="secondary shortcut-btn" style="width: 100%; background: #fef3c7; color: #78350f; border: 1px solid #fbbf24;" onclick="setZeroCorpus()">Tutto 0 corpo</button>
         </div>
       </div>
     </div>
-    
-    <!-- Sezione Forme Speciali -->
+
+    <!-- FORME SPECIALI -->
     <div class="card" style="border: 2px solid #d69e2e; background: #fffbeb;">
       <h2 style="color: #744210; border-bottom-color: #f6ad55; cursor: pointer; user-select: none;" onclick="toggleSpecialForms()">
-        ⚠️ Forme Speciali di Gastrite 
-        <span id="specialFormsToggle" style="float: right; font-size: 1.2rem;">▼</span>
+        Forme Speciali di Gastrite
+        <span id="specialFormsToggle" style="float: right; font-size: 1.2rem;">v</span>
       </h2>
       <div id="specialFormsContent" style="display: none; margin-top: 1rem;">
         <div class="info-panel" style="background: #fef3c7; border-left-color: #d97706;">
-          <strong>Nota:</strong> Le forme speciali possono coesistere con gastrite cronica HP-associata o con atrofia/metaplasia. 
+          <strong>Nota:</strong> Le forme speciali possono coesistere con gastrite cronica HP-associata.
           Valutare solo se il pattern istologico suggerisce una forma speciale.
         </div>
-        
+
         <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
-          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
-            🧪 Gastropatia Chimica / Reattiva
-          </h3>
-          <div style="display: grid; gap: 1rem;">
-            <div class="field">
-              <label>Iperplasia foveolare</label>
-              <select id="foveolar_hyperplasia">
-                <option value="">Non valutato</option>
-                <option value="0">0 - Assente</option>
-                <option value="1">1 - Lieve</option>
-                <option value="2">2 - Moderata</option>
-                <option value="3">3 - Elevata</option>
-              </select>
-            </div>
-            <div class="field">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
-                <input type="checkbox" id="lamina_edema" style="accent-color: #4299e1;">
-                <span>Edema della lamina propria</span>
-              </label>
-            </div>
-            <div class="field">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
-                <input type="checkbox" id="smooth_muscle_prolif" style="accent-color: #4299e1;">
-                <span>Proliferazione muscolo liscio nella lamina propria</span>
-              </label>
-            </div>
-            <div style="font-size: 0.85rem; color: #718096;">
-              <strong>Eziologie comuni:</strong> Reflusso biliare (post-gastrectomia), FANS, alcol
-            </div>
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Gastropatia Chimica / Reattiva</h3>
+          <div class="field">
+            <label>Iperplasia foveolare</label>
+            <select id="foveolar_hyperplasia"><option value="">Non valutato</option><option value="0">0 - Assente</option><option value="1">1 - Lieve</option><option value="2">2 - Moderata</option><option value="3">3 - Elevata</option></select>
           </div>
+          <div class="field">
+            <label style="text-transform: none; letter-spacing: normal; font-weight: normal; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="lamina_edema" style="accent-color: #4299e1;">
+              <span>Edema della lamina propria</span>
+            </label>
+          </div>
+          <div class="field">
+            <label style="text-transform: none; letter-spacing: normal; font-weight: normal; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="smooth_muscle_prolif" style="accent-color: #4299e1;">
+              <span>Proliferazione muscolo liscio nella lamina propria</span>
+            </label>
+          </div>
+          <div style="font-size: 0.85rem; color: #718096;"><strong>Eziologie comuni:</strong> Reflusso biliare (post-gastrectomia), FANS, alcol</div>
         </div>
-        
+
         <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
-          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
-            🎯 Gastrite Autoimmune (tipo A)
-          </h3>
-          <div style="display: grid; gap: 1rem;">
-            <div class="field">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
-                <input type="checkbox" id="corpus_restricted" style="accent-color: #4299e1;">
-                <span>Pattern corpo-predominante/ristretto (corpo >>> antro)</span>
-              </label>
-            </div>
-            <div class="field">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
-                <input type="checkbox" id="pseudopyloric_meta" style="accent-color: #4299e1;">
-                <span>Metaplasia pseudopilorica (vs. metaplasia intestinale)</span>
-              </label>
-            </div>
-            <div class="field">
-              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-weight: normal;">
-                <input type="checkbox" id="ecl_hyperplasia" style="accent-color: #4299e1;">
-                <span>Iperplasia cellule ECL (argirofilia/cromogranina)</span>
-              </label>
-            </div>
-            <div style="font-size: 0.85rem; color: #718096;">
-              <strong>Associazioni:</strong> Anemia perniciosa, ipergastrinemia, anticorpi anti-cellule parietali
-            </div>
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Gastrite Autoimmune (tipo A)</h3>
+          <div class="field">
+            <label style="text-transform: none; letter-spacing: normal; font-weight: normal; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="corpus_restricted" style="accent-color: #4299e1;">
+              <span>Pattern corpo-predominante/ristretto (corpo >>> antro)</span>
+            </label>
           </div>
+          <div class="field">
+            <label style="text-transform: none; letter-spacing: normal; font-weight: normal; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="pseudopyloric_meta" style="accent-color: #4299e1;">
+              <span>Metaplasia pseudopilorica</span>
+            </label>
+          </div>
+          <div class="field">
+            <label style="text-transform: none; letter-spacing: normal; font-weight: normal; display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="ecl_hyperplasia" style="accent-color: #4299e1;">
+              <span>Iperplasia cellule ECL (argirofilia/cromogranina)</span>
+            </label>
+          </div>
+          <div style="font-size: 0.85rem; color: #718096;"><strong>Associazioni:</strong> Anemia perniciosa, ipergastrinemia, anticorpi anti-cellule parietali</div>
         </div>
-        
+
         <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
-          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
-            🔬 Gastrite Linfocitica
-          </h3>
-          <div style="display: grid; gap: 1rem;">
-            <div class="field">
-              <label>Linfociti intraepiteliali (IEL)</label>
-              <select id="iels_grade">
-                <option value="">Non valutato</option>
-                <option value="0">0 - Nella norma (&lt;15/100 cellule epiteliali)</option>
-                <option value="1">1 - Borderline (15-25/100 cellule epiteliali)</option>
-                <option value="2">2 - Francamente aumentati (&gt;25/100 cellule epiteliali)</option>
-              </select>
-              <small>Soglia diagnostica classica: ≥20-25/100 cellule epiteliali. Borderline richiede correlazione clinica.</small>
-            </div>
-            <div style="font-size: 0.85rem; color: #718096;">
-              <strong>Associazioni:</strong> Gastrite variolariforme (endoscopia), malattia celiaca (20-40% dei casi), Ménétrier's disease
-            </div>
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Gastrite Linfocitica</h3>
+          <div class="field">
+            <label>Linfociti intraepiteliali (IEL)</label>
+            <select id="iels_grade">
+              <option value="">Non valutato</option>
+              <option value="0">0 - Nella norma (&lt;15/100 cellule epiteliali)</option>
+              <option value="1">1 - Borderline (15-25/100 cellule epiteliali)</option>
+              <option value="2">2 - Francamente aumentati (&gt;25/100 cellule epiteliali)</option>
+            </select>
+            <small>Soglia diagnostica: >=20-25/100. Borderline richiede correlazione clinica.</small>
           </div>
+          <div style="font-size: 0.85rem; color: #718096;"><strong>Associazioni:</strong> Gastrite variolariforme, malattia celiaca (20-40%), Menetrier's disease</div>
         </div>
-        
+
         <div style="margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
-          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">
-            🔴 Gastrite Eosinofila
-          </h3>
-          <div style="display: grid; gap: 1rem;">
-            <div class="field">
-              <label>Eosinofili per campo ad alto ingrandimento (HPF)</label>
-              <select id="eosinophils_hpf">
-                <option value="">Non valutato</option>
-                <option value="0">&lt;10 eosinofili/HPF (entro limiti)</option>
-                <option value="1">10-19 eosinofili/HPF (lievemente aumentati)</option>
-                <option value="2">20-29 eosinofili/HPF (moderatamente aumentati)</option>
-                <option value="3">≥30 eosinofili/HPF (marcatamente aumentati)</option>
-              </select>
-              <small>Soglia diagnostica: ≥30 eosinofili/HPF (obiettivo 40×) (Rosai and Ackerman's, 11th ed.)</small>
-            </div>
-            <div style="font-size: 0.85rem; color: #718096;">
-              <strong>DD essenziali:</strong> Parassitosi (Anisakis), farmaci (PPI, FANS), IBD, vasculiti, neoplasie (linfoma, carcinoma)
-            </div>
+          <h3 style="font-size: 1rem; color: #2d3748; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem;">Gastrite Eosinofila</h3>
+          <div class="field">
+            <label>Eosinofili per campo ad alto ingrandimento (HPF)</label>
+            <select id="eosinophils_hpf">
+              <option value="">Non valutato</option>
+              <option value="0">&lt;10 eosinofili/HPF</option>
+              <option value="1">10-19 eosinofili/HPF</option>
+              <option value="2">20-29 eosinofili/HPF</option>
+              <option value="3">>=30 eosinofili/HPF</option>
+            </select>
+            <small>Soglia diagnostica: >=30/HPF (obj. 40x) (Rosai and Ackerman's, 11th ed.)</small>
           </div>
+          <div style="font-size: 0.85rem; color: #718096;"><strong>DD essenziali:</strong> Parassitosi (Anisakis), farmaci (PPI, FANS), IBD, vasculiti, linfoma</div>
         </div>
       </div>
     </div>
-    
+
+    <!-- NOTE LIBERE -->
     <div class="card" style="border: 2px solid #718096; background: #f7fafc;">
-      <h2 style="color: #2d3748; border-bottom-color: #cbd5e0;">
-        📝 Note aggiuntive
-      </h2>
+      <h2 style="color: #2d3748; border-bottom-color: #cbd5e0;">Note aggiuntive</h2>
       <div class="field" style="margin-top: 1rem;">
         <label>Osservazioni libere (opzionale)</label>
-        <textarea id="free_notes" rows="4" style="width: 100%; padding: 0.75rem; border: 2px solid #cbd5e0; border-radius: 0.375rem; font-size: 0.95rem; font-family: inherit; resize: vertical;" placeholder="Eventuali osservazioni aggiuntive non coperte dai campi strutturati (es: aspetti morfologici particolari, note cliniche, dubbi diagnostici...)"></textarea>
-        <small>Queste note verranno aggiunte alla fine del referto se compilate.</small>
+        <textarea id="free_notes" rows="4" style="width: 100%; padding: 0.75rem; border: 2px solid #cbd5e0; border-radius: 0.375rem; font-size: 0.95rem; font-family: inherit; resize: vertical;" placeholder="Aspetti morfologici particolari, note cliniche, dubbi diagnostici..."></textarea>
       </div>
     </div>
-    
+
     <div class="controls">
-      <button class="primary" onclick="calculate()">📊 Calcola referto</button>
-      <button class="secondary copy-report-btn" onclick="copyReport()">📋 Copia referto</button>
-      <button class="secondary" onclick="window.print()">🖨️ Stampa/PDF</button>
+      <button class="primary" onclick="calculate()">Calcola referto</button>
+      <button class="secondary copy-report-btn" onclick="copyReport()">Copia referto</button>
+      <button class="secondary" onclick="window.print()">Stampa/PDF</button>
     </div>
-    
+
     <div id="resultsSection" class="results" style="display: none;">
       <h2 style="margin-bottom: 1rem;">Risultati</h2>
-      
       <div id="badgesContainer" class="badges"></div>
-      
       <table>
         <thead>
           <tr>
-            <th>Sede</th>
-            <th>Infiltr. cronico</th>
-            <th>Attività</th>
-            <th>Atrofia</th>
-            <th>Metaplasia</th>
-            <th>H. pylori</th>
+            <th>Sede</th><th>Infiltr. cronico</th><th>Attivita</th><th>Atrofia</th><th>Metaplasia</th><th>H. pylori</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
       </table>
-      
       <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Referto istologico</h3>
       <div id="reportText" class="report-box"></div>
-      
       <div class="footer">
-        <p><strong>⚠️ Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo linee guida MAPS III (ESGE/ESP 2025). La presenza di displasia modifica significativamente il management.</p>
-        
+        <p><strong>Nota clinica:</strong> Gli stadi OLGA/OLGIM stratificano il rischio di adenocarcinoma gastrico. Stadi III-IV richiedono sorveglianza endoscopica secondo MAPS III (ESGE/ESP 2025).</p>
         <div class="biblio-section">
-          <strong>Riferimenti bibliografici:</strong>
-          <div class="biblio-item">
-            • Dixon MF et al. Classification and grading of gastritis. The updated Sydney System. 
-            <em>Am J Surg Pathol</em> 1996;20(10):1161-81. 
-            <a href="https://pubmed.ncbi.nlm.nih.gov/8827022/" target="_blank" rel="noopener">PMID:8827022</a>
-          </div>
-          <div class="biblio-item">
-            • Rugge M et al. Gastritis staging in clinical practice: the OLGA staging system. 
-            <em>Gut</em> 2007;56(5):631-6. 
-            <a href="https://pubmed.ncbi.nlm.nih.gov/17142647/" target="_blank" rel="noopener">PMID:17142647</a>
-          </div>
-          <div class="biblio-item">
-            • Rugge M et al. OLGA gastritis staging for the assessment of gastric cancer risk: a twelve-year clinico-pathological follow-up study. 
-            <em>Dig Liver Dis</em> 2010;42(3):177-82. 
-            <a href="https://pubmed.ncbi.nlm.nih.gov/19671492/" target="_blank" rel="noopener">PMID:19671492</a>
-          </div>
-          <div class="biblio-item">
-            • Capelle LG et al. The staging of gastritis with the OLGA system by using intestinal metaplasia as an accurate alternative for atrophic gastritis. 
-            <em>Gastrointest Endosc</em> 2010;71(7):1150-8. 
-            <a href="https://pubmed.ncbi.nlm.nih.gov/20381801/" target="_blank" rel="noopener">PMID:20381801</a>
-          </div>
-          <div class="biblio-item">
-            • Capelle LG et al. Staging gastritis with the OLGIM: a less complex alternative to OLGA gastritis staging. 
-            <em>Am J Surg Pathol</em> 2010;34(11):1653-64. 
-            <a href="https://pubmed.ncbi.nlm.nih.gov/20975341/" target="_blank" rel="noopener">PMID:20975341</a>
-          </div>
-          <div class="biblio-item">
-            • Dinis-Ribeiro M et al. Management of epithelial precancerous conditions and early neoplasia of the stomach (MAPS III): European Society of Gastrointestinal Endoscopy (ESGE), European Helicobacter and Microbiota Study Group (EHMSG) and European Society of Pathology (ESP) Guideline update 2025. 
-            <em>Endoscopy</em> 2025. 
-            <a href="https://doi.org/10.1055/a-2529-5025" target="_blank" rel="noopener">DOI:10.1055/a-2529-5025</a>
-          </div>
+          <strong>Riferimenti:</strong>
+          <div class="biblio-item">- Dixon MF et al. Am J Surg Pathol 1996;20(10):1161-81. <a href="https://pubmed.ncbi.nlm.nih.gov/8827022/" target="_blank">PMID:8827022</a></div>
+          <div class="biblio-item">- Rugge M et al. Gut 2007;56(5):631-6. <a href="https://pubmed.ncbi.nlm.nih.gov/17142647/" target="_blank">PMID:17142647</a></div>
+          <div class="biblio-item">- Capelle LG et al. Gastrointest Endosc 2010;71(7):1150-8. <a href="https://pubmed.ncbi.nlm.nih.gov/20381801/" target="_blank">PMID:20381801</a></div>
+          <div class="biblio-item">- Dinis-Ribeiro M et al. MAPS III. Endoscopy 2025. <a href="https://doi.org/10.1055/a-2529-5025" target="_blank">DOI:10.1055/a-2529-5025</a></div>
         </div>
       </div>
     </div>
   </main>
-  
+
   <script>
-    // PWA Support
+    // ============================================================
+    // PWA
+    // ============================================================
     let deferredPrompt;
-    
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      
       const dismissed = localStorage.getItem('pwaPromptDismissed');
       const dismissedTime = dismissed ? parseInt(dismissed) : 0;
       const daysSinceDismiss = (Date.now() - dismissedTime) / (1000 * 60 * 60 * 24);
-      
       if (!dismissed || daysSinceDismiss > 7) {
-        setTimeout(() => {
-          document.getElementById('installPrompt').classList.add('show');
-        }, 3000);
+        setTimeout(() => document.getElementById('installPrompt').classList.add('show'), 3000);
       }
     });
-    
     function installPWA() {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('PWA installata');
-          }
+        deferredPrompt.userChoice.then(() => {
           deferredPrompt = null;
           document.getElementById('installPrompt').classList.remove('show');
         });
       }
     }
-    
     function dismissInstallPrompt() {
       document.getElementById('installPrompt').classList.remove('show');
       localStorage.setItem('pwaPromptDismissed', Date.now().toString());
     }
-    
+
     // Service Worker
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        const isValidDomain = 
-          location.hostname === 'localhost' || 
-          location.hostname === '127.0.0.1' ||
-          location.protocol === 'https:';
-        
-        const isPreviewDomain = 
-          location.hostname.includes('claudeusercontent.com') ||
-          location.hostname.includes('claude.ai');
-        
+        const isValidDomain = location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.protocol === 'https:';
+        const isPreviewDomain = location.hostname.includes('claudeusercontent.com') || location.hostname.includes('claude.ai');
         if (isValidDomain && !isPreviewDomain) {
           navigator.serviceWorker.register('service-worker.js')
-            .then(reg => {
-              console.log('✅ Service Worker registrato:', reg.scope);
-            })
-            .catch(err => {
-              console.warn('⚠️ Service Worker non disponibile (app funziona comunque):', err.message);
-            });
-        } else {
-          console.log('ℹ️ Service Worker non registrato (ambiente anteprima/sviluppo)');
+            .then(reg => console.log('Service Worker registrato:', reg.scope))
+            .catch(err => console.warn('Service Worker non disponibile:', err.message));
         }
       });
     }
-    
-    // Costanti cliniche
+
+    // ============================================================
+    // COSTANTI CLINICHE
+    // ============================================================
     const CLINICAL_NOTES = {
-      topographySydney: '(Topografia definita su base infiltrato cronico - Sydney System)',
-      hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorità a resezione/sorveglianza stretta).',
-      compositeMethod: 'METODO COMPOSITO: Approccio non standard (max atrofia/MI per sede), utilizzato a fini di stratificazione prudenziale',
-      stagingValidity: 'Staging valido con campionamento adeguato (≥5 biopsie, 3 sedi - MAPS III 2025)',
+      hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorita a resezione/sorveglianza stretta).',
+      stagingValidity: 'Staging valido con campionamento adeguato (>=5 biopsie, 3 sedi - MAPS III 2025)',
       autoimmuneCorrelation: 'CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali (APCA).',
       miWithoutAtrophy: 'NOTA: Metaplasia intestinale senza atrofia significativa - possibile campionamento limitato o fase post-eradicazione HP.',
-      // FIX v5.7.7: Note metodologiche OLGIM per forme speciali
       olgaMethodAutoimmune: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
       olgaMethodChemical: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
-      olgaMethodSpecial: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite (meccanismo non cancerogenetico classico).'
+      olgaMethodSpecial: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite.'
     };
-    
-    // Matrice OLGA standard (Rugge et al. Gut 2007)
-    // Righe = Antrum score (0-3, verticale)
-    // Colonne = Corpus score (0-3, orizzontale)
+
+    // Matrice OLGA standard - Rugge et al. Gut 2007/2008
+    // Righe = Antrum (0-3), Colonne = Corpus (0-3)
     const OLGA_MATRIX = [
       ['0',   'I',   'II',  'III'],  // Antrum 0
-      ['I',   'I',   'II',  'III'],  // Antrum 1 (fix: [1,1] era II → I)
-      ['II',  'II',  'III', 'IV' ],  // Antrum 2 (fix: [2,1] era III → II)
-      ['III', 'III', 'IV',  'IV' ]   // Antrum 3 (fix: [3,0] era II → III)
+      ['I',   'I',   'II',  'III'],  // Antrum 1
+      ['II',  'II',  'III', 'IV' ],  // Antrum 2
+      ['III', 'III', 'IV',  'IV' ]   // Antrum 3
     ];
-    
+
+    // ============================================================
+    // UTILITY
+    // ============================================================
     function getValue(id) {
       const el = document.getElementById(id);
       return el && el.value !== '' ? parseInt(el.value, 10) : null;
     }
-    
     function getStringValue(id) {
       const el = document.getElementById(id);
       return el ? el.value : '';
     }
-    
+
+    // ============================================================
+    // ALERT SYSTEM
+    // ============================================================
     const alertQueue = [];
-    const MAX_ALERTS = 3;
     const ALERT_PRIORITY = { 'error': 3, 'warning': 2, 'success': 1 };
-    
+
     function showAlert(type, message) {
       alertQueue.push({ type, message, priority: ALERT_PRIORITY[type] || 1 });
       alertQueue.sort((a, b) => b.priority - a.priority);
-      const toShow = alertQueue.slice(0, MAX_ALERTS);
-      
       clearAlerts();
-      
-      toShow.forEach(({ type, message }) => {
+      alertQueue.slice(0, 3).forEach(({ type, message }) => {
         const alertId = type === 'error' ? 'errorAlert' : type === 'warning' ? 'warningAlert' : 'successAlert';
         const alert = document.getElementById(alertId);
-        if (alert) {
-          alert.textContent = message;
-          alert.classList.add('show');
-        }
+        if (alert) { alert.textContent = message; alert.classList.add('show'); }
       });
-      
-      setTimeout(() => {
-        alertQueue.length = 0;
-        clearAlerts();
-      }, 6000);
+      setTimeout(() => { alertQueue.length = 0; clearAlerts(); }, 6000);
     }
-    
     function clearAlerts() {
-      document.getElementById('errorAlert')?.classList.remove('show');
-      document.getElementById('warningAlert')?.classList.remove('show');
-      document.getElementById('successAlert')?.classList.remove('show');
+      ['errorAlert', 'warningAlert', 'successAlert'].forEach(id => document.getElementById(id)?.classList.remove('show'));
     }
-    
     function clearErrors() {
       document.querySelectorAll('select.error').forEach(el => el.classList.remove('error'));
       alertQueue.length = 0;
       clearAlerts();
     }
-    
+
+    // ============================================================
+    // UI HELPERS
+    // ============================================================
     function toggleSpecialForms() {
       const content = document.getElementById('specialFormsContent');
       const toggle = document.getElementById('specialFormsToggle');
-      if (content.style.display === 'none') {
-        content.style.display = 'block';
-        toggle.textContent = '▲';
-      } else {
-        content.style.display = 'none';
-        toggle.textContent = '▼';
-      }
+      const isHidden = content.style.display === 'none';
+      content.style.display = isHidden ? 'block' : 'none';
+      toggle.textContent = isHidden ? '^' : 'v';
     }
-    
+
     function checkMetaplasiaAndShowMIType(site) {
       const metaValue = getValue(site + '_metaplasia') || 0;
       const miTypeField = document.getElementById(site + '_mi_type_field');
-      
       if (miTypeField) {
         if (metaValue > 0) {
           miTypeField.classList.add('show');
@@ -1113,1130 +733,650 @@
           document.getElementById(site + '_mi_type').value = '';
         }
       }
-      // saveFormData() rimosso - già gestito da event listener (v5.7.17 performance)
     }
-    
-    function getMITypeText() {
-      const sites = ['an', 'in', 'co'];
-      const siteNames = { 'an': 'antro', 'in': 'incisura', 'co': 'corpo' };
-      const miData = [];
-      
-      sites.forEach(site => {
-        const metaValue = getValue(site + '_metaplasia') || 0;
-        const miType = getStringValue(site + '_mi_type');
-        if (metaValue > 0) {
-          miData.push({
-            site: siteNames[site],
-            grade: metaValue,
-            type: miType
-          });
-        }
-      });
-      
-      if (miData.length === 0) {
-        return 'Assente';
-      }
-      
-      // Helper per testo grado
-      function gradeText(grade) {
-        if (grade === 1) return 'lieve';
-        if (grade === 2) return 'moderata';
-        if (grade === 3) return 'elevata';
-        return '';
-      }
-      
-      const types = miData.map(d => d.type).filter(t => t !== '');
-      const allSame = types.length > 0 && types.every(t => t === types[0]);
-      const hasMixed = types.includes('mixed');
-      
-      // Calcola grado massimo
-      const maxGrade = Math.max(...miData.map(d => d.grade));
-      const gradeTextStr = gradeText(maxGrade);
-      
-      const sitesText = miData.map(d => d.site).join(', ');
-      
-      // Se TUTTI hanno lo stesso tipo E nessuno è mixed
-      if (allSame && !hasMixed && types[0] === 'complete') {
-        if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' e completa (' + sitesText + ')';
-        }
-        return 'Presente, completa (' + sitesText + ')';
-      } else if (allSame && !hasMixed && types[0] === 'incomplete') {
-        if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' e incompleta (' + sitesText + ')';
-        }
-        return 'Presente, incompleta (' + sitesText + ')';
-      } else if (allSame && types[0] === 'mixed') {
-        if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' e mista (' + sitesText + ')';
-        }
-        return 'Presente, mista (' + sitesText + ')';
-      } else if (types.length > 1 || hasMixed) {
-        // Tipi diversi O almeno una sede con mixed → mostra dettaglio per sede
-        const details = miData.map(d => {
-          const typeText = d.type === 'complete' ? 'completa' : 
-                          d.type === 'incomplete' ? 'incompleta' : 
-                          d.type === 'mixed' ? 'mista' : 'n.d.';
-          return d.site + ': ' + gradeText(d.grade) + ' e ' + typeText;
-        }).join(', ');
-        return 'Presente, pattern misto (' + details + ')';
-      } else {
-        if (gradeTextStr) {
-          return 'Presente, ' + gradeTextStr + ' (' + sitesText + ')';
-        }
-        return 'Presente (' + sitesText + ')';
-      }
-    }
-    
-    // v5.7.10: Funzione helper per testo atrofia con sedi
+
+    // ============================================================
+    // FIX #1: getAtrophyText - RIMOSSA notazione (1/3) non standard
+    // ============================================================
     function getAtrophyText() {
       const anAtrophy = getValue('an_atrophy') || 0;
       const inAtrophy = getValue('in_atrophy') || 0;
       const coAtrophy = getValue('co_atrophy') || 0;
-      
+
       const atrophyData = [];
-      if (anAtrophy > 0) atrophyData.push({site: 'antro', grade: anAtrophy});
-      if (inAtrophy > 0) atrophyData.push({site: 'incisura', grade: inAtrophy});
-      if (coAtrophy > 0) atrophyData.push({site: 'corpo', grade: coAtrophy});
-      
-      if (atrophyData.length === 0) {
-        return 'Assente';
+      if (anAtrophy > 0) atrophyData.push({ site: 'antro', grade: anAtrophy });
+      if (inAtrophy > 0) atrophyData.push({ site: 'incisura', grade: inAtrophy });
+      if (coAtrophy > 0) atrophyData.push({ site: 'corpo', grade: coAtrophy });
+
+      if (atrophyData.length === 0) return 'Assente';
+
+      function gradeText(g) {
+        return g === 1 ? 'lieve' : g === 2 ? 'moderata' : g === 3 ? 'elevata' : '';
       }
-      
-      // Helper per testo grado con numero
-      function gradeText(grade) {
-        if (grade === 1) return 'lieve (1/3)';
-        if (grade === 2) return 'moderata (2/3)';
-        if (grade === 3) return 'elevata (3/3)';
-        return '';
-      }
-      
-      // Tutti con stesso grado?
+
       const grades = atrophyData.map(d => d.grade);
       const allSame = grades.every(g => g === grades[0]);
-      
+
       if (allSame) {
-        const gText = gradeText(grades[0]);
-        return 'Presente, ' + gText + ' (' + atrophyData.map(d => d.site).join(', ') + ')';
+        return 'Presente, ' + gradeText(grades[0]) + ' (' + atrophyData.map(d => d.site).join(', ') + ')';
       } else {
-        // Gradi diversi - pattern misto
         const details = atrophyData.map(d => d.site + ': ' + gradeText(d.grade)).join(', ');
         return 'Presente, pattern misto (' + details + ')';
       }
     }
-    
+
+    // ============================================================
+    // FIX #3: getMITypeText - warning se sede ha MI>0 ma tipo non selezionato
+    // ============================================================
+    function getMITypeText() {
+      const sites = ['an', 'in', 'co'];
+      const siteNames = { 'an': 'antro', 'in': 'incisura', 'co': 'corpo' };
+      const miData = [];
+      let missingType = false;
+
+      sites.forEach(site => {
+        const metaValue = getValue(site + '_metaplasia') || 0;
+        const miType = getStringValue(site + '_mi_type');
+        if (metaValue > 0) {
+          miData.push({ site: siteNames[site], grade: metaValue, type: miType });
+          if (!miType) missingType = true;
+        }
+      });
+
+      if (miData.length === 0) return 'Assente';
+
+      // FIX #3: segnala tipo mancante
+      if (missingType) {
+        showAlert('warning', 'Tipo metaplasia intestinale non selezionato per una o piu sedi. Specificare completa/incompleta/mista.');
+      }
+
+      function gradeText(g) {
+        return g === 1 ? 'lieve' : g === 2 ? 'moderata' : g === 3 ? 'elevata' : '';
+      }
+
+      const types = miData.map(d => d.type).filter(t => t !== '');
+      const allSame = types.length > 0 && types.every(t => t === types[0]);
+      const hasMixed = types.includes('mixed');
+      const maxGrade = Math.max(...miData.map(d => d.grade));
+      const gradeStr = gradeText(maxGrade);
+      const sitesText = miData.map(d => d.site).join(', ');
+
+      if (allSame && !hasMixed && types[0] === 'complete') {
+        return gradeStr ? 'Presente, ' + gradeStr + ' e completa (' + sitesText + ')' : 'Presente, completa (' + sitesText + ')';
+      } else if (allSame && !hasMixed && types[0] === 'incomplete') {
+        return gradeStr ? 'Presente, ' + gradeStr + ' e incompleta (' + sitesText + ')' : 'Presente, incompleta (' + sitesText + ')';
+      } else if (allSame && types[0] === 'mixed') {
+        return gradeStr ? 'Presente, ' + gradeStr + ' e mista (' + sitesText + ')' : 'Presente, mista (' + sitesText + ')';
+      } else if (types.length > 1 || hasMixed) {
+        const details = miData.map(d => {
+          const t = d.type === 'complete' ? 'completa' : d.type === 'incomplete' ? 'incompleta' : d.type === 'mixed' ? 'mista' : 'n.d.';
+          return d.site + ': ' + gradeText(d.grade) + ' ' + t;
+        }).join(', ');
+        return 'Presente, pattern misto (' + details + ')';
+      } else {
+        return gradeStr ? 'Presente, ' + gradeStr + ' (' + sitesText + ')' : 'Presente (' + sitesText + ')';
+      }
+    }
+
+    // ============================================================
+    // VALIDAZIONE
+    // ============================================================
     function validate() {
       clearErrors();
       const fields = [
-        'an_chronic', 'an_activity', 'an_atrophy', 'an_metaplasia', 'an_hp',
-        'co_chronic', 'co_activity', 'co_atrophy', 'co_metaplasia', 'co_hp',
-        'in_chronic', 'in_activity', 'in_atrophy', 'in_metaplasia', 'in_hp'
+        'an_chronic','an_activity','an_atrophy','an_metaplasia','an_hp',
+        'co_chronic','co_activity','co_atrophy','co_metaplasia','co_hp',
+        'in_chronic','in_activity','in_atrophy','in_metaplasia','in_hp'
       ];
-      
       const missing = fields.filter(id => getValue(id) === null);
-      
       if (missing.length > 0) {
         missing.forEach(id => document.getElementById(id).classList.add('error'));
-        showAlert('error', '⚠️ Compila tutti i campi obbligatori (' + missing.length + ' mancanti)');
+        showAlert('error', 'Compila tutti i campi obbligatori (' + missing.length + ' mancanti)');
         return false;
       }
       return true;
     }
-    
-    function getOLGAScore(atrophy) {
-      // OLGA si basa SOLO su atrofia ghiandolare (non metaplasia)
-      return atrophy;
-    }
-    
+
+    // ============================================================
+    // CALCOLO STAGING
+    // ============================================================
+    function getOLGAScore(atrophy) { return atrophy; }
+
     function calculateStage(antrumScore, corpusScore) {
       const a = Math.min(3, Math.max(0, antrumScore));
       const c = Math.min(3, Math.max(0, corpusScore));
-      return OLGA_MATRIX[a][c]; // [antrum][corpus] - matrice standard Rugge
+      return OLGA_MATRIX[a][c];
     }
-    
+
     function getTopography(anChronic, coChronic) {
-      if (anChronic === 0 && coChronic === 0) {
-        return 'assenza di significativo infiltrato flogistico cronico';
-      }
+      if (anChronic === 0 && coChronic === 0) return 'assenza di significativo infiltrato flogistico cronico';
       if (anChronic > 0 && coChronic > 0) return 'Gastrite diffusa (pangastrite)';
       if (anChronic > 0) return 'Gastrite prevalentemente antrale';
       return 'Gastrite prevalentemente corpale';
     }
-    
+
     function gradeText(val) {
-      const words = ['assente', 'lieve', 'moderata', 'elevata'];
-      return words[val] || '?';
+      return ['assente', 'lieve', 'moderata', 'elevata'][val] || '?';
     }
-    
+
     function getRiskLevel(stage) {
-      if (stage === 'III' || stage === 'IV') return 'alto';
-      if (stage === '0' || stage === 'I' || stage === 'II') return 'basso';
-      return 'indeterminato';
+      return (stage === 'III' || stage === 'IV') ? 'alto' : 'basso';
     }
-    
-    function getDysplasiaText(val) {
-      if (val === 0) return 'Assente';
-      if (val === 1) return 'Basso grado (LGD)';
-      if (val === 2) return 'Alto grado (HGD)';
-      return '?';
-    }
-    
+
     function getDysplasiaTextWithSites(anDys, inDys, coDys) {
       const dysplasiaSites = [];
-      if (anDys === 1) dysplasiaSites.push({site: 'antro', grade: 'LGD'});
-      if (anDys === 2) dysplasiaSites.push({site: 'antro', grade: 'HGD'});
-      if (inDys === 1) dysplasiaSites.push({site: 'incisura', grade: 'LGD'});
-      if (inDys === 2) dysplasiaSites.push({site: 'incisura', grade: 'HGD'});
-      if (coDys === 1) dysplasiaSites.push({site: 'corpo', grade: 'LGD'});
-      if (coDys === 2) dysplasiaSites.push({site: 'corpo', grade: 'HGD'});
-      
+      if (anDys === 1) dysplasiaSites.push({ site: 'antro', grade: 'LGD' });
+      if (anDys === 2) dysplasiaSites.push({ site: 'antro', grade: 'HGD' });
+      if (inDys === 1) dysplasiaSites.push({ site: 'incisura', grade: 'LGD' });
+      if (inDys === 2) dysplasiaSites.push({ site: 'incisura', grade: 'HGD' });
+      if (coDys === 1) dysplasiaSites.push({ site: 'corpo', grade: 'LGD' });
+      if (coDys === 2) dysplasiaSites.push({ site: 'corpo', grade: 'HGD' });
       if (dysplasiaSites.length === 0) return 'Assente';
-      
       const lgdSites = dysplasiaSites.filter(s => s.grade === 'LGD').map(s => s.site);
       const hgdSites = dysplasiaSites.filter(s => s.grade === 'HGD').map(s => s.site);
-      
       const parts = [];
       if (lgdSites.length > 0) parts.push('LGD (' + lgdSites.join(', ') + ')');
       if (hgdSites.length > 0) parts.push('HGD (' + hgdSites.join(', ') + ')');
-      
       return parts.join('; ');
     }
-    
+
+    // ============================================================
+    // CALCULATE PRINCIPALE
+    // ============================================================
     function calculate() {
       if (!validate()) return;
-      
-      const method = 'max';
-      
+
       const anDysplasia = getValue('an_dysplasia') || 0;
       const inDysplasia = getValue('in_dysplasia') || 0;
       const coDysplasia = getValue('co_dysplasia') || 0;
       const dysplasiaMax = Math.max(anDysplasia, inDysplasia, coDysplasia);
-      
+
       const data = {
-        antrum: {
-          chronic: getValue('an_chronic'),
-          activity: getValue('an_activity'),
-          atrophy: getValue('an_atrophy'),
-          metaplasia: getValue('an_metaplasia'),
-          hp: getValue('an_hp'),
-          dysplasia: anDysplasia
-        },
-        corpus: {
-          chronic: getValue('co_chronic'),
-          activity: getValue('co_activity'),
-          atrophy: getValue('co_atrophy'),
-          metaplasia: getValue('co_metaplasia'),
-          hp: getValue('co_hp'),
-          dysplasia: coDysplasia
-        },
-        incisura: {
-          chronic: getValue('in_chronic'),
-          activity: getValue('in_activity'),
-          atrophy: getValue('in_atrophy'),
-          metaplasia: getValue('in_metaplasia'),
-          hp: getValue('in_hp'),
-          dysplasia: inDysplasia
-        }
+        antrum:  { chronic: getValue('an_chronic'), activity: getValue('an_activity'), atrophy: getValue('an_atrophy'), metaplasia: getValue('an_metaplasia'), hp: getValue('an_hp'), dysplasia: anDysplasia },
+        corpus:  { chronic: getValue('co_chronic'), activity: getValue('co_activity'), atrophy: getValue('co_atrophy'), metaplasia: getValue('co_metaplasia'), hp: getValue('co_hp'), dysplasia: coDysplasia },
+        incisura:{ chronic: getValue('in_chronic'), activity: getValue('in_activity'), atrophy: getValue('in_atrophy'), metaplasia: getValue('in_metaplasia'), hp: getValue('in_hp'), dysplasia: inDysplasia }
       };
-      
-      const getChecked = (id) => {
-        const el = document.getElementById(id);
-        return el ? el.checked : false;
-      };
-      
+
+      const getChecked = id => document.getElementById(id)?.checked || false;
       const specialForms = {
-        chemical: {
-          foveolarHyperplasia: getValue('foveolar_hyperplasia'),
-          laminaEdema: getChecked('lamina_edema'),
-          smoothMuscleProlif: getChecked('smooth_muscle_prolif')
-        },
-        autoimmune: {
-          corpusRestricted: getChecked('corpus_restricted'),
-          pseudopyloricMeta: getChecked('pseudopyloric_meta'),
-          eclHyperplasia: getChecked('ecl_hyperplasia')
-        },
-        lymphocytic: {
-          ielsGrade: getValue('iels_grade')
-        },
-        eosinophilic: {
-          eosinophilsHPF: getValue('eosinophils_hpf')
-        }
+        chemical:    { foveolarHyperplasia: getValue('foveolar_hyperplasia'), laminaEdema: getChecked('lamina_edema'), smoothMuscleProlif: getChecked('smooth_muscle_prolif') },
+        autoimmune:  { corpusRestricted: getChecked('corpus_restricted'), pseudopyloricMeta: getChecked('pseudopyloric_meta'), eclHyperplasia: getChecked('ecl_hyperplasia') },
+        lymphocytic: { ielsGrade: getValue('iels_grade') },
+        eosinophilic:{ eosinophilsHPF: getValue('eosinophils_hpf') }
       };
-      
-      const hasChemical = specialForms.chemical.foveolarHyperplasia !== null || 
-                         specialForms.chemical.laminaEdema || 
-                         specialForms.chemical.smoothMuscleProlif;
-      const hasAutoimmune = specialForms.autoimmune.corpusRestricted || 
-                           specialForms.autoimmune.pseudopyloricMeta || 
-                           specialForms.autoimmune.eclHyperplasia;
+
+      const hasChemical    = specialForms.chemical.foveolarHyperplasia !== null || specialForms.chemical.laminaEdema || specialForms.chemical.smoothMuscleProlif;
+      const hasAutoimmune  = specialForms.autoimmune.corpusRestricted || specialForms.autoimmune.pseudopyloricMeta || specialForms.autoimmune.eclHyperplasia;
       const hasLymphocytic = specialForms.lymphocytic.ielsGrade !== null && specialForms.lymphocytic.ielsGrade > 0;
-      const hasEosinophilic = specialForms.eosinophilic.eosinophilsHPF !== null;
-      
+      const hasEosinophilic= specialForms.eosinophilic.eosinophilsHPF !== null;
+
       const maxActivity = Math.max(data.antrum.activity, data.corpus.activity, data.incisura.activity);
-      const maxChronic = Math.max(data.antrum.chronic, data.corpus.chronic, data.incisura.chronic);
-      const hpMax = Math.max(data.antrum.hp, data.corpus.hp, data.incisura.hp);
-      
-      if (hasChemical && maxActivity > 0) {
-        showAlert('warning', '⚠️ ALERT: Gastropatia chimica è tipicamente paucicellulare. Attività neutrofila presente è inconsueta (verificare H. pylori).');
-      }
-      
-      if (hasChemical && maxChronic <= 1) {
-        showAlert('success', '✅ PATTERN COMPATIBILE: Gastropatia chimica con scarso infiltrato infiammatorio (score ≤1).');
-      }
-      
-      if (hasEosinophilic && specialForms.eosinophilic.eosinophilsHPF === 3) {
-        showAlert('warning', '⚠️ GASTRITE EOSINOFILA: Infiltrato eosinofilo ≥30/HPF eccedente soglia critica. DD: parassitosi, farmaci, IBD, vasculiti.');
-      }
-      
-      if (hasAutoimmune) {
-        const corpusInflammation = data.corpus.chronic;
-        const antrumInflammation = Math.max(data.antrum.chronic, data.incisura.chronic);
-        if (!specialForms.autoimmune.corpusRestricted && (corpusInflammation <= antrumInflammation)) {
-          showAlert('warning', '⚠️ ALERT: Criteri autoimmuni presenti ma pattern non corpo-predominante.');
-        }
-        if (hpMax > 0) {
-          showAlert('warning', '⚠️ ALERT: H. pylori presente è raro in gastrite autoimmune conclamata.');
-        }
-      }
-      
-      if (maxActivity > 0 && hpMax === 0) {
-        showAlert('warning', '⚠️ VALIDAZIONE: Attività neutrofila presente senza H. pylori rilevabile.');
-      }
-      
-      const hasLGD = (anDysplasia === 1 || inDysplasia === 1 || coDysplasia === 1);
-      if (hasLGD && maxActivity > 0) {
-        showAlert('warning', '⚠️ LGD in contesto infiammatorio attivo: considerare regressione post-eradicazione HP e revisione a distanza.');
-      }
-      
-      const hasMetaplasiaWithoutAtrophy = (data.antrum.metaplasia > 0 && data.antrum.atrophy === 0) ||
-                                          (data.corpus.metaplasia > 0 && data.corpus.atrophy === 0) ||
-                                          (data.incisura.metaplasia > 0 && data.incisura.atrophy === 0);
+      const maxChronic  = Math.max(data.antrum.chronic, data.corpus.chronic, data.incisura.chronic);
+      const hpMax       = Math.max(data.antrum.hp, data.corpus.hp, data.incisura.hp);
+
+      // ALERT CLINICI
+      if (hasChemical && maxActivity > 0)
+        showAlert('warning', 'ALERT: Gastropatia chimica con attivita neutrofila presente - verificare H. pylori.');
+      if (hasEosinophilic && specialForms.eosinophilic.eosinophilsHPF === 3)
+        showAlert('warning', 'GASTRITE EOSINOFILA: >=30/HPF. DD: parassitosi, farmaci, IBD, vasculiti.');
+      if (hasAutoimmune && hpMax > 0)
+        showAlert('warning', 'ALERT: H. pylori presente in pattern autoimmune - coesistenza rara.');
+      if (maxActivity > 0 && hpMax === 0)
+        showAlert('warning', 'VALIDAZIONE: Attivita neutrofila senza H. pylori rilevabile.');
+      if ((anDysplasia === 1 || inDysplasia === 1 || coDysplasia === 1) && maxActivity > 0)
+        showAlert('warning', 'LGD in contesto infiammatorio attivo: considerare regressione post-eradicazione.');
+
+      const hasMetaplasiaWithoutAtrophy =
+        (data.antrum.metaplasia > 0 && data.antrum.atrophy === 0) ||
+        (data.corpus.metaplasia > 0 && data.corpus.atrophy === 0) ||
+        (data.incisura.metaplasia > 0 && data.incisura.atrophy === 0);
       if (hasMetaplasiaWithoutAtrophy) {
-        if (hpMax === 0 && maxChronic <= 1) {
-          showAlert('success', 'ℹ️ INFO: Metaplasia intestinale senza atrofia. Pattern compatibile con campionamento limitato o fase post-eradicazione.');
-        } else {
-          showAlert('warning', '⚠️ VALIDAZIONE: Metaplasia intestinale senza atrofia ghiandolare è insolita.');
-        }
+        showAlert(hpMax === 0 && maxChronic <= 1 ? 'success' : 'warning',
+          'Metaplasia intestinale senza atrofia. Possibile campionamento limitato o post-eradicazione.');
       }
-      
-      const hasAtrophyWithoutInflammation = (data.antrum.atrophy >= 2 && data.antrum.chronic < 2) ||
-                                            (data.corpus.atrophy >= 2 && data.corpus.chronic < 2);
-      if (hasAtrophyWithoutInflammation) {
-        showAlert('warning', '⚠️ VALIDAZIONE: Atrofia elevata con scarso infiltrato cronico. Pattern compatibile con gastrite autoimmune avanzata (burned-out) o esito post-eradicazione.');
-      }
-      
-      const antrumAtrophyAggregated = Math.max(data.antrum.atrophy, data.incisura.atrophy);
+
+      const hasAtrophyWithoutInflammation =
+        (data.antrum.atrophy >= 2 && data.antrum.chronic < 2) ||
+        (data.corpus.atrophy >= 2 && data.corpus.chronic < 2);
+      if (hasAtrophyWithoutInflammation)
+        showAlert('warning', 'Atrofia elevata con scarso infiltrato cronico. Pattern compatibile con gastrite autoimmune burned-out o post-eradicazione.');
+
+      // STAGING
+      const antrumAtrophyAggregated    = Math.max(data.antrum.atrophy, data.incisura.atrophy);
       const antrumMetaplasiaAggregated = Math.max(data.antrum.metaplasia, data.incisura.metaplasia);
-      
-      const olgaAntrum = getOLGAScore(antrumAtrophyAggregated);
-      const olgaCorpus = getOLGAScore(data.corpus.atrophy);
-      const olgaStage = calculateStage(olgaAntrum, olgaCorpus);
-      
-      const olgimAntrum = antrumMetaplasiaAggregated;
-      const olgimCorpus = data.corpus.metaplasia;
-      const olgimStage = calculateStage(olgimAntrum, olgimCorpus);
-      
-      const maxAntrumChronic = Math.max(data.antrum.chronic, data.incisura.chronic);
-      const topography = getTopography(maxAntrumChronic, data.corpus.chronic);
-      
-      const olgaRisk = getRiskLevel(olgaStage);
-      const olgimRisk = getRiskLevel(olgimStage);
-      const isHighRisk = olgaRisk === 'alto' || olgimRisk === 'alto';
-      
+
+      const olgaStage  = calculateStage(getOLGAScore(antrumAtrophyAggregated), getOLGAScore(data.corpus.atrophy));
+      const olgimStage = calculateStage(antrumMetaplasiaAggregated, data.corpus.metaplasia);
+
+      const olgaRisk   = getRiskLevel(olgaStage);
+      const olgimRisk  = getRiskLevel(olgimStage);
+
       const stageValues = { '0': 0, 'I': 1, 'II': 2, 'III': 3, 'IV': 4 };
-      const stageDiff = Math.abs(stageValues[olgaStage] - stageValues[olgimStage]);
+      const stageDiff   = Math.abs(stageValues[olgaStage] - stageValues[olgimStage]);
       const hasDiscordance = stageDiff >= 2;
-      
+      if (hasDiscordance)
+        showAlert('warning', 'OLGA e OLGIM divergono >=2 stadi: considerare lo stadio piu alto per la sorveglianza.');
+
       const hasMetaplasia = antrumMetaplasiaAggregated > 0 || data.corpus.metaplasia > 0;
-      
-      const olgaBadgeClass = olgaRisk === 'alto' ? 'high' : 'low';
-      const olgimBadgeClass = olgimRisk === 'alto' ? 'high' : 'low';
-      
-      let badgesHTML = '<span class="badge ' + olgaBadgeClass + '">' +
-          '<span class="dot" style="background: ' + (olgaRisk === 'alto' ? '#f56565' : '#48bb78') + '"></span>' +
-          'OLGA ' + olgaStage +
-        '</span>' +
-        '<span class="badge ' + olgimBadgeClass + '">' +
-          '<span class="dot" style="background: ' + (olgimRisk === 'alto' ? '#f56565' : '#48bb78') + '"></span>' +
-          'OLGIM ' + olgimStage +
-        '</span>';
-      
-      if (dysplasiaMax > 0) {
-        const dysplasiaBadgeClass = dysplasiaMax === 2 ? 'high' : 'dysplasia';
-        const dysplasiaText = getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia);
-        badgesHTML += '<span class="badge ' + dysplasiaBadgeClass + '">' +
-            '<span class="dot" style="background: ' + (dysplasiaMax === 2 ? '#f56565' : '#805ad5') + '"></span>' +
-            dysplasiaText +
-          '</span>';
-      }
-      
-      if (hasDiscordance) {
-        badgesHTML += '<span class="badge warning">' +
-            '<span class="dot" style="background: #ed8936"></span>' +
-            'Discordanza OLGA/OLGIM' +
-          '</span>';
-        showAlert('warning', '⚠️ OLGA e OLGIM divergono ≥2 stadi: considerare lo stadio più alto per la sorveglianza');
-      }
-      
-      if (hasChemical) {
-        badgesHTML += '<span class="badge warning">' +
-            '<span class="dot" style="background: #f59e0b"></span>' +
-            'Gastropatia chimica/reattiva' +
-          '</span>';
-      }
-      if (hasAutoimmune) {
-        badgesHTML += '<span class="badge info">' +
-            '<span class="dot" style="background: #8b5cf6"></span>' +
-            'Pattern autoimmune' +
-          '</span>';
-      }
-      
+      const maxAntrumChronic = Math.max(data.antrum.chronic, data.incisura.chronic);
+
+      // BADGES
+      let badgesHTML = '';
+      const addBadge = (cls, color, text) =>
+        badgesHTML += '<span class="badge ' + cls + '"><span class="dot" style="background:' + color + '"></span>' + text + '</span>';
+
+      addBadge(olgaRisk === 'alto' ? 'high' : 'low', olgaRisk === 'alto' ? '#f56565' : '#48bb78', 'OLGA ' + olgaStage);
+      addBadge(olgimRisk === 'alto' ? 'high' : 'low', olgimRisk === 'alto' ? '#f56565' : '#48bb78', 'OLGIM ' + olgimStage);
+      if (dysplasiaMax > 0) addBadge(dysplasiaMax === 2 ? 'high' : 'dysplasia', dysplasiaMax === 2 ? '#f56565' : '#805ad5', getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia));
+      if (hasDiscordance) addBadge('warning', '#ed8936', 'Discordanza OLGA/OLGIM');
+      if (hasChemical)    addBadge('warning', '#f59e0b', 'Gastropatia chimica/reattiva');
+      if (hasAutoimmune)  addBadge('info', '#8b5cf6', 'Pattern autoimmune');
       if (hasLymphocytic) {
-        const ielsGrade = specialForms.lymphocytic.ielsGrade;
-        let badgeText = 'Gastrite linfocitica';
-        let badgeClass = 'dysplasia';
-        let badgeColor = '#6366f1';
-        
-        if (ielsGrade === 1) {
-          badgeText = 'IEL aumentati (borderline)';
-          badgeClass = 'info';
-          badgeColor = '#3b82f6';
-        }
-        
-        badgesHTML += '<span class="badge ' + badgeClass + '">' +
-            '<span class="dot" style="background: ' + badgeColor + '"></span>' +
-            badgeText +
-          '</span>';
+        const g = specialForms.lymphocytic.ielsGrade;
+        addBadge(g === 1 ? 'info' : 'dysplasia', g === 1 ? '#3b82f6' : '#6366f1', g === 1 ? 'IEL aumentati (borderline)' : 'Gastrite linfocitica');
       }
-      
-      if (hasEosinophilic) {
-        badgesHTML += '<span class="badge ' + (specialForms.eosinophilic.eosinophilsHPF === 3 ? 'high' : 'warning') + '">' +
-            '<span class="dot" style="background: ' + (specialForms.eosinophilic.eosinophilsHPF === 3 ? '#ef4444' : '#f59e0b') + '"></span>' +
-            'Gastrite eosinofila ' + (specialForms.eosinophilic.eosinophilsHPF === 3 ? '(≥30/HPF)' : '') +
-          '</span>';
-      }
-      
+      if (hasEosinophilic) addBadge(specialForms.eosinophilic.eosinophilsHPF === 3 ? 'high' : 'warning', specialForms.eosinophilic.eosinophilsHPF === 3 ? '#ef4444' : '#f59e0b', 'Gastrite eosinofila');
+
       document.getElementById('badgesContainer').innerHTML = badgesHTML;
-      
-      const tableSites = [
-        ['Antro', data.antrum],
-        ['Incisura', data.incisura],
-        ['Corpo', data.corpus]
-      ];
-      
-      document.getElementById('tableBody').innerHTML = tableSites.map(function(item) {
-        const name = item[0];
-        const d = item[1];
-        return '<tr>' +
-          '<td><strong>' + name + '</strong></td>' +
-          '<td>' + d.chronic + '</td>' +
-          '<td>' + d.activity + '</td>' +
-          '<td>' + d.atrophy + '</td>' +
-          '<td>' + d.metaplasia + '</td>' +
-          '<td>' + d.hp + '</td>' +
-        '</tr>';
-      }).join('');
-      
+
+      // TABELLA
+      document.getElementById('tableBody').innerHTML = [['Antro', data.antrum], ['Incisura', data.incisura], ['Corpo', data.corpus]]
+        .map(([name, d]) => '<tr><td><strong>' + name + '</strong></td><td>' + d.chronic + '</td><td>' + d.activity + '</td><td>' + d.atrophy + '</td><td>' + d.metaplasia + '</td><td>' + d.hp + '</td></tr>')
+        .join('');
+
       const hpStatus = hpMax > 0 ? 'Presente' : 'Assente';
-      
-      const freeNotesEl = document.getElementById('free_notes');
-      const freeNotes = freeNotesEl ? freeNotesEl.value.trim() : '';
-      const freeNotesSection = freeNotes ? 
-        '\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nNOTE AGGIUNTIVE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' + freeNotes : '';
-      
-      const extendedReportEl = document.getElementById('extended_report');
-      const isExtendedMode = extendedReportEl ? extendedReportEl.checked : false;
-      
-      let report;
-      
+      const freeNotes = document.getElementById('free_notes')?.value.trim() || '';
+      const freeNotesSection = freeNotes ? '\n\n' + '='.repeat(51) + '\nNOTE AGGIUNTIVE\n' + '='.repeat(51) + '\n\n' + freeNotes : '';
+
+      // ============================================================
+      // GENERAZIONE REFERTO
+      // ============================================================
+      let diagnosticHeader = '';
+      let report = '';
+
       const hasAnyGastritis = maxChronic > 0 || antrumAtrophyAggregated > 0 || data.corpus.atrophy > 0 ||
                               antrumMetaplasiaAggregated > 0 || data.corpus.metaplasia > 0 || dysplasiaMax > 0;
-      
       const isCompletelyNegative = !hasAnyGastritis && !hasChemical && !hasAutoimmune && !hasLymphocytic && !hasEosinophilic;
-      
       const hasOnlySpecialForms = !hasAnyGastritis && (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic);
-      
-      // ============================================
-      // FIX v5.7.7: INTESTAZIONI DIAGNOSTICHE DIFFERENZIATE
-      // ============================================
-      
-      let diagnosticHeader = '';
-      
-      if (isExtendedMode) {
-        report = 'Referto esteso non ancora implementato completamente in v5.7.7';
-      } else {
-        if (isCompletelyNegative) {
-          report = 'Mucosa gastrica antrale e corpale nei limiti della norma.\n\n' +
-'ATROFIA GHIANDOLARE: Assente\n' +
-'METAPLASIA INTESTINALE: Assente\n' +
-'H. PYLORI: Assente\n' +
-'DISPLASIA: Assente\n\n' +
-'**OLGA**: stadio 0\n' +
-'**OLGIM**: stadio 0' + freeNotesSection;
-        
-        } else if (hasOnlySpecialForms) {
-          let specialDiagnosis = '';
-          let olgaContextNote = '';
-          
-          if (hasChemical) {
-            diagnosticHeader = 'Gastropatia reattiva (chimica/farmacologica)';
-            const fovHyp = specialForms.chemical.foveolarHyperplasia;
-            specialDiagnosis = 'Mucosa gastrica priva di infiltrato flogistico cronico' + (fovHyp > 0 ? ', con iperplasia foveolare ' + gradeText(fovHyp).toLowerCase() : '') + (specialForms.chemical.laminaEdema ? ', edema lamina propria' : '') + (specialForms.chemical.smoothMuscleProlif ? ', proliferazione muscolo liscio' : '') + '.\n\n' +
-'Quadro istologico compatibile con GASTROPATIA REATTIVA/CHIMICA.\n' +
-'Pattern suggestivo per reflusso biliare, FANS o alcol.';
-            olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
-          } else if (hasAutoimmune) {
-            diagnosticHeader = 'Gastrite cronica autoimmune';
-            specialDiagnosis = 'Mucosa gastrica ' + (specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') + ' priva di infiltrato flogistico cronico significativo.\n' +
-(specialForms.autoimmune.pseudopyloricMeta ? 'Metaplasia pseudopilorica presente. ' : '') + (specialForms.autoimmune.eclHyperplasia ? 'Iperplasia cellule ECL. ' : '') + '\n' +
-'Quadro istologico compatibile con GASTRITE AUTOIMMUNE (fase avanzata/esito).\n\n' +
-CLINICAL_NOTES.autoimmuneCorrelation;
-            olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
-          } else if (hasLymphocytic) {
-            const ielsGrade = specialForms.lymphocytic.ielsGrade;
-            // FIX v5.7.7: Wording ultra-prudente per IEL borderline
-            if (ielsGrade === 1) {
-              diagnosticHeader = 'Incremento borderline linfociti intraepiteliali';
-              specialDiagnosis = 'Mucosa gastrica con incremento borderline dei linfociti intraepiteliali (15-25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
-'Quadro suggestivo ma NON diagnostico per gastrite linfocitica.\n' +
-'Correlazione clinica ed endoscopica raccomandata.\n\n' +
-'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), fase precoce gastrite linfocitica, variante normale.';
-            } else {
-              diagnosticHeader = 'Gastrite linfocitica';
-              specialDiagnosis = 'Mucosa gastrica con linfociti intraepiteliali francamente aumentati (>25/100 cellule epiteliali), in assenza di significativo infiltrato flogistico cronico nella lamina propria.\n\n' +
-'GASTRITE LINFOCITICA.\n\n' +
-'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), malattia di Ménétrier.';
-            }
-            olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
-          } else if (hasEosinophilic) {
-            diagnosticHeader = 'Gastrite eosinofila';
-            const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '≥30/HPF (soglia critica)' : 
-                          specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF' : '10-19/HPF';
-            specialDiagnosis = 'Mucosa gastrica con marcato incremento eosinofili (' + eoText + '), in assenza di significativo infiltrato flogistico cronico.\n\n' +
-'Quadro istologico compatibile con GASTRITE EOSINOFILA.\n' +
-'DD: parassitosi (Anisakis), farmaci (PPI/FANS), IBD, vasculiti.';
-            olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
-          }
-          
-          report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
-'H. PYLORI: ' + hpStatus + '\n' +
-'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
-'DISPLASIA: Assente\n\n' +
-'**OLGA**: stadio ' + olgaStage + '\n' +
-'**OLGIM**: stadio ' + olgimStage + olgaContextNote + '\n\n' +
-'NOTA INTERPRETATIVA:\n' +
-'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
-'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
-        
-        } else {
-          // ============================================
-          // FIX v5.7.7: Intestazione differenziata per gastrite cronica
-          // ============================================
-          if (hpMax > 0) {
-            diagnosticHeader = 'Gastrite cronica HP-associata';
-          } else if (hasAutoimmune && maxAntrumChronic === 0) {
-            diagnosticHeader = 'Gastrite cronica autoimmune';
+
+      if (isCompletelyNegative) {
+        report = 'Mucosa gastrica antrale e corpale nei limiti della norma.\n\n' +
+          'ATROFIA GHIANDOLARE: Assente\n' +
+          'METAPLASIA INTESTINALE: Assente\n' +
+          'H. PYLORI: Assente\n' +
+          'DISPLASIA: Assente\n\n' +
+          '**OLGA**: stadio 0\n' +
+          '**OLGIM**: stadio 0' + freeNotesSection;
+
+      } else if (hasOnlySpecialForms) {
+        let specialDiagnosis = '';
+        let olgaContextNote = '';
+
+        if (hasChemical) {
+          diagnosticHeader = 'Gastropatia reattiva (chimica/farmacologica)';
+          const fovHyp = specialForms.chemical.foveolarHyperplasia;
+          specialDiagnosis = 'Mucosa gastrica priva di infiltrato flogistico cronico' +
+            (fovHyp > 0 ? ', con iperplasia foveolare ' + gradeText(fovHyp) : '') +
+            (specialForms.chemical.laminaEdema ? ', edema lamina propria' : '') +
+            (specialForms.chemical.smoothMuscleProlif ? ', proliferazione muscolo liscio' : '') +
+            '.\n\nQuadro istologico compatibile con GASTROPATIA REATTIVA/CHIMICA.\nPattern suggestivo per reflusso biliare, FANS o alcol.';
+          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
+        } else if (hasAutoimmune) {
+          diagnosticHeader = 'Gastrite cronica autoimmune';
+          specialDiagnosis = 'Mucosa gastrica ' + (specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') +
+            ' priva di infiltrato flogistico cronico significativo.\n' +
+            (specialForms.autoimmune.pseudopyloricMeta ? 'Metaplasia pseudopilorica presente. ' : '') +
+            (specialForms.autoimmune.eclHyperplasia ? 'Iperplasia cellule ECL. ' : '') +
+            '\nQuadro istologico compatibile con GASTRITE AUTOIMMUNE (fase avanzata/esito).\n\n' +
+            CLINICAL_NOTES.autoimmuneCorrelation;
+          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
+        } else if (hasLymphocytic) {
+          const ielsGrade = specialForms.lymphocytic.ielsGrade;
+          if (ielsGrade === 1) {
+            diagnosticHeader = 'Incremento borderline linfociti intraepiteliali';
+            specialDiagnosis = 'Mucosa gastrica con incremento borderline dei linfociti intraepiteliali (15-25/100 cellule epiteliali).\n\n' +
+              'Quadro suggestivo ma NON diagnostico per gastrite linfocitica.\n' +
+              'Correlazione clinica ed endoscopica raccomandata.\n\n' +
+              'DD: gastrite variolariforme (endoscopia), malattia celiaca (20-40%), variante normale.';
           } else {
-            diagnosticHeader = 'Gastrite cronica';
+            diagnosticHeader = 'Gastrite linfocitica';
+            specialDiagnosis = 'Mucosa gastrica con linfociti intraepiteliali francamente aumentati (>25/100 cellule epiteliali).\n\nGASTRITE LINFOCITICA.\n\nDD: gastrite variolariforme, malattia celiaca, malattia di Menetrier.';
           }
-          
-          diagnosticHeader += (maxActivity > 0 ? ' (attiva)' : ' (quiescente)');
-          
-          let specialFormsNote = '';
-          if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
-            specialFormsNote = '\n\nPATTERN SOVRAPPOSTI:';
-            if (hasChemical) specialFormsNote += '\n• Gastropatia chimica/reattiva';
-            if (hasAutoimmune) {
-              specialFormsNote += '\n• Pattern autoimmune';
-              specialFormsNote += '\n  ' + CLINICAL_NOTES.autoimmuneCorrelation;
-            }
-            if (hasLymphocytic) {
-              const ielsGrade = specialForms.lymphocytic.ielsGrade;
-              if (ielsGrade === 1) {
-                specialFormsNote += '\n• Incremento borderline linfociti intraepiteliali (15-25/100 cellule)';
-                specialFormsNote += '\n  Suggestivo ma NON diagnostico per gastrite linfocitica';
-              } else {
-                specialFormsNote += '\n• Gastrite linfocitica (IEL francamente aumentati)';
-              }
-            }
-            if (hasEosinophilic) specialFormsNote += '\n• Gastrite eosinofila';
-          }
-          
-          const hgdNote = dysplasiaMax === 2 ? '\n\n' + CLINICAL_NOTES.hgdPrevails : '';
-          
-          const miNote = hasMetaplasiaWithoutAtrophy ? '\n' + CLINICAL_NOTES.miWithoutAtrophy : '';
-          
-          const discordanceNote = hasDiscordance ? '\nDISCORDANZA: OLGA e OLGIM divergono ≥2 stadi - considerare stadio più alto per sorveglianza' : '';
-          
-          // FIX v5.7.7: OLGIM relativizzato per forme speciali sovrapposte
-          let olgaContextNote = '';
-          if (hasAutoimmune || hasChemical || hasLymphocytic || hasEosinophilic) {
-            if (hasAutoimmune) {
-              olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
-            } else if (hasChemical) {
-              olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
-            } else {
-              olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
-            }
-          }
-          
-          report = diagnosticHeader + '\n\n' +
-'H. PYLORI: ' + hpStatus + '\n' +
-'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
-'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + '\n' +
-'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) + specialFormsNote + '\n\n' +
-'**OLGA**: stadio ' + olgaStage + '\n' +
-'**OLGIM**: stadio ' + olgimStage + discordanceNote + olgaContextNote + hgdNote + '\n\n' +
-'NOTA INTERPRETATIVA:\n' +
-(document.getElementById('inadequate_sampling')?.checked ? 
-  'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.\n' : '') +
-'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
-'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
-CLINICAL_NOTES.stagingValidity;
+          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
+        } else if (hasEosinophilic) {
+          diagnosticHeader = 'Gastrite eosinofila';
+          const eoText = specialForms.eosinophilic.eosinophilsHPF === 3 ? '>=30/HPF (soglia critica)' : specialForms.eosinophilic.eosinophilsHPF === 2 ? '20-29/HPF' : '10-19/HPF';
+          specialDiagnosis = 'Mucosa gastrica con marcato incremento eosinofili (' + eoText + ').\n\nQuadro istologico compatibile con GASTRITE EOSINOFILA.\nDD: parassitosi (Anisakis), farmaci, IBD, vasculiti.';
+          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
         }
-      }
-      
-      // Stealth mode: rimuovi emoji e sostituisci con testo
-      if (document.getElementById('stealth_mode')?.checked) {
-        report = report
-          .replace(/⚠️/g, 'ATTENZIONE')
-          .replace(/✅/g, 'OK')
-          .replace(/⛔/g, 'ATTENZIONE')
-          .replace(/📋/g, 'NOTA')
-          .replace(/🔬/g, '')
-          .replace(/ℹ️/g, 'INFO')
-          .trim();
+
+        report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
+          'H. PYLORI: ' + hpStatus + '\n' +
+          'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
+          'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
+          'DISPLASIA: Assente\n\n' +
+          '**OLGA**: stadio ' + olgaStage + '\n' +
+          '**OLGIM**: stadio ' + olgimStage + olgaContextNote + '\n\n' +
+          'NOTA INTERPRETATIVA:\n' +
+          'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
+          'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
+
       } else {
-        // Default: rimuovi TUTTE le emoji dal referto (non sostituire)
-        report = report
-          .replace(/⚠️|✅|⛔|📋|🔬|ℹ️|🦠|🎯|🧪|🔴|📝|⚡|🔒/g, '')
-          .trim();
+        // Gastrite cronica con o senza forme speciali sovrapposte
+        if (hpMax > 0) {
+          diagnosticHeader = 'Gastrite cronica HP-associata';
+        } else if (hasAutoimmune && maxAntrumChronic === 0) {
+          diagnosticHeader = 'Gastrite cronica autoimmune';
+        } else {
+          diagnosticHeader = 'Gastrite cronica';
+        }
+        diagnosticHeader += (maxActivity > 0 ? ' (attiva)' : ' (quiescente)');
+
+        let specialFormsNote = '';
+        if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
+          specialFormsNote = '\n\nPATTERN SOVRAPPOSTI:';
+          if (hasChemical)    specialFormsNote += '\n- Gastropatia chimica/reattiva';
+          if (hasAutoimmune) {
+            specialFormsNote += '\n- Pattern autoimmune';
+            specialFormsNote += '\n  ' + CLINICAL_NOTES.autoimmuneCorrelation;
+          }
+          if (hasLymphocytic) {
+            specialFormsNote += specialForms.lymphocytic.ielsGrade === 1
+              ? '\n- Incremento borderline linfociti intraepiteliali (15-25/100)\n  Suggestivo ma NON diagnostico per gastrite linfocitica'
+              : '\n- Gastrite linfocitica (IEL francamente aumentati)';
+          }
+          if (hasEosinophilic) specialFormsNote += '\n- Gastrite eosinofila';
+        }
+
+        const hgdNote    = dysplasiaMax === 2 ? '\n\n' + CLINICAL_NOTES.hgdPrevails : '';
+        const miNote     = hasMetaplasiaWithoutAtrophy ? '\n' + CLINICAL_NOTES.miWithoutAtrophy : '';
+        const discordNote= hasDiscordance ? '\nDISCORDANZA: OLGA e OLGIM divergono >=2 stadi - considerare stadio piu alto per sorveglianza' : '';
+
+        let olgaContextNote = '';
+        if (hasAutoimmune) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
+        else if (hasChemical) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
+        else if (hasLymphocytic || hasEosinophilic) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
+
+        report = diagnosticHeader + '\n\n' +
+          'H. PYLORI: ' + hpStatus + '\n' +
+          'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
+          'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + '\n' +
+          'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) +
+          specialFormsNote + '\n\n' +
+          '**OLGA**: stadio ' + olgaStage + '\n' +
+          '**OLGIM**: stadio ' + olgimStage + discordNote + olgaContextNote + hgdNote + '\n\n' +
+          'NOTA INTERPRETATIVA:\n' +
+          (document.getElementById('inadequate_sampling')?.checked ?
+            'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilita limitata.\n' : '') +
+          'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
+          'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
+          CLINICAL_NOTES.stagingValidity;
       }
-      
-      // Converti markdown bold (**testo**) in HTML (<strong>testo</strong>)
+
+      // Stealth mode
+      if (document.getElementById('stealth_mode')?.checked) {
+        report = report.replace(/ATTENZIONE/g,'ATTENZIONE').trim();
+      } else {
+        // Default: nessuna emoji nel referto (gia rimossa)
+      }
+
+      // Render con bold
       const htmlReport = report
         .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
         .replace(/\n/g, '<br>');
-      
+
       document.getElementById('reportText').innerHTML = htmlReport;
       document.getElementById('resultsSection').style.display = 'block';
       document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
+
       lockFormAfterReport();
     }
-    
-    // ============================================
-    // FIX v5.7.7: CLIPBOARD ULTRA-ROBUSTO
-    // ============================================
+
+    // ============================================================
+    // CLIPBOARD
+    // ============================================================
     function copyReport() {
       const reportEl = document.getElementById('reportText');
       if (!reportEl || !reportEl.innerHTML || reportEl.innerHTML.trim() === '') {
-        showAlert('error', '⚠️ Calcola prima il referto');
+        showAlert('error', 'Calcola prima il referto');
         return;
       }
-      
-      // Estrai testo da HTML: converti <br> in \n e rimuovi tags HTML
       let text = reportEl.innerHTML
         .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<strong>/gi, '')
-        .replace(/<\/strong>/gi, '')
+        .replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
         .replace(/<[^>]+>/g, '');
-      
-      // Converti \n in \r\n per compatibilità Windows/LIS
       text = text.replace(/\r?\n/g, '\r\n');
-      
-      // Check se Clipboard API è disponibile e non bloccata
-      const canUseClipboardAPI = 
-        navigator.clipboard && 
-        navigator.clipboard.writeText && 
-        window.isSecureContext;
-      
-      if (canUseClipboardAPI) {
-        // Tenta Clipboard API ma gestisci silenziosamente il blocco permissions
+
+      if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
         navigator.clipboard.writeText(text)
-          .then(() => {
-            showAlert('success', '✅ Referto copiato negli appunti');
-          })
-          .catch(() => {
-            // Clipboard API bloccata da permissions policy → usa fallback silenzioso
-            copyReportFallback(text);
-          });
+          .then(() => showAlert('success', 'Referto copiato negli appunti'))
+          .catch(() => copyReportFallback(text));
       } else {
-        // Clipboard API non disponibile → usa direttamente fallback
         copyReportFallback(text);
       }
     }
-    
-    // Fallback iOS-friendly (v5.7.9)
+
     function copyReportFallback(text) {
-      // iOS/Safari richiede elemento VISIBILE e con focus reale
       const textarea = document.createElement('textarea');
       textarea.value = text;
       textarea.readOnly = true;
-      
-      // Style: temporaneamente visibile (iOS non copia elementi hidden)
-      textarea.style.position = 'fixed';
-      textarea.style.top = '50%';
-      textarea.style.left = '50%';
-      textarea.style.transform = 'translate(-50%, -50%)';
-      textarea.style.width = '90%';
-      textarea.style.height = '200px';
-      textarea.style.zIndex = '9999';
-      textarea.style.border = '3px solid #4CAF50';
-      textarea.style.background = '#fff';
-      textarea.style.padding = '10px';
-      textarea.style.fontSize = '14px';
-      
+      Object.assign(textarea.style, { position:'fixed', top:'50%', left:'50%', transform:'translate(-50%,-50%)', width:'90%', height:'200px', zIndex:'9999', border:'3px solid #4CAF50', background:'#fff', padding:'10px', fontSize:'14px' });
       document.body.appendChild(textarea);
-      
-      // iOS: focus + selezione con delay
       textarea.focus();
       textarea.setSelectionRange(0, text.length);
-      
-      // Scroll to top della textarea (iOS fix)
-      textarea.scrollTop = 0;
-      
       let success = false;
-      
-      try {
-        // execCommand('copy') deve essere chiamato DOPO focus
-        success = document.execCommand('copy');
-      } catch (err) {
-        console.warn('execCommand fallito:', err);
-      }
-      
+      try { success = document.execCommand('copy'); } catch(e) {}
       if (success) {
-        // Rimuovi textarea dopo breve delay (feedback visivo)
-        setTimeout(() => {
-          document.body.removeChild(textarea);
-          showAlert('success', '✅ Referto copiato negli appunti (modalità compatibilità)');
-        }, 150);
+        setTimeout(() => { document.body.removeChild(textarea); showAlert('success', 'Referto copiato (modalita compatibilita)'); }, 150);
       } else {
-        // Fallback manuale: lascia textarea visibile con istruzioni
         copyReportManual(textarea);
       }
     }
-    
-    // Fallback finale: copia manuale assistita (v5.7.9)
+
     function copyReportManual(textarea) {
       if (!textarea) {
-        // Se textarea non passata, usa reportText direttamente
-        const reportEl = document.getElementById('reportText');
         const range = document.createRange();
-        range.selectNodeContents(reportEl);
+        range.selectNodeContents(document.getElementById('reportText'));
         const sel = window.getSelection();
         sel.removeAllRanges();
         sel.addRange(range);
-        
-        showAlert('warning', '⚠️ Copia automatica non supportata. Testo selezionato → Premi Ctrl+C (o Cmd+C su Mac)', 8000);
+        showAlert('warning', 'Testo selezionato. Premi Ctrl+C (o Cmd+C su Mac)');
       } else {
-        // Textarea già visibile e selezionata - mostra istruzioni
         textarea.focus();
         textarea.setSelectionRange(0, textarea.value.length);
-        
-        // Box istruzioni sovrapposto
-        const instructionBox = document.createElement('div');
-        instructionBox.style.cssText = `
-          position: fixed;
-          top: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: #ff9800;
-          color: white;
-          padding: 15px 25px;
-          border-radius: 8px;
-          font-size: 16px;
-          font-weight: bold;
-          z-index: 10000;
-          box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        `;
-        instructionBox.textContent = '📋 Premi Ctrl+C (Cmd+C su Mac) per copiare';
-        document.body.appendChild(instructionBox);
-        
-        // Rimuovi tutto dopo 10 secondi
-        setTimeout(() => {
-          if (document.body.contains(textarea)) document.body.removeChild(textarea);
-          if (document.body.contains(instructionBox)) document.body.removeChild(instructionBox);
-        }, 10000);
+        const box = document.createElement('div');
+        box.textContent = 'Premi Ctrl+C (Cmd+C su Mac) per copiare';
+        Object.assign(box.style, { position:'fixed', top:'20px', left:'50%', transform:'translateX(-50%)', background:'#ff9800', color:'white', padding:'15px 25px', borderRadius:'8px', fontSize:'16px', fontWeight:'bold', zIndex:'10000' });
+        document.body.appendChild(box);
+        setTimeout(() => { if(document.body.contains(textarea)) document.body.removeChild(textarea); if(document.body.contains(box)) document.body.removeChild(box); }, 10000);
       }
     }
-    
+
+    // ============================================================
+    // SHORTCUT & RESET
+    // ============================================================
     function setNegativeCase() {
-      unlockForm(); // Sblocca form se era bloccato
-      
-      const fields = [
-        'an_chronic', 'an_activity', 'an_atrophy', 'an_metaplasia', 'an_hp', 'an_dysplasia',
-        'co_chronic', 'co_activity', 'co_atrophy', 'co_metaplasia', 'co_hp', 'co_dysplasia',
-        'in_chronic', 'in_activity', 'in_atrophy', 'in_metaplasia', 'in_hp', 'in_dysplasia'
-      ];
-      
-      fields.forEach(function(id) {
-        const el = document.getElementById(id);
-        if (el) el.value = '0';
-      });
-      
-      ['an', 'in', 'co'].forEach(site => {
-        document.getElementById(site + '_mi_type').value = '';
-        checkMetaplasiaAndShowMIType(site);
-      });
-      
+      unlockForm();
+      ['an_chronic','an_activity','an_atrophy','an_metaplasia','an_hp','an_dysplasia',
+       'co_chronic','co_activity','co_atrophy','co_metaplasia','co_hp','co_dysplasia',
+       'in_chronic','in_activity','in_atrophy','in_metaplasia','in_hp','in_dysplasia']
+        .forEach(id => { const el = document.getElementById(id); if(el) el.value = '0'; });
+      ['an','in','co'].forEach(s => { document.getElementById(s+'_mi_type').value = ''; checkMetaplasiaAndShowMIType(s); });
       document.getElementById('resultsSection').style.display = 'none';
-      
-      showAlert('success', '✅ Caso negativo standard: tutti i campi settati a 0');
+      showAlert('success', 'Caso negativo: tutti i campi settati a 0');
       saveFormData();
     }
-    
+
     function setHPyCase() {
-      unlockForm(); // Sblocca form se era bloccato
-      
+      unlockForm();
       document.getElementById('an_chronic').value = '1';
       document.getElementById('in_chronic').value = '1';
       document.getElementById('co_chronic').value = '0';
-      
       document.getElementById('an_hp').value = '1';
       document.getElementById('in_hp').value = '0';
       document.getElementById('co_hp').value = '0';
-      
-      const zeroFields = [
-        'an_activity', 'an_atrophy', 'an_metaplasia', 'an_dysplasia',
-        'co_activity', 'co_atrophy', 'co_metaplasia', 'co_dysplasia',
-        'in_activity', 'in_atrophy', 'in_metaplasia', 'in_dysplasia'
-      ];
-      
-      zeroFields.forEach(function(id) {
-        const el = document.getElementById(id);
-        if (el) el.value = '0';
-      });
-      
-      ['an', 'in', 'co'].forEach(site => {
-        document.getElementById(site + '_mi_type').value = '';
-        checkMetaplasiaAndShowMIType(site);
-      });
-      
+      ['an_activity','an_atrophy','an_metaplasia','an_dysplasia','co_activity','co_atrophy','co_metaplasia','co_dysplasia','in_activity','in_atrophy','in_metaplasia','in_dysplasia']
+        .forEach(id => { const el = document.getElementById(id); if(el) el.value = '0'; });
+      ['an','in','co'].forEach(s => { document.getElementById(s+'_mi_type').value = ''; checkMetaplasiaAndShowMIType(s); });
       document.getElementById('resultsSection').style.display = 'none';
-      
-      showAlert('success', '✅ H. pylori+: precompilato pattern base antro-predominante');
+      showAlert('success', 'H. pylori+: precompilato pattern base antro-predominante');
       saveFormData();
     }
-    
-    function setZeroAntrum() {
-      unlockForm(); // Sblocca form se era bloccato
-      document.getElementById('an_chronic').value = '0';
-      document.getElementById('an_activity').value = '0';
-      document.getElementById('an_atrophy').value = '0';
-      document.getElementById('an_metaplasia').value = '0';
-      document.getElementById('an_hp').value = '0';
-      document.getElementById('an_dysplasia').value = '0';
-      checkMetaplasiaAndShowMIType('an');
+
+    function setZeroSite(prefix) {
+      unlockForm();
+      [prefix+'_chronic',prefix+'_activity',prefix+'_atrophy',prefix+'_metaplasia',prefix+'_hp',prefix+'_dysplasia']
+        .forEach(id => { const el = document.getElementById(id); if(el) el.value = '0'; });
+      checkMetaplasiaAndShowMIType(prefix);  // prefix e gia 'an', 'in', 'co'
       saveFormData();
-      showAlert('success', '✅ Antro impostato a 0');
     }
-    
-    function setZeroIncisura() {
-      unlockForm(); // Sblocca form se era bloccato
-      document.getElementById('in_chronic').value = '0';
-      document.getElementById('in_activity').value = '0';
-      document.getElementById('in_atrophy').value = '0';
-      document.getElementById('in_metaplasia').value = '0';
-      document.getElementById('in_hp').value = '0';
-      document.getElementById('in_dysplasia').value = '0';
-      checkMetaplasiaAndShowMIType('in');
-      saveFormData();
-      showAlert('success', '✅ Incisura impostata a 0');
-    }
-    
-    function setZeroCorpus() {
-      unlockForm(); // Sblocca form se era bloccato
-      document.getElementById('co_chronic').value = '0';
-      document.getElementById('co_activity').value = '0';
-      document.getElementById('co_atrophy').value = '0';
-      document.getElementById('co_metaplasia').value = '0';
-      document.getElementById('co_hp').value = '0';
-      document.getElementById('co_dysplasia').value = '0';
-      checkMetaplasiaAndShowMIType('co');
-      saveFormData();
-      showAlert('success', '✅ Corpo impostato a 0');
-    }
-    
+
+    function setZeroAntrum()  { setZeroSite('an'); showAlert('success', 'Antro impostato a 0'); }
+    function setZeroIncisura(){ setZeroSite('in'); showAlert('success', 'Incisura impostata a 0'); }
+    function setZeroCorpus()  { setZeroSite('co'); showAlert('success', 'Corpo impostato a 0'); }
+
     function dismissResetAlert() {
-      const alert = document.getElementById('resetAlert');
-      if (alert) {
-        alert.style.display = 'none';
-      }
+      document.getElementById('resetAlert').style.display = 'none';
     }
-    
+
+    // ============================================================
+    // LOCK / UNLOCK
+    // ============================================================
     function lockFormAfterReport() {
       document.getElementById('postReportLockBanner').style.display = 'block';
       document.body.style.background = '#fffbeb';
-      
-      document.querySelectorAll('select').forEach(el => {
-        el.disabled = true;
-        el.style.opacity = '0.5';
-        el.style.cursor = 'not-allowed';
+      document.querySelectorAll('select, textarea').forEach(el => {
+        el.disabled = true; el.style.opacity = '0.5'; el.style.cursor = 'not-allowed';
       });
-      
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-        el.disabled = true;
-        el.style.opacity = '0.5';
-        el.style.cursor = 'not-allowed';
+        el.disabled = true; el.style.opacity = '0.5';
       });
-      
-      const freeNotesEl = document.getElementById('free_notes');
-      if (freeNotesEl) {
-        freeNotesEl.disabled = true;
-        freeNotesEl.style.opacity = '0.5';
-        freeNotesEl.style.cursor = 'not-allowed';
-      }
-      
       document.querySelectorAll('button').forEach(el => {
-        if (!el.classList.contains('mega-reset-btn') && 
-            !el.classList.contains('shortcut-btn') && 
-            !el.classList.contains('copy-report-btn')) {
-          el.disabled = true;
-          el.style.opacity = '0.4';
-          el.style.cursor = 'not-allowed';
+        if (!el.classList.contains('mega-reset-btn') && !el.classList.contains('shortcut-btn') && !el.classList.contains('copy-report-btn')) {
+          el.disabled = true; el.style.opacity = '0.4'; el.style.cursor = 'not-allowed';
         }
       });
-      
-      const megaReset = document.querySelector('.mega-reset-btn');
-      if (megaReset) {
-        megaReset.style.animation = 'pulse-soft 1.5s ease-in-out infinite';
-      }
-      
+      document.querySelector('.mega-reset-btn').style.animationDuration = '1.5s';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    
+
+    // FIX #4: unlockForm riabilita tutto, inclusi eventuali campi disabilitati da auto-fill
+    // L'unlock e totale e intenzionale: l'utente sta iniziando un nuovo caso
     function unlockForm() {
       document.getElementById('postReportLockBanner').style.display = 'none';
       document.body.style.background = '#f5f7fa';
-      
-      document.querySelectorAll('select').forEach(el => {
-        el.disabled = false;
-        el.style.opacity = '1';
-        el.style.cursor = 'pointer';
+      document.querySelectorAll('select, textarea').forEach(el => {
+        el.disabled = false; el.style.opacity = '1'; el.style.cursor = '';
       });
-      
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-        el.disabled = false;
-        el.style.opacity = '1';
-        el.style.cursor = 'pointer';
+        el.disabled = false; el.style.opacity = '1';
       });
-      
-      const freeNotesEl = document.getElementById('free_notes');
-      if (freeNotesEl) {
-        freeNotesEl.disabled = false;
-        freeNotesEl.style.opacity = '1';
-        freeNotesEl.style.cursor = 'text';
-      }
-      
       document.querySelectorAll('button').forEach(el => {
-        el.disabled = false;
-        el.style.opacity = '1';
-        el.style.cursor = 'pointer';
+        el.disabled = false; el.style.opacity = '1'; el.style.cursor = 'pointer';
       });
-      
-      const megaReset = document.querySelector('.mega-reset-btn');
-      if (megaReset) {
-        megaReset.style.animation = 'pulse-soft 3s ease-in-out infinite';
-      }
+      document.querySelector('.mega-reset-btn').style.animationDuration = '3s';
     }
-    
+
     function resetForm() {
-      document.querySelectorAll('select').forEach(function(el) { el.value = ''; });
-      document.querySelectorAll('input[type="checkbox"]').forEach(function(el) { el.checked = false; });
-      const freeNotesEl = document.getElementById('free_notes');
-      if (freeNotesEl) freeNotesEl.value = '';
+      document.querySelectorAll('select').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+      document.getElementById('free_notes').value = '';
       document.getElementById('resultsSection').style.display = 'none';
       clearErrors();
       document.getElementById('warningAlert').classList.remove('show');
-      
-      const specialFormsContent = document.getElementById('specialFormsContent');
-      const specialFormsToggle = document.getElementById('specialFormsToggle');
-      if (specialFormsContent) specialFormsContent.style.display = 'none';
-      if (specialFormsToggle) specialFormsToggle.textContent = '▼';
-      
-      ['an', 'in', 'co'].forEach(site => checkMetaplasiaAndShowMIType(site));
-      
+      document.getElementById('specialFormsContent').style.display = 'none';
+      document.getElementById('specialFormsToggle').textContent = 'v';
+      ['an','in','co'].forEach(s => checkMetaplasiaAndShowMIType(s));
       localStorage.removeItem('gastritisFormData');
-      showAlert('success', '✅ Reset completo eseguito');
-      
+      showAlert('success', 'Reset completo eseguito');
       unlockForm();
     }
-    
-    // Debounce per saveFormData - Performance optimization (v5.7.17)
-    // Previene chiamate multiple rapide su mobile/tablet
-    let saveFormDataTimeout = null;
-    
-    function saveFormDataDebounced() {
-      clearTimeout(saveFormDataTimeout);
-      saveFormDataTimeout = setTimeout(() => {
-        saveFormData();
-      }, 300); // 300ms delay
-    }
-    
+
+    // ============================================================
+    // PERSISTENZA
+    // ============================================================
+    let saveTimeout = null;
     function saveFormData() {
-      try {
-        const formData = {
-          extendedReport: document.getElementById('extended_report')?.checked || false,
-          inadequateSampling: document.getElementById('inadequate_sampling')?.checked || false,
-          stealthMode: document.getElementById('stealth_mode')?.checked || false,
-          
-          antrum: {
-            chronic: getValue('an_chronic'),
-            activity: getValue('an_activity'),
-            atrophy: getValue('an_atrophy'),
-            metaplasia: getValue('an_metaplasia'),
-            hp: getValue('an_hp'),
-            dysplasia: getValue('an_dysplasia'),
-            miType: getStringValue('an_mi_type')
-          },
-          corpus: {
-            chronic: getValue('co_chronic'),
-            activity: getValue('co_activity'),
-            atrophy: getValue('co_atrophy'),
-            metaplasia: getValue('co_metaplasia'),
-            hp: getValue('co_hp'),
-            dysplasia: getValue('co_dysplasia'),
-            miType: getStringValue('co_mi_type')
-          },
-          incisura: {
-            chronic: getValue('in_chronic'),
-            activity: getValue('in_activity'),
-            atrophy: getValue('in_atrophy'),
-            metaplasia: getValue('in_metaplasia'),
-            hp: getValue('in_hp'),
-            dysplasia: getValue('in_dysplasia'),
-            miType: getStringValue('in_mi_type')
-          },
-          
-          foveolarHyperplasia: getValue('foveolar_hyperplasia'),
-          laminaEdema: document.getElementById('lamina_edema')?.checked || false,
-          smoothMuscleProlif: document.getElementById('smooth_muscle_prolif')?.checked || false,
-          corpusRestricted: document.getElementById('corpus_restricted')?.checked || false,
-          pseudopyloricMeta: document.getElementById('pseudopyloric_meta')?.checked || false,
-          eclHyperplasia: document.getElementById('ecl_hyperplasia')?.checked || false,
-          ielsGrade: getValue('iels_grade'),
-          eosinophilsHPF: getValue('eosinophils_hpf'),
-          
-          freeNotes: document.getElementById('free_notes')?.value || '',
-          
-          savedAt: new Date().toISOString()
-        };
-        
-        localStorage.setItem('gastritisFormData', JSON.stringify(formData));
-      } catch (e) {
-        console.warn('Errore salvataggio localStorage:', e);
-      }
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        try {
+          const d = {
+            extendedReport: document.getElementById('extended_report')?.checked || false,
+            inadequateSampling: document.getElementById('inadequate_sampling')?.checked || false,
+            stealthMode: document.getElementById('stealth_mode')?.checked || false,
+            an: { chronic: getValue('an_chronic'), activity: getValue('an_activity'), atrophy: getValue('an_atrophy'), metaplasia: getValue('an_metaplasia'), hp: getValue('an_hp'), dysplasia: getValue('an_dysplasia'), miType: getStringValue('an_mi_type') },
+            co: { chronic: getValue('co_chronic'), activity: getValue('co_activity'), atrophy: getValue('co_atrophy'), metaplasia: getValue('co_metaplasia'), hp: getValue('co_hp'), dysplasia: getValue('co_dysplasia'), miType: getStringValue('co_mi_type') },
+            in: { chronic: getValue('in_chronic'), activity: getValue('in_activity'), atrophy: getValue('in_atrophy'), metaplasia: getValue('in_metaplasia'), hp: getValue('in_hp'), dysplasia: getValue('in_dysplasia'), miType: getStringValue('in_mi_type') },
+            foveolarHyperplasia: getValue('foveolar_hyperplasia'),
+            laminaEdema: document.getElementById('lamina_edema')?.checked || false,
+            smoothMuscleProlif: document.getElementById('smooth_muscle_prolif')?.checked || false,
+            corpusRestricted: document.getElementById('corpus_restricted')?.checked || false,
+            pseudopyloricMeta: document.getElementById('pseudopyloric_meta')?.checked || false,
+            eclHyperplasia: document.getElementById('ecl_hyperplasia')?.checked || false,
+            ielsGrade: getValue('iels_grade'),
+            eosinophilsHPF: getValue('eosinophils_hpf'),
+            freeNotes: document.getElementById('free_notes')?.value || ''
+          };
+          localStorage.setItem('gastritisFormData', JSON.stringify(d));
+        } catch(e) { console.warn('localStorage save error:', e); }
+      }, 300);
     }
-    
+
     function loadFormData() {
       try {
         const saved = localStorage.getItem('gastritisFormData');
         if (!saved) return;
-        
-        const data = JSON.parse(saved);
-        
-        if (document.getElementById('extended_report')) {
-          document.getElementById('extended_report').checked = data.extendedReport || false;
-        }
-        
-        if (document.getElementById('inadequate_sampling')) {
-          document.getElementById('inadequate_sampling').checked = data.inadequateSampling || false;
-        }
-        
-        if (document.getElementById('stealth_mode')) {
-          document.getElementById('stealth_mode').checked = data.stealthMode || false;
-        }
-        
-        const setValue = function(id, val) {
-          const el = document.getElementById(id);
-          if (el && val !== null && val !== undefined) el.value = val;
-        };
-        
-        setValue('an_chronic', data.antrum.chronic);
-        setValue('an_activity', data.antrum.activity);
-        setValue('an_atrophy', data.antrum.atrophy);
-        setValue('an_metaplasia', data.antrum.metaplasia);
-        setValue('an_hp', data.antrum.hp);
-        setValue('an_dysplasia', data.antrum.dysplasia);
-        setValue('an_mi_type', data.antrum.miType);
-        
-        setValue('co_chronic', data.corpus.chronic);
-        setValue('co_activity', data.corpus.activity);
-        setValue('co_atrophy', data.corpus.atrophy);
-        setValue('co_metaplasia', data.corpus.metaplasia);
-        setValue('co_hp', data.corpus.hp);
-        setValue('co_dysplasia', data.corpus.dysplasia);
-        setValue('co_mi_type', data.corpus.miType);
-        
-        setValue('in_chronic', data.incisura.chronic);
-        setValue('in_activity', data.incisura.activity);
-        setValue('in_atrophy', data.incisura.atrophy);
-        setValue('in_metaplasia', data.incisura.metaplasia);
-        setValue('in_hp', data.incisura.hp);
-        setValue('in_dysplasia', data.incisura.dysplasia);
-        setValue('in_mi_type', data.incisura.miType);
-        
-        setValue('foveolar_hyperplasia', data.foveolarHyperplasia);
-        if (document.getElementById('lamina_edema')) {
-          document.getElementById('lamina_edema').checked = data.laminaEdema;
-        }
-        if (document.getElementById('smooth_muscle_prolif')) {
-          document.getElementById('smooth_muscle_prolif').checked = data.smoothMuscleProlif;
-        }
-        if (document.getElementById('corpus_restricted')) {
-          document.getElementById('corpus_restricted').checked = data.corpusRestricted;
-        }
-        if (document.getElementById('pseudopyloric_meta')) {
-          document.getElementById('pseudopyloric_meta').checked = data.pseudopyloricMeta;
-        }
-        if (document.getElementById('ecl_hyperplasia')) {
-          document.getElementById('ecl_hyperplasia').checked = data.eclHyperplasia;
-        }
-        setValue('iels_grade', data.ielsGrade);
-        setValue('eosinophils_hpf', data.eosinophilsHPF);
-        
-        if (document.getElementById('free_notes')) {
-          document.getElementById('free_notes').value = data.freeNotes || '';
-        }
-        
-        ['an', 'in', 'co'].forEach(site => checkMetaplasiaAndShowMIType(site));
-        
-      } catch (e) {
-        console.warn('Errore caricamento localStorage:', e);
-      }
-    }
-    
-    window.addEventListener('DOMContentLoaded', function() {
-      loadFormData();
-      
-      ['an', 'in', 'co'].forEach(site => checkMetaplasiaAndShowMIType(site));
-      
-      document.querySelectorAll('select, input, textarea').forEach(function(el) {
-        el.addEventListener('change', saveFormDataDebounced);
-      });
-      
-      // v5.7.21: Auto-fill gastrite autoimmune quando si seleziona pattern corpo-predominante
-      const corpusRestrictedCheckbox = document.getElementById('corpus_restricted');
-      if (corpusRestrictedCheckbox) {
-        corpusRestrictedCheckbox.addEventListener('change', function() {
-          if (this.checked) {
-            // Pattern gastrite autoimmune: corpo atrofico, antro risparmiato
-            document.getElementById('co_atrophy').value = '2';  // Moderata default
-            document.getElementById('an_atrophy').value = '0';
-            document.getElementById('in_atrophy').value = '0';
-            
-            // Suggerisci anche altri parametri tipici
-            document.getElementById('co_chronic').value = '1';
-            document.getElementById('an_chronic').value = '0';
-            document.getElementById('in_chronic').value = '0';
-            
-            showAlert('success', '✅ Pattern autoimmune: precompilato corpo atrofico, antro risparmiato');
-            saveFormData();
-          }
+        const d = JSON.parse(saved);
+        const setVal = (id, v) => { const el = document.getElementById(id); if(el && v !== null && v !== undefined) el.value = v; };
+        const setChk = (id, v) => { const el = document.getElementById(id); if(el) el.checked = !!v; };
+
+        setChk('extended_report', d.extendedReport);
+        setChk('inadequate_sampling', d.inadequateSampling);
+        setChk('stealth_mode', d.stealthMode);
+
+        ['an','co','in'].forEach(s => {
+          if(!d[s]) return;
+          setVal(s+'_chronic', d[s].chronic); setVal(s+'_activity', d[s].activity);
+          setVal(s+'_atrophy', d[s].atrophy); setVal(s+'_metaplasia', d[s].metaplasia);
+          setVal(s+'_hp', d[s].hp); setVal(s+'_dysplasia', d[s].dysplasia);
+          setVal(s+'_mi_type', d[s].miType);
         });
-      }
+
+        setVal('foveolar_hyperplasia', d.foveolarHyperplasia);
+        setChk('lamina_edema', d.laminaEdema); setChk('smooth_muscle_prolif', d.smoothMuscleProlif);
+        setChk('corpus_restricted', d.corpusRestricted); setChk('pseudopyloric_meta', d.pseudopyloricMeta);
+        setChk('ecl_hyperplasia', d.eclHyperplasia);
+        setVal('iels_grade', d.ielsGrade); setVal('eosinophils_hpf', d.eosinophilsHPF);
+        if(document.getElementById('free_notes')) document.getElementById('free_notes').value = d.freeNotes || '';
+
+        ['an','in','co'].forEach(s => checkMetaplasiaAndShowMIType(s));
+      } catch(e) { console.warn('localStorage load error:', e); }
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFormData();
+      ['an','in','co'].forEach(s => checkMetaplasiaAndShowMIType(s));
+      document.querySelectorAll('select, input, textarea').forEach(el => el.addEventListener('change', saveFormData));
+
+      // FIX #2 / #4: auto-fill autoimmune via checkbox corpus_restricted
+      // Precompila i campi ma NON li blocca con disabled
+      // (il blocco era nella PATCH che descriveva un select inesistente)
+      // Il comportamento corretto e: suggerisce i valori, l'utente puo modificarli
+      document.getElementById('corpus_restricted')?.addEventListener('change', function() {
+        if (this.checked) {
+          document.getElementById('co_atrophy').value = '2';
+          document.getElementById('an_atrophy').value = '0';
+          document.getElementById('in_atrophy').value = '0';
+          document.getElementById('co_chronic').value = '1';
+          document.getElementById('an_chronic').value = '0';
+          document.getElementById('in_chronic').value = '0';
+          showAlert('success', 'Pattern autoimmune: valori precompilati (modificabili)');
+          saveFormData();
+        }
+      });
     });
   </script>
 </body>
