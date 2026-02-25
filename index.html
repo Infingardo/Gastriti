@@ -1186,11 +1186,8 @@
         showAlert('error', 'Calcola prima il referto');
         return;
       }
-      let text = reportEl.innerHTML
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
-        .replace(/<[^>]+>/g, '');
-      text = text.replace(/\r?\n/g, '\r\n');
+    let text = reportEl.innerText;
+text = text.replace(/\r?\n/g, '\r\n');;
 
       if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
         navigator.clipboard.writeText(text)
