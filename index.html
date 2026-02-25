@@ -1187,7 +1187,7 @@
         return;
       }
     let text = reportEl.innerText;
-text = text.replace(/\r?\n/g, '\r\n');;
+      text = text.replace(/\r?\n/g, '\r\n');
 
       if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
         navigator.clipboard.writeText(text)
