@@ -1,6 +1,6 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.21 "Formattazione Referto + Auto-fill Pattern"  
+**Versione:** 5.7.20 "Matrice OLGA Rugge Fix"  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
@@ -300,61 +300,6 @@ if (dysplasiaMax === 2) {
 ---
 
 ## 📚 Changelog
-
-### v5.7.21 "Formattazione Referto + Auto-fill Pattern" (2026-02-09) 🎨
-
-**MIGLIORAMENTI FORMATTAZIONE REFERTO**
-
-**Intestazioni diagnostiche più professionali:**
-- Tutte le intestazioni ora usano solo la prima lettera maiuscola
-  - `GASTRITE CRONICA HP-ASSOCIATA` → `Gastrite cronica HP-associata`
-  - `GASTROPATIA REATTIVA` → `Gastropatia reattiva`
-  - `GASTRITE LINFOCITICA` → `Gastrite linfocitica`
-  - Etc.
-
-**OLGA/OLGIM evidenziati:**
-- Gli acronimi OLGA e OLGIM ora appaiono in **grassetto** nel referto
-  - `OLGA: stadio II` → `**OLGA**: stadio II`
-  - `OLGIM: stadio I` → `**OLGIM**: stadio I`
-
-**Grading esplicito nel referto:**
-- **Atrofia ghiandolare:** ora include il grado
-  - Prima: `ATROFIA GHIANDOLARE: Presente (antro, corpo)`
-  - Dopo: `ATROFIA GHIANDOLARE: Presente, moderata (antro, corpo)`
-  - Pattern misti: `Presente, pattern misto (antro: lieve, corpo: moderata)`
-- **Metaplasia intestinale:** grado + tipo combinati
-  - Prima: `METAPLASIA INTESTINALE: Presente, completa (antro)`
-  - Dopo: `METAPLASIA INTESTINALE: Presente, moderata e completa (antro)`
-
-**Emoji rimosse dal referto copiabile:**
-- Tutte le emoji rimosse per compatibilità LIS
-  - `⚠️ NOTA INTERPRETATIVA:` → `NOTA INTERPRETATIVA:`
-  - `🔴 ATTENZIONE:` → `ATTENZIONE:`
-  - `⚡ URGENZA:` → `URGENZA:`
-  - `📋 NOTA:` → `NOTA:`
-- Emoji rimangono nell'interfaccia utente (bottoni, labels)
-
-**AUTO-FILL PATTERN TOPOGRAFICI**
-
-**Gastrite autoimmune:**
-- Selezione automatica del pattern topografico tipico
-  - Corpo: atrofia grado 2 (modificabile)
-  - Antro: atrofia 0 (bloccato)
-  - Incisura: atrofia 0 (bloccato)
-- Razionale: Pattern tipo A con risparmio antrale patognomonico
-
-**Gastropatia reattiva:**
-- Blocco automatico dell'atrofia
-  - Tutti i campi atrofia = 0 (bloccati)
-- Razionale: Per definizione la gastropatia chimica NON ha atrofia
-
-**MODIFICHE TECNICHE:**
-- Funzioni `getAtrophyText()` e `getMITypeText()` riscritte
-- Nuovo listener `gastrite_speciale` per auto-fill
-- service-worker.js: bump v5.7.21
-- Compatibilità: retro-compatibile con v5.7.20
-
----
 
 ### v5.7.20 "Matrice OLGA Rugge Fix" (2026-01-27) 🚨 CRITICAL BUG FIX #2
 
