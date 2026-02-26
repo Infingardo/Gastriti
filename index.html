@@ -323,13 +323,6 @@
       <small style="display: block; margin-top: 0.25rem; color: #718096;">
         Aggiunge disclaimer nel referto.
       </small>
-      <label style="margin-top: 1rem;">
-        <input type="checkbox" id="stealth_mode" checked style="accent-color: #718096;">
-        <span><strong>Modalita formale</strong> (rimuove emoji dal referto)</span>
-      </label>
-      <small style="display: block; margin-top: 0.25rem; color: #718096;">
-        Per ambienti istituzionali formali o export LIS.
-      </small>
     </div>
 
     <div id="errorAlert" class="alert error"></div>
@@ -1102,6 +1095,8 @@
           '**OLGA**: stadio ' + olgaStage + '\n' +
           '**OLGIM**: stadio ' + olgimStage + olgaContextNote + '\n\n' +
           'NOTA INTERPRETATIVA:\n' +
+          (document.getElementById('inadequate_sampling')?.checked ?
+            'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilita limitata.\n' : '') +
           'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
           'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
 
@@ -1160,10 +1155,8 @@
           CLINICAL_NOTES.stagingValidity;
       }
 
-      // Stealth mode (formale - default)
-      if (document.getElementById('stealth_mode')?.checked) {
-        report = report.replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|⚠️|📋|🔴|⛔/gu, '').trim();
-      }
+      // Modalita formale sempre attiva
+      report = report.replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|⚠️|📋|🔴|⛔/gu, '').trim();
 
       // Render con bold
       const htmlReport = report
@@ -1345,7 +1338,6 @@
           const d = {
             extendedReport: document.getElementById('extended_report')?.checked || false,
             inadequateSampling: document.getElementById('inadequate_sampling')?.checked || false,
-            stealthMode: document.getElementById('stealth_mode')?.checked || false,
             an: { chronic: getValue('an_chronic'), activity: getValue('an_activity'), atrophy: getValue('an_atrophy'), metaplasia: getValue('an_metaplasia'), hp: getValue('an_hp'), dysplasia: getValue('an_dysplasia'), miType: getStringValue('an_mi_type') },
             co: { chronic: getValue('co_chronic'), activity: getValue('co_activity'), atrophy: getValue('co_atrophy'), metaplasia: getValue('co_metaplasia'), hp: getValue('co_hp'), dysplasia: getValue('co_dysplasia'), miType: getStringValue('co_mi_type') },
             in: { chronic: getValue('in_chronic'), activity: getValue('in_activity'), atrophy: getValue('in_atrophy'), metaplasia: getValue('in_metaplasia'), hp: getValue('in_hp'), dysplasia: getValue('in_dysplasia'), miType: getStringValue('in_mi_type') },
@@ -1374,7 +1366,6 @@
 
         setChk('extended_report', d.extendedReport);
         setChk('inadequate_sampling', d.inadequateSampling);
-        setChk('stealth_mode', d.stealthMode);
 
         ['an','co','in'].forEach(s => {
           if(!d[s]) return;
