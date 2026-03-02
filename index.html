@@ -668,13 +668,12 @@
     // COSTANTI CLINICHE
     // ============================================================
     const CLINICAL_NOTES = {
-      hgdPrevails: '⚠️ NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorita a resezione/sorveglianza stretta).',
+      hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorita a resezione/sorveglianza stretta).',
       stagingValidity: 'Staging valido con campionamento adeguato (>=5 biopsie, 3 sedi - MAPS III 2025)',
-      autoimmuneCorrelation: '📋 CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali (APCA).',
-      miWithoutAtrophy: '📋 NOTA: Metaplasia intestinale senza atrofia significativa - possibile campionamento limitato o fase post-eradicazione HP.',
-      olgaMethodAutoimmune: '📋 NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
-      olgaMethodChemical: '📋 NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
-      olgaMethodSpecial: '📋 NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite.'
+      autoimmuneCorrelation: 'CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali (APCA).',
+      olgaMethodAutoimmune: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
+      olgaMethodChemical: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
+      olgaMethodSpecial: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite.'
     };
 
     // Matrice OLGA standard - Rugge et al. Gut 2007/2008
@@ -1128,28 +1127,27 @@
         }
 
         const hgdNote    = dysplasiaMax === 2 ? '\n\n' + CLINICAL_NOTES.hgdPrevails : '';
-        const miNote     = hasMetaplasiaWithoutAtrophy ? '\n' + CLINICAL_NOTES.miWithoutAtrophy : '';
-        const discordNote= hasDiscordance ? '\n⚠️ DISCORDANZA: OLGA e OLGIM divergono >=2 stadi - considerare stadio piu alto per sorveglianza' : '';
+        const discordNote= hasDiscordance ? '\nDISCORDANZA: OLGA e OLGIM divergono >=2 stadi - considerare stadio piu alto per sorveglianza' : '';
 
         let olgaContextNote = '';
         if (hasAutoimmune) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
         else if (hasChemical) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
         else if (hasLymphocytic || hasEosinophilic) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
 
-        const netNote = netRisk ? '\n\n🔴 ALLERT CLINICO:\nPattern compatibile con gastrite autoimmune con iperplasia ECL.\nRischio NET gastrico tipo I (ben differenziato, HP negativo, ipergastrinemia da atrofia corpale).\nIndicata sorveglianza cromogranina A + gastrinemia + endoscopia con biopsie ECL.' : '';
+        const netNote = netRisk ? '\n\nALLERT CLINICO:\nPattern compatibile con gastrite autoimmune con iperplasia ECL.\nRischio NET gastrico tipo I (ben differenziato, HP negativo, ipergastrinemia da atrofia corpale).\nIndicata sorveglianza cromogranina A + gastrinemia + endoscopia con biopsie ECL.' : '';
 
         report = diagnosticHeader + '\n\n' +
           'H. PYLORI: ' + hpStatus + '\n' +
           'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
           (incisuraNote ? incisuraNote + '\n' : '') +
-          'METAPLASIA INTESTINALE: ' + getMITypeText() + miNote + '\n' +
+          'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
           'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) +
           specialFormsNote + '\n\n' +
           '**OLGA**: stadio ' + olgaStage + '\n' +
           '**OLGIM**: stadio ' + olgimStage + discordNote + olgaContextNote + hgdNote + netNote + '\n\n' +
           'NOTA INTERPRETATIVA:\n' +
           (document.getElementById('inadequate_sampling')?.checked ?
-            '⛔ CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilita limitata.\n' : '') +
+            'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilita limitata.\n' : '') +
           'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
           'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
           CLINICAL_NOTES.stagingValidity;
@@ -1179,7 +1177,14 @@
         showAlert('error', 'Calcola prima il referto');
         return;
       }
-    let text = reportEl.innerText;
+      // Decodifica entità HTML residue (es. &gt; → >)
+      const htmlDecoder = document.createElement('textarea');
+      htmlDecoder.innerHTML = reportEl.innerHTML
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<strong>/gi, '')
+        .replace(/<\/strong>/gi, '')
+        .replace(/<[^>]+>/g, '');
+      let text = htmlDecoder.value;
       text = text.replace(/\r?\n/g, '\r\n');
 
       if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
