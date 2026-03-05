@@ -1,20 +1,28 @@
-const CACHE_NAME = 'olga-olgim-v5.7.28';
+const CACHE_NAME = 'olga-olgim-v5.7.36';
 const urlsToCache = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+  );
   self.skipWaiting();
 });
 
 self.addEventListener('fetch', event => {
+  // Solo GET e same-origin: esclude POST, API calls, cross-origin
+  if (event.request.method !== 'GET') return;
+  const url = new URL(event.request.url);
+  if (url.origin !== location.origin) return;
+
   event.respondWith(
-    caches.match(event.request).then(response => {
-      if (response) return response;
-      const fetchRequest = event.request.clone();
-      return fetch(fetchRequest).then(response => {
-        if (!response || response.status !== 200 || response.type !== 'basic') return response;
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseToCache));
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(event.request).then(response => {
+        if (!response || response.status !== 200) return response;
+
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
         return response;
       });
     })
@@ -24,8 +32,12 @@ self.addEventListener('fetch', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames =>
-      Promise.all(cacheNames.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))
+      Promise.all(
+        cacheNames
+          .filter(name => name !== CACHE_NAME)
+          .map(name => caches.delete(name))
+      )
     )
   );
-  return self.clients.claim();
+  self.clients.claim();
 });
