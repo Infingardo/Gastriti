@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.26</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.28</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -265,7 +265,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.26</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.28</div>
     </div>
   </header>
 
@@ -1402,21 +1402,22 @@
       // (il blocco era nella PATCH che descriveva un select inesistente)
       // Il comportamento corretto e: suggerisce i valori, l'utente puo modificarli
       // Auto-fill gastropatia chimica: atrofia sempre 0 (per definizione)
-      function setChemicalAtrophyZero() {
-        ['an_atrophy','in_atrophy','co_atrophy'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.value = '0';
-        });
-        showAlert('success', 'Gastropatia chimica: atrofia impostata a 0 (modificabile)');
+      function setChemicalAllZero() {
+        ['an_chronic','an_activity','an_atrophy','an_metaplasia','an_hp','an_dysplasia',
+         'in_chronic','in_activity','in_atrophy','in_metaplasia','in_hp','in_dysplasia',
+         'co_chronic','co_activity','co_atrophy','co_metaplasia','co_hp','co_dysplasia']
+          .forEach(id => { const el = document.getElementById(id); if (el) el.value = '0'; });
+        ['an','in','co'].forEach(s => { checkMetaplasiaAndShowMIType(s); });
+        showAlert('success', 'Gastropatia chimica: tutti i campi impostati a 0 (modificabili)');
         saveFormData();
       }
       ['lamina_edema','smooth_muscle_prolif'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', function() {
-          if (this.checked) setChemicalAtrophyZero();
+          if (this.checked) setChemicalAllZero();
         });
       });
       document.getElementById('foveolar_hyperplasia')?.addEventListener('change', function() {
-        if (this.value && this.value !== '' && this.value !== '0') setChemicalAtrophyZero();
+        if (this.value && this.value !== '' && this.value !== '0') setChemicalAllZero();
       });
 
       document.getElementById('corpus_restricted')?.addEventListener('change', function() {
