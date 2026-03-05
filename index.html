@@ -16,6 +16,8 @@
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <title>OLGA/OLGIM e H. pylori v5.7.36</title>
+  <meta name="version" content="5.7.36">
+  <meta name="build-date" content="2026-03-06">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -265,7 +267,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.36</div>
+      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.36</span></div>
     </div>
   </header>
 
@@ -1311,6 +1313,16 @@
       if (calcBtn) { calcBtn.disabled = false; calcBtn.style.opacity = '1'; calcBtn.style.cursor = 'pointer'; }
       const resetBtn2 = document.querySelector('.mega-reset-btn');
       if (resetBtn2) resetBtn2.style.animationDuration = '3s';
+    }
+
+    function showVersionInfo() {
+      const appVer = document.querySelector('meta[name="version"]')?.content || '?';
+      const buildDate = document.querySelector('meta[name="build-date"]')?.content || '?';
+      let swInfo = 'Service Worker: non attivo';
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        swInfo = 'Service Worker: attivo ✓';
+      }
+      alert(`OLGA/OLGIM Tool\nVersione: ${appVer}\nBuild: ${buildDate}\n${swInfo}\n\nSe la versione mostrata non corrisponde:\n→ DevTools > Application > Service Workers > Unregister\n→ Ctrl+Shift+R`);
     }
 
     function resetForm() {
