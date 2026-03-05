@@ -1401,6 +1401,24 @@
       // Precompila i campi ma NON li blocca con disabled
       // (il blocco era nella PATCH che descriveva un select inesistente)
       // Il comportamento corretto e: suggerisce i valori, l'utente puo modificarli
+      // Auto-fill gastropatia chimica: atrofia sempre 0 (per definizione)
+      function setChemicalAtrophyZero() {
+        ['an_atrophy','in_atrophy','co_atrophy'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.value = '0';
+        });
+        showAlert('success', 'Gastropatia chimica: atrofia impostata a 0 (modificabile)');
+        saveFormData();
+      }
+      ['lamina_edema','smooth_muscle_prolif'].forEach(id => {
+        document.getElementById(id)?.addEventListener('change', function() {
+          if (this.checked) setChemicalAtrophyZero();
+        });
+      });
+      document.getElementById('foveolar_hyperplasia')?.addEventListener('change', function() {
+        if (this.value && this.value !== '' && this.value !== '0') setChemicalAtrophyZero();
+      });
+
       document.getElementById('corpus_restricted')?.addEventListener('change', function() {
         if (this.checked) {
           document.getElementById('co_atrophy').value = '2';
