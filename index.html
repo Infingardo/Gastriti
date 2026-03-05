@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.25</title>
+  <title>OLGA/OLGIM e H. pylori v5.7.26</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -265,7 +265,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica v5.7.25</div>
+      <div class="subtitle">Tool per refertazione istologica v5.7.26</div>
     </div>
   </header>
 
@@ -669,7 +669,6 @@
     // ============================================================
     const CLINICAL_NOTES = {
       hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorita a resezione/sorveglianza stretta).',
-      stagingValidity: 'Staging valido con campionamento adeguato (>=5 biopsie, 3 sedi - MAPS III 2025)',
       autoimmuneCorrelation: 'CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali (APCA).',
       olgaMethodAutoimmune: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
       olgaMethodChemical: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
@@ -1149,8 +1148,7 @@
           (document.getElementById('inadequate_sampling')?.checked ?
             'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilita limitata.\n' : '') +
           'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
-          'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection + '\n\n' +
-          CLINICAL_NOTES.stagingValidity;
+          'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
       }
 
       // Modalita formale sempre attiva
