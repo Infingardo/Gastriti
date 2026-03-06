@@ -15,8 +15,8 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.41</title>
-  <meta name="version" content="5.7.41">
+  <title>OLGA/OLGIM e H. pylori v5.7.42</title>
+  <meta name="version" content="5.7.42">
   <meta name="build-date" content="2026-03-06">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -269,14 +269,14 @@
     <div style="font-size:0.85rem; color:#a0aec0; margin-bottom:0.75rem;">Nuova versione pronta. Ricarica per applicarla.</div>
     <div style="display:flex; gap:0.5rem;">
       <button onclick="applyUpdate()" style="flex:1; background:#4299e1; color:white; padding:0.5rem; border-radius:0.375rem; font-weight:600; font-size:0.9rem;">Aggiorna ora</button>
-      <button onclick="document.getElementById('updateBanner').style.display='none'" style="background:#2d3748; color:#a0aec0; padding:0.5rem 0.75rem; border-radius:0.375rem; font-size:0.9rem;">Dopo</button>
+      <button onclick="dismissUpdateBanner()" style="background:#2d3748; color:#a0aec0; padding:0.5rem 0.75rem; border-radius:0.375rem; font-size:0.9rem;">Dopo</button>
     </div>
   </div>
 
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.41</span></div>
+      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.42</span></div>
     </div>
   </header>
 
@@ -681,8 +681,10 @@
                 });
               });
 
-              // Per sessioni lunghe (tool aperto per ore): poll update ogni ora
-              setInterval(() => { reg.update().catch(() => {}); }, 60 * 60 * 1000);
+              // Per sessioni lunghe (tool aperto per ore): poll update ogni ora, solo se tab visibile
+              setInterval(() => {
+                if (!document.hidden) reg.update().catch(() => {});
+              }, 60 * 60 * 1000);
             })
             .catch(err => console.warn('Service Worker non disponibile:', err.message));
 
@@ -691,6 +693,7 @@
           navigator.serviceWorker.addEventListener('controllerchange', () => {
             if (swRefreshing) return;
             swRefreshing = true;
+            sessionStorage.removeItem('updateBannerDismissed');
             document.getElementById('updateBanner').style.display = 'none';
             window.location.reload();
           });
@@ -699,17 +702,46 @@
     }
 
     function showUpdateBanner() {
+      if (!swRegistration) return;
+      if (!swRegistration.waiting) return;
+      if (!navigator.serviceWorker.controller) return;
+      if (sessionStorage.getItem('updateBannerDismissed') === '1') return;
       document.getElementById('updateBanner').style.display = 'block';
     }
 
-    function applyUpdate() {
+    function dismissUpdateBanner() {
+      sessionStorage.setItem('updateBannerDismissed', '1');
       document.getElementById('updateBanner').style.display = 'none';
-      if (swRegistration && swRegistration.waiting) {
-        swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+
+    let updateInProgress = false;
+
+    async function applyUpdate() {
+      if (updateInProgress) return;
+      updateInProgress = true;
+      document.getElementById('updateBanner').style.display = 'none';
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (reg?.waiting) {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
       } else {
         window.location.reload();
       }
     }
+
+    // Sync banner su visibilità: aggiorna stato quando tab torna in primo piano
+    document.addEventListener('visibilitychange', async () => {
+      if (document.hidden || !('serviceWorker' in navigator)) return;
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) return;
+      swRegistration = reg;
+      if (reg.waiting && navigator.serviceWorker.controller) {
+        showUpdateBanner();
+      } else {
+        document.getElementById('updateBanner').style.display = 'none';
+      }
+      // Controlla anche se ci sono aggiornamenti
+      reg.update().catch(() => {});
+    });
 
     // ============================================================
     // COSTANTI CLINICHE
@@ -1607,7 +1639,7 @@
         // OLGA distribution
         const olgaDist = {'0':0,'I':0,'II':0,'III':0,'IV':0};
         const olgimDist = {'0':0,'I':0,'II':0,'III':0,'IV':0};
-        let hpPos = 0, discordN = 0, dysN = 0, miInc = 0, netN = 0;
+        let hpPos = 0, discordN = 0, dysN = 0, netN = 0;
         log.forEach(e => {
           if(olgaDist[e.olga] !== undefined) olgaDist[e.olga]++;
           if(olgimDist[e.olgim] !== undefined) olgimDist[e.olgim]++;
