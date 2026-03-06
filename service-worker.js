@@ -1,5 +1,11 @@
-const CACHE_NAME = 'olga-olgim-v5.7.39';
+const CACHE_NAME = 'olga-olgim-v5.7.40';
 const urlsToCache = ['./', './index.html', './manifest.json'];
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 self.addEventListener('install', event => {
   event.waitUntil(
