@@ -1,4 +1,4 @@
-const CACHE_NAME = 'olga-olgim-v5.7.40';
+const CACHE_NAME = 'olga-olgim-v5.7.41';
 const urlsToCache = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('message', event => {
@@ -8,10 +8,11 @@ self.addEventListener('message', event => {
 });
 
 self.addEventListener('install', event => {
+  // Niente skipWaiting qui: il nuovo SW resta in "waiting"
+  // finché l'utente non accetta l'update dal banner (SKIP_WAITING message)
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
-  self.skipWaiting();
 });
 
 self.addEventListener('fetch', event => {
