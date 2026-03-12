@@ -15,8 +15,8 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.44</title>
-  <meta name="version" content="5.7.44">
+  <title>OLGA/OLGIM e H. pylori v5.7.45</title>
+  <meta name="version" content="5.7.45">
   <meta name="build-date" content="2026-03-06">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -276,7 +276,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.44</span></div>
+      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.45</span></div>
     </div>
   </header>
 
@@ -1566,10 +1566,12 @@
     // INCISURA NEL REFERTO: helper per visibilita clinica
     // ============================================================
     function getIncisuraNote(inAtrophy, inMetaplasia, anAtrophy, coAtrophy) {
+      // L'atrofia dell'incisura è già riportata in getAtrophyText() — qui solo MI e contesto
       const parts = [];
-      if (inAtrophy > 0) parts.push('atrofia ' + (inAtrophy === 1 ? 'lieve' : inAtrophy === 2 ? 'moderata' : 'elevata'));
       if (inMetaplasia > 0) parts.push('MI ' + (inMetaplasia === 1 ? 'lieve' : inMetaplasia === 2 ? 'moderata' : 'elevata'));
-      if (parts.length === 0) return null;
+
+      // Se non c'è né MI né atrofia incisura, niente nota
+      if (parts.length === 0 && !inAtrophy) return null;
 
       // Etichetta contestuale al pattern atrofico dominante
       let contextLabel = '';
@@ -1577,18 +1579,19 @@
       const co = coAtrophy || 0;
       const inn = inAtrophy || 0;
       if (inn > an && inn > co) {
-        contextLabel = 'sede con atrofia massima (pattern incisura-centrico)';
+        contextLabel = 'sede con atrofia massima – pattern incisura-centrico';
       } else if (co > an) {
-        contextLabel = 'punto sentinella atrofia corpo-predominante';
+        contextLabel = 'punto sentinella – atrofia corpo-predominante';
       } else if (an > co) {
-        contextLabel = 'punto di transizione in pattern antro-predominante';
+        contextLabel = 'punto di transizione – pattern antro-predominante';
       } else if (an > 0 && co > 0 && an === co) {
-        contextLabel = 'punto di confluenza in pangastrite';
+        contextLabel = 'punto di confluenza – pangastrite';
       } else {
         contextLabel = 'sede sentinella';
       }
 
-      return 'Incisura angolare: ' + parts.join(', ') + ' (' + contextLabel + ')';
+      const detail = parts.length > 0 ? parts.join(', ') + ' (' + contextLabel + ')' : '(' + contextLabel + ')';
+      return 'Incisura angolare: ' + detail;
     }
 
     // ============================================================
