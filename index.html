@@ -15,8 +15,8 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.45</title>
-  <meta name="version" content="5.7.45">
+  <title>OLGA/OLGIM e H. pylori v5.7.47</title>
+  <meta name="version" content="5.7.47">
   <meta name="build-date" content="2026-03-06">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -276,7 +276,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.45</span></div>
+      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.47</span></div>
     </div>
   </header>
 
@@ -757,12 +757,10 @@
     // COSTANTI CLINICHE
     // ============================================================
     const CLINICAL_NOTES = {
-      hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorità a resezione/sorveglianza stretta).',
-      autoimmuneCorrelation: 'CORRELAZIONE NECESSARIA: Gastrinemia, anticorpi anti-cellule parietali (APCA).',
-      olgaMethodAutoimmune: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastrite autoimmune (progressione non HP-mediata).',
-      olgaMethodChemical: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di gastropatia reattiva (meccanismo non atrofico classico).',
-      olgaMethodSpecial: 'NOTA METODOLOGICA:\nOLGA/OLGIM calcolati a fini descrittivi; rilevanza prognostica limitata\nnel contesto di forma speciale di gastrite.'
+      hgdPrevails: 'NOTA CLINICA: La presenza di displasia di alto grado prevale sullo staging OLGA/OLGIM ai fini del management (priorità a resezione/sorveglianza stretta).'
     };
+
+    const MAPS_REF = '\n\n---\nStagiazione OLGA/OLGIM secondo linee guida MAPS III (Dinis-Ribeiro M et al., Endoscopy 2025).';
 
     // Matrice OLGA standard - Rugge et al. Gut 2007/2008
     // Righe = Antrum (0-3), Colonne = Corpus (0-3)
@@ -1137,11 +1135,10 @@
           'H. PYLORI: Assente\n' +
           'DISPLASIA: Assente\n\n' +
           '**OLGA**: stadio 0 (rischio basso)\n' +
-          '**OLGIM**: stadio 0 (rischio basso)' + freeNotesSection;
+          '**OLGIM**: stadio 0 (rischio basso)' + freeNotesSection + MAPS_REF;
 
       } else if (hasOnlySpecialForms) {
         let specialDiagnosis = '';
-        let olgaContextNote = '';
 
         if (hasChemical) {
           diagnosticHeader = 'Gastropatia reattiva (chimica/farmacologica)';
@@ -1151,16 +1148,13 @@
             (specialForms.chemical.laminaEdema ? ', edema lamina propria' : '') +
             (specialForms.chemical.smoothMuscleProlif ? ', proliferazione muscolo liscio' : '') +
             '.\n\nQuadro istologico compatibile con GASTROPATIA REATTIVA/CHIMICA.\nPattern suggestivo per reflusso biliare, FANS o alcol.';
-          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
         } else if (hasAutoimmune) {
           diagnosticHeader = 'Gastrite cronica autoimmune';
           specialDiagnosis = 'Mucosa gastrica ' + (specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') +
             ' priva di infiltrato flogistico cronico significativo.\n' +
             (specialForms.autoimmune.pseudopyloricMeta ? 'Metaplasia pseudopilorica presente. ' : '') +
             (specialForms.autoimmune.eclHyperplasia ? 'Iperplasia cellule ECL. ' : '') +
-            '\nQuadro istologico compatibile con GASTRITE AUTOIMMUNE (fase avanzata/esito).\n\n' +
-            CLINICAL_NOTES.autoimmuneCorrelation;
-          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
+            '\nQuadro istologico compatibile con GASTRITE AUTOIMMUNE (fase avanzata/esito).';
         } else if (hasLymphocytic) {
           const ielsGrade = specialForms.lymphocytic.ielsGrade;
           if (ielsGrade === 1) {
@@ -1174,7 +1168,6 @@
             diagnosticHeader = 'Gastrite linfocitica';
             specialDiagnosis = 'Mucosa gastrica con linfociti intraepiteliali francamente aumentati (>25/100 cellule epiteliali).\n\nGASTRITE LINFOCITICA.\n\nDD: gastrite variolariforme, malattia celiaca, malattia di Menetrier.';
           }
-          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
         } else if (hasEosinophilic) {
           const eoCount = specialForms.eosinophilic.eosinophilsHPF;
           const eoText = eoCount === 3 ? '>=30/HPF' : eoCount === 2 ? '20-29/HPF' : '10-19/HPF';
@@ -1192,7 +1185,6 @@
             '- presenza di microascessi eosinofilici\n' +
             '- contesto clinico (atopia, ipereosinofilia periferica)\n\n' +
             'DD: parassitosi (Anisakis), farmaci (PPI, FANS), IBD, vasculiti, linfoma.';
-          olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
         }
 
         report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
@@ -1202,12 +1194,10 @@
           'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
           'DISPLASIA: Assente\n\n' +
           '**OLGA**: stadio ' + olgaStage + ' (rischio ' + olgaRisk + ')\n' +
-          '**OLGIM**: stadio ' + olgimStage + ' (rischio ' + olgimRisk + ')' + olgaContextNote + '\n\n' +
-          'NOTA INTERPRETATIVA:\n' +
+          '**OLGIM**: stadio ' + olgimStage + ' (rischio ' + olgimRisk + ')' +
           (document.getElementById('inadequate_sampling')?.checked ?
-            'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.\n' : '') +
-          'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
-          'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
+            '\n\nCAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.' : '') +
+          freeNotesSection + MAPS_REF;
 
       } else {
         // Gastrite cronica con o senza forme speciali sovrapposte
@@ -1226,26 +1216,17 @@
         if (hasChemical || hasAutoimmune || hasLymphocytic || hasEosinophilic) {
           specialFormsNote = '\n\nPATTERN SOVRAPPOSTI:';
           if (hasChemical)    specialFormsNote += '\n- Gastropatia chimica/reattiva';
-          if (hasAutoimmune) {
-            specialFormsNote += '\n- Pattern autoimmune';
-            specialFormsNote += '\n  ' + CLINICAL_NOTES.autoimmuneCorrelation;
-          }
+          if (hasAutoimmune)  specialFormsNote += '\n- Pattern autoimmune';
           if (hasLymphocytic) {
             specialFormsNote += specialForms.lymphocytic.ielsGrade === 1
               ? '\n- Incremento borderline linfociti intraepiteliali (15-25/100)\n  Suggestivo ma NON diagnostico per gastrite linfocitica'
               : '\n- Gastrite linfocitica (IEL francamente aumentati)';
           }
-          if (hasEosinophilic) specialFormsNote += '\n- Gastrite eosinofila';
+          if (hasEosinophilic) specialFormsNote += '\n- ' + (specialForms.eosinophilic.eosinophilsHPF === 3 ? 'Gastrite eosinofila' : 'Incremento eosinofilico mucoso');
         }
 
         const hgdNote    = dysplasiaMax === 2 ? '\n\n' + CLINICAL_NOTES.hgdPrevails : '';
         const discordNote= hasDiscordance ? '\nDISCORDANZA: OLGA e OLGIM divergono >=2 stadi - considerare stadio più alto per sorveglianza' : '';
-
-        let olgaContextNote = '';
-        if (hasAutoimmune) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodAutoimmune;
-        else if (hasChemical) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodChemical;
-        else if (hasLymphocytic || hasEosinophilic) olgaContextNote = '\n\n' + CLINICAL_NOTES.olgaMethodSpecial;
-
         const netNote = netRisk ? '\n\nALERT CLINICO:\nPattern compatibile con gastrite autoimmune con iperplasia ECL.\nRischio NET gastrico tipo I (ben differenziato, HP negativo, ipergastrinemia da atrofia corpale).\nIndicata sorveglianza cromogranina A + gastrinemia + endoscopia con biopsie ECL.' : '';
 
         report = diagnosticHeader + '\n\n' +
@@ -1256,12 +1237,10 @@
           'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) +
           specialFormsNote + '\n\n' +
           '**OLGA**: stadio ' + olgaStage + ' (rischio ' + olgaRisk + ')\n' +
-          '**OLGIM**: stadio ' + olgimStage + ' (rischio ' + olgimRisk + ')' + discordNote + olgaContextNote + hgdNote + netNote + '\n\n' +
-          'NOTA INTERPRETATIVA:\n' +
+          '**OLGIM**: stadio ' + olgimStage + ' (rischio ' + olgimRisk + ')' + discordNote + hgdNote + netNote +
           (document.getElementById('inadequate_sampling')?.checked ?
-            'CAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.\n' : '') +
-          'Lo staging OLGA/OLGIM richiede correlazione con il quadro morfologico\n' +
-          'complessivo e l\'adeguatezza del campionamento.' + freeNotesSection;
+            '\n\nCAMPIONAMENTO INADEGUATO: Staging OLGA/OLGIM di affidabilità limitata.' : '') +
+          freeNotesSection + MAPS_REF;
       }
 
       // Modalita formale sempre attiva
