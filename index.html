@@ -15,8 +15,8 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.49</title>
-  <meta name="version" content="5.7.49">
+  <title>OLGA/OLGIM e H. pylori v5.7.51</title>
+  <meta name="version" content="5.7.51">
   <meta name="build-date" content="2026-03-06">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -276,7 +276,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.49</span></div>
+      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.51</span></div>
     </div>
   </header>
 
@@ -1033,7 +1033,6 @@
       if ((anDysplasia === 1 || inDysplasia === 1 || coDysplasia === 1) && maxActivity > 0)
         showAlert('warning', 'LGD in contesto infiammatorio attivo: considerare regressione post-eradicazione.');
 
-      const incisuraNote = getIncisuraNote(data.incisura.atrophy, data.incisura.metaplasia, data.antrum.atrophy, data.corpus.atrophy);
 
       const hasMetaplasiaWithoutAtrophy =
         (data.antrum.metaplasia > 0 && data.antrum.atrophy === 0) ||
@@ -1190,7 +1189,6 @@
         report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
           'H. PYLORI: ' + hpStatus + '\n' +
           'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
-          (incisuraNote ? incisuraNote + '\n' : '') +
           'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
           'DISPLASIA: Assente\n\n' +
           '**OLGA**: stadio ' + olgaStage + ' (rischio ' + olgaRisk + ')\n' +
@@ -1232,7 +1230,6 @@
         report = diagnosticHeader + '\n\n' +
           'H. PYLORI: ' + hpStatus + '\n' +
           'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
-          (incisuraNote ? incisuraNote + '\n' : '') +
           'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
           'DISPLASIA: ' + getDysplasiaTextWithSites(anDysplasia, inDysplasia, coDysplasia) +
           specialFormsNote + '\n\n' +
@@ -1541,17 +1538,6 @@
         }
       });
     });
-    // ============================================================
-    // INCISURA NEL REFERTO: helper per visibilita clinica
-    // ============================================================
-    function getIncisuraNote(inAtrophy, inMetaplasia, anAtrophy, coAtrophy) {
-      const parts = [];
-      if (inMetaplasia > 0) parts.push('MI ' + (inMetaplasia === 1 ? 'lieve' : inMetaplasia === 2 ? 'moderata' : 'elevata'));
-      if (parts.length === 0 && !inAtrophy) return null;
-      const detail = parts.length > 0 ? parts.join(', ') : null;
-      return detail ? 'Incisura angolare: ' + detail : null;
-    }
-
     // ============================================================
     // AUDIT - salvataggio casi refertati
     // ============================================================
