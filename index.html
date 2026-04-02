@@ -15,8 +15,8 @@
   <link rel="apple-touch-icon" sizes="167x167" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <title>OLGA/OLGIM e H. pylori v5.7.51</title>
-  <meta name="version" content="5.7.51">
+  <title>OLGA/OLGIM e H. pylori v5.7.52</title>
+  <meta name="version" content="5.7.52">
   <meta name="build-date" content="2026-03-06">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -276,7 +276,7 @@
   <header>
     <div class="container">
       <h1>OLGA/OLGIM e H. pylori</h1>
-      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.51</span></div>
+      <div class="subtitle">Tool per refertazione istologica <span id="versionBadge" title="Build: 2026-03-06 | Clicca per dettagli cache" onclick="showVersionInfo()" style="cursor:pointer;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 6px;font-size:0.85em;font-weight:600;">v5.7.52</span></div>
     </div>
   </header>
 
@@ -1140,13 +1140,13 @@
         let specialDiagnosis = '';
 
         if (hasChemical) {
-          diagnosticHeader = 'Gastropatia reattiva (chimica/farmacologica)';
+          diagnosticHeader = '';
           const fovHyp = specialForms.chemical.foveolarHyperplasia;
           specialDiagnosis = 'Mucosa gastrica con infiltrato flogistico cronico non significativo' +
             (fovHyp > 0 ? ', con iperplasia foveolare ' + gradeText(fovHyp) : '') +
             (specialForms.chemical.laminaEdema ? ', edema lamina propria' : '') +
             (specialForms.chemical.smoothMuscleProlif ? ', proliferazione muscolo liscio' : '') +
-            '.\n\nQuadro istologico compatibile con GASTROPATIA REATTIVA/CHIMICA.\nPattern suggestivo per reflusso biliare, FANS o alcol.';
+            '.\n\nQuadro istologico compatibile con gastropatia reattiva/chimica.\nPattern suggestivo per reflusso biliare, FANS o alcol.';
         } else if (hasAutoimmune) {
           diagnosticHeader = 'Gastrite cronica autoimmune';
           specialDiagnosis = 'Mucosa gastrica ' + (specialForms.autoimmune.corpusRestricted ? 'corpale' : 'antrale e corpale') +
@@ -1186,7 +1186,7 @@
             'DD: parassitosi (Anisakis), farmaci (PPI, FANS), IBD, vasculiti, linfoma.';
         }
 
-        report = diagnosticHeader + '\n\n' + specialDiagnosis + '\n\n' +
+        report = (diagnosticHeader ? diagnosticHeader + '\n\n' : '') + specialDiagnosis + '\n\n' +
           'H. PYLORI: ' + hpStatus + '\n' +
           'ATROFIA GHIANDOLARE: ' + getAtrophyText() + '\n' +
           'METAPLASIA INTESTINALE: ' + getMITypeText() + '\n' +
