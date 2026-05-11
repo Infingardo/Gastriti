@@ -987,6 +987,7 @@
     function calculate() {
       if (!validate()) return;
       miTypeWarningShown = false;
+      alertQueue.length = 0; clearAlerts();
 
       const anDysplasia = getValue('an_dysplasia') || 0;
       const inDysplasia = getValue('in_dysplasia') || 0;
@@ -1061,8 +1062,7 @@
       const stageDiff   = Math.abs(
         (stageValues[olgaStage] ?? 0) - (stageValues[olgimStage] ?? 0)
       );
-      const hasDiscordance = stageDiff >= 2 &&
-        (stageValues[olgimStage] ?? 0) >= (stageValues[olgaStage] ?? 0);
+      const hasDiscordance = stageDiff >= 2;
       if (hasDiscordance)
         showAlert('warning', 'OLGA e OLGIM divergono >=2 stadi: considerare lo stadio più alto per la sorveglianza.');
 
@@ -1322,6 +1322,13 @@
     // ============================================================
     // SHORTCUT & RESET
     // ============================================================
+    function resetSpecialForms() {
+      ['corpus_restricted','pseudopyloric_meta','ecl_hyperplasia','lamina_edema','smooth_muscle_prolif']
+        .forEach(id => { const el = document.getElementById(id); if(el) el.checked = false; });
+      ['foveolar_hyperplasia','iels_grade','eosinophils_hpf']
+        .forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    }
+
     function setNegativeCase() {
       unlockForm();
       ['an_chronic','an_activity','an_atrophy','an_metaplasia','an_hp','an_dysplasia',
@@ -1329,6 +1336,7 @@
        'in_chronic','in_activity','in_atrophy','in_metaplasia','in_hp','in_dysplasia']
         .forEach(id => { const el = document.getElementById(id); if(el) el.value = '0'; });
       ['an','in','co'].forEach(s => { document.getElementById(s+'_mi_type').value = ''; checkMetaplasiaAndShowMIType(s); });
+      resetSpecialForms();
       document.getElementById('resultsSection').style.display = 'none';
       showAlert('success', 'Caso negativo: tutti i campi settati a 0');
       saveFormData();
@@ -1345,6 +1353,7 @@
       ['an_activity','an_atrophy','an_metaplasia','an_dysplasia','co_activity','co_atrophy','co_metaplasia','co_dysplasia','in_activity','in_atrophy','in_metaplasia','in_dysplasia']
         .forEach(id => { const el = document.getElementById(id); if(el) el.value = '0'; });
       ['an','in','co'].forEach(s => { document.getElementById(s+'_mi_type').value = ''; checkMetaplasiaAndShowMIType(s); });
+      resetSpecialForms();
       document.getElementById('resultsSection').style.display = 'none';
       showAlert('success', 'H. pylori+: precompilato pattern base antro-predominante');
       saveFormData();
@@ -1378,9 +1387,10 @@
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
         el.disabled = true; el.style.opacity = '0.5';
       });
-      // Disabilita solo il bottone Calcola - gli altri restano attivi
-      const calcBtn = document.querySelector('button.primary');
-      if (calcBtn) { calcBtn.disabled = true; calcBtn.style.opacity = '0.4'; calcBtn.style.cursor = 'not-allowed'; }
+      // Disabilita solo i bottoni primari (Calcola) - gli altri restano attivi
+      document.querySelectorAll('button.primary').forEach(btn => {
+        btn.disabled = true; btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed';
+      });
       const resetBtn = document.querySelector('.mega-reset-btn');
       if (resetBtn) resetBtn.style.animationDuration = '1.5s';
     }
@@ -1396,8 +1406,9 @@
       document.querySelectorAll('input[type="checkbox"]').forEach(el => {
         el.disabled = false; el.style.opacity = '1';
       });
-      const calcBtn = document.querySelector('button.primary');
-      if (calcBtn) { calcBtn.disabled = false; calcBtn.style.opacity = '1'; calcBtn.style.cursor = 'pointer'; }
+      document.querySelectorAll('button.primary').forEach(btn => {
+        btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+      });
       const resetBtn2 = document.querySelector('.mega-reset-btn');
       if (resetBtn2) resetBtn2.style.animationDuration = '3s';
     }

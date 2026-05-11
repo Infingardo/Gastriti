@@ -1,4 +1,4 @@
-const CACHE_NAME = 'olga-olgim-v5.7.44';
+const CACHE_NAME = 'olga-olgim-v5.7.57';
 const urlsToCache = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('message', event => {
