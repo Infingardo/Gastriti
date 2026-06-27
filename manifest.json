@@ -2,12 +2,12 @@
   "name": "OLGA/OLGIM Tool - Refertazione Gastrite",
   "short_name": "OLGA/OLGIM",
   "description": "Tool per refertazione istologica gastrite cronica secondo Sydney System, OLGA/OLGIM staging, MAPS III guidelines",
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f5f7fa",
   "theme_color": "#4299e1",
   "orientation": "any",
-  "scope": "/",
+  "scope": "./",
   "icons": [
     {
       "src": "apple-touch-icon.png",
