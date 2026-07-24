@@ -1,6 +1,7 @@
 # 🔬 OLGA/OLGIM Tool per Refertazione Gastrite Cronica
 
-**Versione:** 5.7.20 "Matrice OLGA Rugge Fix"  
+**Versione:** 5.7.57  
+**Nota:** il changelog dettagliato di questo readme si ferma alla 5.7.20; le release 5.7.21–5.7.57 sono documentate solo nella storia git.  
 **Autore:** Dr. Filippo Bianchi  
 **SC Anatomia Patologica, ASST Fatebenefratelli-Sacco, Milano**
 
