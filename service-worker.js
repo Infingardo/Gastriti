@@ -41,7 +41,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(cacheNames =>
       Promise.all(
         cacheNames
-          .filter(name => name !== CACHE_NAME)
+          .filter(name => name.startsWith('olga-olgim-') && name !== CACHE_NAME)
           .map(name => caches.delete(name))
       )
     )
